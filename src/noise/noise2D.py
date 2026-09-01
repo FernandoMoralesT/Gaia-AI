@@ -13,16 +13,39 @@ width = 256
 height = 256 
 scale = 10.0
 
-value = [[0.0 for _ in range(height)] for _ in range(width)]
-noise = Noise2D(seed=42)
+def fractal_noise_2d(width, height, scale, octaves=6, seed=42, base_frequency=1.0, persistence=0.5, lacunarity=2.0):
+    noise = Noise2D(seed)
+    mapa = numpy.zeros((height, width))
+    amplitud_total = 0.0
+    capas = []
 
-for y in range(height):
-    for x in range(width):
-        nx = x / width - 0.5
-        ny = y / height - 0.5
-        value[y][x] = noise.get_noise(nx*scale, ny*scale)
+    for octave in range (octaves):
+        frequency = base_frequency * (lacunarity ** octave)
+        amplitude = persistence ** octave
+        amplitud_total += amplitude
 
-array_value = numpy.array(value)
+        capa = numpy.zeros((height, width))
+        for y in range(height):
+            for x in range(width):
+                nx = x / scale * frequency
+                ny = y / scale * frequency
+                capa[y][x] = noise.get_noise(nx, ny) * amplitude
 
-plt.imshow(array_value, cmap='gray')
+        capas.append(capa)
+        mapa += capa
+    return mapa / amplitud_total, capas
+
+
+mapa_final, capas = fractal_noise_2d(width, height, scale)
+
+plt.figure(figsize=(10, 10))
+
+plt.subplot(1, 2, 1)
+plt.imshow(mapa_final, cmap='gray')
+plt.title('Fractal Noise')
+
+plt.subplot(1, 2, 2)
+plt.imshow(capas[0] - capas[1], cmap='gray')
+plt.title('Difference between first two octaves')
+
 plt.show()
