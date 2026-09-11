@@ -1,6 +1,7 @@
 import numpy
 from opensimplex import OpenSimplex
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 
 class Noise2D:
     def __init__(self, seed=None):
@@ -29,7 +30,22 @@ def remap(valor, a, b, c, d):
 
 array_norm = remap(array_value, numpy.min(array_value), numpy.max(array_value), 0, 255)
 
+array_uint8 = array_norm.astype(numpy.uint8)
+
+agua_umbral = 85
+tierra_umbral = 170
+
+biomas = numpy.zeros_like(array_norm, dtype=numpy.uint8)
+
+biomas[array_uint8 < agua_umbral] = 0
+biomas[(array_uint8 >= agua_umbral) & (array_uint8 < tierra_umbral)] = 1
+biomas[array_uint8 >= tierra_umbral] = 2
+
+colores = ['blue', 'green', 'gray']
+
+cmap_biomas = ListedColormap(colores)
+
 plt.figure(figsize=(10, 10))
-plt.imshow(array_norm, cmap='gray')
-plt.title('2D Noise')
+plt.imshow(biomas, cmap=cmap_biomas)
+plt.title('Biomas')
 plt.show()

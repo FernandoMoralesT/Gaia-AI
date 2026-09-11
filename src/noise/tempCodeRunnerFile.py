@@ -1,2 +1,2 @@
 
-array_value = numpy.array(value)
+colores = ['blue', 'green', 'brown']
