@@ -11,7 +11,7 @@ class Noise2D:
 
 width = 256
 height = 256 
-scale = 10.0
+scale = 5.0
 
 def fractal_noise_2d(width, height, scale, octaves=6, seed=42, base_frequency=1.0, persistence=0.5, lacunarity=2.0):
     noise = Noise2D(seed)
