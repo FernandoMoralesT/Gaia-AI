@@ -2,6 +2,7 @@ import numpy as np
 from opensimplex import OpenSimplex
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+import time
 
 class Noise2D:
     def __init__(self, seed=None):
@@ -15,6 +16,7 @@ class Noise2D:
 
 
 def fractal_noise_2d(width, height, scale, octaves, seed, persistence, lacunarity):
+    print(time.perf_counter())
     noise = Noise2D(seed)
     mapa = np.zeros((height, width), dtype=float)
     amplitud_total = 0.0
@@ -33,23 +35,22 @@ def fractal_noise_2d(width, height, scale, octaves, seed, persistence, lacunarit
         capa = noise.get_noise_array(nx, ny) * amplitude
         capas.append(capa)
         mapa += capa
-
+    
+    print(time.perf_counter())
     return mapa / amplitud_total, capas
 
-
 def remap(valor, a, b, c, d):
-    """
-    Pieza 4 pendiente: ¿qué haces si a == b?
-    """
-    pass
+    if a==b:
+        return np.full_like(valor, (c+d)/2)
+    return c + (valor - a)/(b - a) * (d - c)
 
 
 def clasificar_biomas(array_uint8, agua_umbral, tierra_umbral):
-    """
-    La lógica de umbralización que ya tenían en el script 1,
-    ahora como función reutilizable en vez de código suelto.
-    """
-    pass
+    biomas = np.zeros_like(array_uint8)
+    biomas[array_uint8 < agua_umbral] = 0
+    biomas[(array_uint8 >= agua_umbral) & (array_uint8 < tierra_umbral)] = 1
+    biomas[array_uint8 >= tierra_umbral] = 2
+    return biomas
 
 
 def exportar_para_godot(mapa_float, formato):
@@ -59,6 +60,12 @@ def exportar_para_godot(mapa_float, formato):
     Aquí es donde decide tu equipo: PNG16 / EXR / raw.
     """
     pass
+
+mapa_final, capas = fractal_noise_2d(width=256, height=256, scale=5.0, octaves=6, seed=42, persistence=0.5, lacunarity=2.0)
+array_norm = remap(mapa_final, np.min(mapa_final), np.max(mapa_final), 0, 255)
+array_uint8 = array_norm.astype(np.uint8)
+
+biomas = clasificar_biomas(array_uint8, agua_umbral=85, tierra_umbral=170)
 
 
 if __name__ == "__main__":
