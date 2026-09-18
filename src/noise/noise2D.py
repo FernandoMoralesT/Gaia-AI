@@ -9,6 +9,13 @@ class Noise2D:
     def get_noise(self, x, y):
         return self.noise.noise2(x, y)
 
+    def get_noise_array(self, x, y):
+        return self.noise.noise2array(x, y)
+
+N = Noise2D(seed=42)
+resultado = N.get_noise_array(numpy.arange(3), numpy.arange(5))
+print(resultado.shape)
+
 width = 256
 height = 256 
 scale = 5.0

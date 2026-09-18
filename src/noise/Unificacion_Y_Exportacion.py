@@ -53,25 +53,29 @@ def clasificar_biomas(array_uint8, agua_umbral, tierra_umbral):
     return biomas
 
 
-def exportar_para_godot(mapa_float, formato):
-    """
-    Pieza 5 pendiente: esta rama NO debe pasar por array_uint8.
-    Recibe el mapa float directo de fractal_noise_2d (antes del remap a 0-255).
-    Aquí es donde decide tu equipo: PNG16 / EXR / raw.
-    """
-    pass
-
-mapa_final, capas = fractal_noise_2d(width=256, height=256, scale=5.0, octaves=6, seed=42, persistence=0.5, lacunarity=2.0)
-array_norm = remap(mapa_final, np.min(mapa_final), np.max(mapa_final), 0, 255)
-array_uint8 = array_norm.astype(np.uint8)
-
-biomas = clasificar_biomas(array_uint8, agua_umbral=85, tierra_umbral=170)
-
+def exportar_para_godot(mapa_float, formato, width, height):
+    with open("heightmap.raw", "wb") as f:
+        np.array([width, height], dtype=np.uint32).tofile(f)
+        mapa_float.astype(formato).tofile(f)
 
 if __name__ == "__main__":
     width, height, scale = 256, 256, 5.0
 
     # 1. Generar heightmap crudo con fractal_noise_2d
+    mapa_crudo, capas = fractal_noise_2d(width, height, scale, octaves=6, seed=42, persistence=0.5, lacunarity=2.0)
+    np.save("heightmap_crudo.npy", mapa_crudo)
+
     # 2. Rama A: remap -> uint8 -> clasificar_biomas -> visualizar (como script 1)
+    mapa_norm = remap(mapa_crudo, np.min(mapa_crudo), np.max(mapa_crudo), 0, 255)
+    mapa_uint8 = mapa_norm.astype(np.uint8)
+
+    biomas = clasificar_biomas(mapa_uint8, agua_umbral=85, tierra_umbral=170)
+    colores = ['blue', 'green', 'gray']
+
+    cmap_biomas = ListedColormap(colores)
+    plt.figure(figsize=(10, 10))
+    plt.imshow(biomas, cmap=cmap_biomas)
+    plt.title('Unificacion y Exportacion - Biomas')
+    plt.show()
     # 3. Rama B: exportar_para_godot con el float crudo, sin pasar por uint8
-    pass
+    exportar_para_godot(mapa_crudo, formato=np.float32, width=width, height=height)
