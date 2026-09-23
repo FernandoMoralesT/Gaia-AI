@@ -59,10 +59,10 @@ def exportar_para_godot(mapa_float, formato, width, height):
         mapa_float.astype(formato).tofile(f)
 
 if __name__ == "__main__":
-    width, height, scale = 256, 256, 5.0
+    width, height, scale = 256, 256, 50.0
 
     # 1. Generar heightmap crudo con fractal_noise_2d
-    mapa_crudo, capas = fractal_noise_2d(width, height, scale, octaves=6, seed=42, persistence=0.5, lacunarity=2.0)
+    mapa_crudo, capas = fractal_noise_2d(width, height, scale, octaves=6, seed=42, persistence=0.5, lacunarity=1.5)
     np.save("heightmap_crudo.npy", mapa_crudo)
 
     # 2. Rama A: remap -> uint8 -> clasificar_biomas -> visualizar (como script 1)
