@@ -1,5 +1,6 @@
 import rasterio
 import os
+from procesamiento import recortar
 
 def cargar_bach_dem(carpeta):
     heigthmaps = []
@@ -13,5 +14,10 @@ def cargar_bach_dem(carpeta):
 if __name__ == "__main__":
     batch = cargar_bach_dem("data/raw/")
     print(len(batch))
+    batch_recortado = []
     for h in batch:
-        print(h.shape, h.dtype)
+        print(h.shape, h.dtype, "Sin recortar")
+        batch_recortado.append(recortar(h))
+
+    for h in batch_recortado:
+        print(h.shape, h.dtype, "Recortado")
