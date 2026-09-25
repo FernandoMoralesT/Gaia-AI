@@ -1,6 +1,9 @@
 import rasterio
 import os
 from procesamiento import recortar
+from dem_dataset import DEMDataset
+from torch.utils.data import DataLoader
+
 
 def cargar_bach_dem(carpeta):
     heigthmaps = []
@@ -21,3 +24,9 @@ if __name__ == "__main__":
 
     for h in batch_recortado:
         print(h.shape, h.dtype, "Recortado")
+
+    dataset = DEMDataset(batch_recortado)
+    loader = DataLoader(dataset, batch_size=2)
+
+    for batch_tensor in loader:
+        print(batch_tensor.shape)

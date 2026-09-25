@@ -84,3 +84,83 @@ Se comprobó el pipeline de punta a punta desde Python:
   problemas al leer desde GDScript.
 
 Tag de cierre: `sprint-03`.
+
+## Sprint 4 — Entorno PyTorch y origen de datos reales (DEM)
+
+### Verificación de entorno
+
+Se confirmó instalación de PyTorch (`2.14.0+cu126`). `torch.cuda.is_available()`
+devolvió `False`: el equipo cuenta con GPU AMD Radeon, no NVIDIA, por lo que el
+build `cu126` (compilado para CUDA) no puede usar aceleración por hardware.
+Decisión: entrenar en CPU por el momento; se deja `torch-directml` (backend
+DirectX 12, compatible con AMD en Windows) como opción de optimización futura
+solo si el tiempo de entrenamiento en CPU resulta un bloqueo real.
+
+Se practicaron operaciones básicas de tensores (creación, operaciones
+elemento a elemento, conversión desde/hacia NumPy) y el mecanismo de
+diferenciación automática (`requires_grad`, `.backward()`, `.grad`), base de
+cómo se entrenan redes neuronales sin derivar manualmente.
+
+### Decisión: datos reales vs. sintéticos
+
+Se evaluó entrenar el modelo con datos sintéticos (el propio `fractal_noise_2d`)
+frente a datos reales de elevación (DEM). Se descartó la opción sintética: al
+ser generados por la misma función de ruido procedural clásico contra la que
+el proyecto busca comparar (según la hipótesis del anteproyecto), el modelo
+no tendría de dónde aprender variedad adicional — el propio ruido clásico
+sería el techo de lo que el modelo podría replicar.
+
+Se decidió entrenar con datos reales de elevación (SRTM, vía OpenTopography),
+reservando la comparación contra heightmaps de la comunidad geográfica como
+evaluación cualitativa en el reporte final, no como fuente de entrenamiento.
+
+### Obtención de datos
+
+Se descartó USGS EarthExplorer por exceso de datos personales solicitados en
+el registro. Se optó por OpenTopography (registro más ligero, API key
+inmediata). Se descargaron 3 tiles SRTM GL1 (30m) de zonas con relieve
+marcado cerca de la región de Mazatlán-Culiacán, en formato GeoTIFF.
+
+Cita para bibliografía: NASA Shuttle Radar Topography Mission (SRTM) (2013).
+Shuttle Radar Topography Mission (SRTM) Global. Distribuido por
+OpenTopography. https://doi.org/10.5069/G9445JDF
+
+### Lectura con `rasterio`
+
+Se implementó `cargar_bach_dem()` en `src/dataset/cargar_dem.py`, leyendo
+todos los `.tif` de `data/raw/` con `rasterio`.
+
+Hallazgos relevantes sobre el formato:
+- Los datos vienen en `int16` (metros enteros), no en floats como el ruido
+  sintético — no es pérdida de precisión, es cómo SRTM almacena elevación de
+  forma nativa.
+- SRTM usa un valor centinela (`nodata = -32768`) para huecos de medición.
+  En los tiles descargados no apareció (`min: 17, max: 274`, valores
+  plausibles), pero se deja documentado como riesgo a validar en tiles
+  futuros (Sprint 5), con `src.nodata` como forma de detectarlo.
+- Los tres tiles descargados resultaron con dimensiones distintas entre sí
+  (`278×408`, `494×751`, `141×184`), al no haber delimitado regiones de
+  tamaño idéntico en OpenTopography.
+
+### Recorte temporal y Dataset de PyTorch
+
+Se implementó `recortar()` en `src/dataset/preprocesamiento.py` (archivo
+separado, anticipando que ahí vivirán las funciones de augmentation/splits
+del Sprint 5), como solución mínima al problema de tamaños inconsistentes:
+recorte fijo a 100×100 sobre cada tile.
+
+Se implementó `DEMDataset` (`torch.utils.data.Dataset`) envolviendo el batch
+recortado, y se verificó su funcionamiento real con `DataLoader`
+(`batch_size=2`), obteniendo tensores de forma `[2, 100, 100]` y
+`[1, 100, 100]` — confirma el pipeline completo: DEM real → cargado →
+recortado → Dataset → batches iterables.
+
+### Pendiente para el Sprint 5
+
+- El recorte fijo a 100×100 es una solución temporal, no augmentation real
+  (no hay variabilidad ni manejo cuidadoso de qué región del tile se pierde).
+- Validar manejo de `nodata` con tiles que sí lo contengan.
+- División train/val/test.
+- Documentar tamaño y licencia del dataset en `docs/dataset.md`.
+
+Tag de cierre: `sprint-04`.
