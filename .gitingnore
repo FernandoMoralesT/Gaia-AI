@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Archivos temporales de editor
+tempCodeRunnerFile.py
+
+# Entornos virtuales (si usan alguno)
+venv/
+.venv/
+
+# Datos generados (no el .tif original de OpenTopography, ese sí lo versionan)
+data/processed/
+*.raw
+*.npy
