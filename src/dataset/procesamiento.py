@@ -24,3 +24,4 @@ def generar_variantes(data):
     variantes.append(rotar_90(data, 2))
     variantes.append(rotar_90(data, 3))
     return variantes
+
