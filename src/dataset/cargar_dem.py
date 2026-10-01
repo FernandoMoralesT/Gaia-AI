@@ -1,7 +1,7 @@
 import rasterio
 import os
-from procesamiento import recortar
-from dem_dataset import DEMDataset
+from dataset.procesamiento import recortar
+from dataset.dem_dataset import DEMDataset
 from torch.utils.data import DataLoader
 
 

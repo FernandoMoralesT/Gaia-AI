@@ -58,6 +58,20 @@ def exportar_para_godot(mapa_float, formato, width, height):
         np.array([width, height], dtype=np.uint32).tofile(f)
         mapa_float.astype(formato).tofile(f)
 
+def generar_y_exportar_terreno(width, height, scale, octaves, seed, persistence, lacunarity):
+    mapa_crudo, capas = fractal_noise_2d(width, height, scale, octaves, seed, persistence, lacunarity)
+    mapa_norm = remap(mapa_crudo, np.min(mapa_crudo), np.max(mapa_crudo), 0, 255)
+    mapa_uint8 = mapa_norm.astype(np.uint8)
+    biomas = clasificar_biomas(mapa_uint8, agua_umbral=85, tierra_umbral=170)
+    colores=['blue','green','gray']
+    cmap_biomas = ListedColormap(colores)
+    plt.figure(figsize=(10, 10))
+    plt.imshow(biomas, cmap=cmap_biomas)
+    plt.title('Unificacion y Exportacion - Biomas')
+    exportar_para_godot(mapa_crudo, formato=np.float32, width=width, height=height)
+    return mapa_crudo, biomas
+
+
 if __name__ == "__main__":
     width, height, scale = 256, 256, 50.0
 
