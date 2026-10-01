@@ -164,3 +164,64 @@ recortado → Dataset → batches iterables.
 - Documentar tamaño y licencia del dataset en `docs/dataset.md`.
 
 Tag de cierre: `sprint-04`.
+
+
+## Sprint 5 — Dataset final (augmentation + normalización)
+
+### Normalización con rango global
+
+Se evaluaron dos enfoques: normalizar cada tile con su propio min/max
+individual, o con un rango global fijo. Se eligió rango global
+(`0-9000`, aproximando el máximo plausible de elevación terrestre) para
+preservar la relación real de altura entre tiles — normalizar por tile
+individual habría hecho que un cerro pequeño y una montaña real se vieran
+igual de "altos" tras normalizar, perdiendo justo la variedad que busca
+demostrar la hipótesis del proyecto.
+
+Se implementó `normalizar_dem()` en `preprocesamiento.py`, reutilizando
+`remap()` ya existente. Verificado con el primer tile (17-274m reales):
+resultado normalizado en rango `~4.7-26.4` — confirma que, con relieve
+moderado, el rango global deja los valores concentrados en una porción
+pequeña de 0-255. Queda anotado como punto a revisar si todos los tiles
+futuros muestran el mismo patrón (podría ajustarse el límite superior).
+
+### Augmentation
+
+Con solo 3 tiles reales, se identificó la necesidad de generar más
+muestras de entrenamiento sin inventar datos falsos. Se implementaron
+flips horizontal/vertical y rotaciones de 90°/180°/270° (`numpy.fliplr`,
+`numpy.flipud`, `numpy.rot90`) — únicas transformaciones geométricas que
+preservan las dimensiones originales sin recortar ni dejar huecos
+(rotaciones de ángulo arbitrario sí lo harían).
+
+`generar_variantes()` produce 6 muestras por tile (original + 5
+transformaciones). Verificado visualmente con matplotlib sobre un tile:
+las 6 variantes se distinguen correctamente entre sí.
+
+Decisión de orden en el pipeline: transformar primero, recortar después.
+Como `recortar()` siempre toma la esquina fija `[:size, :size]`, recortar
+antes de transformar habría dado 6 variantes de la misma región; transformar
+primero hace que cada variante exponga una región distinta del tile en esa
+esquina fija, maximizando la variedad real obtenida.
+
+### Integración completa (`pipeline_dataset_dem`)
+
+Flujo verificado de extremo a extremo: cargar tiles → generar variantes →
+recortar → normalizar → `DEMDataset` → `DataLoader`.
+
+Con 3 tiles × 6 variantes = 18 muestras y `batch_size=4`: 5 batches
+(`[4,100,100]` × 4 + `[2,100,100]` × 1) — coincide exactamente con lo
+calculado antes de correr el script.
+
+### Pendiente
+
+- División train/val/test: identificado que debe hacerse por tile
+  original (no por muestra individual), para que las 6 variantes de un
+  mismo tile no queden repartidas entre conjuntos — evita que el modelo
+  "vea" indirectamente, en entrenamiento, una variante del mismo tile
+  que luego se usa para evaluarlo en test. Implementación pendiente.
+- Automatización de descarga de tiles vía API de OpenTopography
+  (investigada, no implementada) — pendiente como mejora de flujo de
+  trabajo, no bloqueante para el MVP.
+
+Tag de cierre: `sprint-05`.
