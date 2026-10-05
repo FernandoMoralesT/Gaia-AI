@@ -213,15 +213,26 @@ Con 3 tiles × 6 variantes = 18 muestras y `batch_size=4`: 5 batches
 (`[4,100,100]` × 4 + `[2,100,100]` × 1) — coincide exactamente con lo
 calculado antes de correr el script.
 
-### Pendiente
+**División train/val/test.** Se dividió por tile original (80/10/10, `random.Random(42)`), antes de generar variantes. Resultado: 11 / 1 / 2 tiles, 66 / 6 / 12 muestras y 17 / 2 / 3 lotes de 4, que coincide con la salida de `pipeline.py`.
 
-- División train/val/test: identificado que debe hacerse por tile
-  original (no por muestra individual), para que las 6 variantes de un
-  mismo tile no queden repartidas entre conjuntos — evita que el modelo
-  "vea" indirectamente, en entrenamiento, una variante del mismo tile
-  que luego se usa para evaluarlo en test. Implementación pendiente.
-- Automatización de descarga de tiles vía API de OpenTopography
-  (investigada, no implementada) — pendiente como mejora de flujo de
-  trabajo, no bloqueante para el MVP.
+**Errores resueltos.**
+- `random.random(seed)` en lugar de `random.Random(seed)`: `random.random` es una función sin argumentos.
+- `procesar_tiles` recibía una carpeta y volvía a cargar los tiles, que ya llegaban cargados.
+- `procesar_tiles` devolvía una tupla y luego un `DEMDataset` con `batch_size`; el `batch_size` pertenece a `DataLoader`.
+
+**Validación de `nodata`.** 0 píxeles con −32768 en los 14 tiles. Elevación de −8 m a 2941 m. Dos tiles costeros tienen mínimo negativo.
+
+**Observación.** Con el rango global 0-9000 m, el máximo del dataset (2941 m) queda en ≈ 83 de 255.
+
+**Decisión.** Se mantienen 14 tiles para cerrar el sprint. Ampliar el dataset se deja para más adelante, solo si el entrenamiento lo exige. Según la documentación de OpenTopography consultada el 5 de octubre de 2026, la cuota de la API para usuarios no académicos es de 50 trabajos por 24 horas; verificarla en la cuenta antes de planear descargas.
+
+**Limitaciones.** El conjunto de validación tiene 1 tile (6 muestras). El recorte toma siempre la esquina `[:100, :100]`.
+
+**Documentación.** `docs/dataset.md`, `README.md` y `requirements.txt` completados.
+
+**Pendientes heredados.**
+- Decidir el límite superior del rango global y el tratamiento de valores negativos.
+- Recorte aleatorio en lugar de esquina fija.
+- Registrar las coordenadas de los dos tiles manuales.
 
 Tag de cierre: `sprint-05`.

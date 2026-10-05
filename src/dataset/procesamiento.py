@@ -1,6 +1,6 @@
 from noise.Unificacion_Y_Exportacion import remap
 import numpy as np
-
+import random
 def recortar(data, size=100):
     return data[:size, :size]
 
@@ -24,4 +24,14 @@ def generar_variantes(data):
     variantes.append(rotar_90(data, 2))
     variantes.append(rotar_90(data, 3))
     return variantes
+
+def dividir_tiles(tiles, train_pct=0.8,val_pct=0.1, seed=42):
+    random.Random(seed).shuffle(tiles)
+    n = len(tiles)
+    n_train = int(n*train_pct)
+    n_val = int(n*val_pct)
+    train = tiles[:n_train]
+    val = tiles[n_train:n_train+n_val]
+    test = tiles[n_train + n_val:]
+    return train, val, test
 

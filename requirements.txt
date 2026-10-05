@@ -1,0 +1,9 @@
+
+matplotlib==3.11.1
+numpy==2.5.2
+opensimplex==0.4.5.1
+python-dotenv==1.2.4
+rasterio==1.5.1
+requests==2.34.2
+torch==2.14.0
+torchvision==0.29.0
