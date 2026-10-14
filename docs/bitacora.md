@@ -237,7 +237,7 @@ calculado antes de correr el script.
 
 Tag de cierre: `sprint-05`.
 
-## Sprint 6 — Arquitectura y datos para la cGAN (en curso)
+## Sprint 6 — Arquitectura y datos para la cGAN (en curso) Licencia revisada: los términos de OpenTopography permiten el uso libre de los datos de su API; se cita el DOI del dataset.
 
 ### Decisión de arquitectura
 
@@ -283,7 +283,6 @@ La ventana de entrada es el tile completo reducido de 360×360 a **120×120** po
 
 - Generador (esqueleto en curso) y discriminador en `src/model/`; verificar la forma de salida (MVP del sprint).
 - Confirmación visual de las 9 etiquetas dudosas.
-- Validar con `resumen_dataset.py` los 12 tiles de la segunda tanda.
-- Actualizar el anteproyecto con el objetivo nuevo, y la presentación y la escaleta.
+- Los 12 tiles de la segunda tanda se validaron con `resumen_dataset.py`: 60 tiles de 360 × 360, 0 píxeles `nodata`, elevación global de −30 a 8748 m, sin etiquetas sobrantes ni faltantes.
 
 Tag de cierre: `sprint-06` (al terminar el MVP).

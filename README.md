@@ -82,7 +82,7 @@ NASA SRTM GL1 (30 m), distribuido por OpenTopography. Cita:
 
 NASA Shuttle Radar Topography Mission (SRTM). (2013). *Shuttle Radar Topography Mission (SRTM) Global* [Conjunto de datos]. OpenTopography. https://doi.org/10.5069/G9445JDF
 
-La página del dataset muestra la licencia como no provista. Verificar los términos de uso antes de redistribuir los archivos.
+https://opentopography.org/usageterms
 
 ## Equipo
 
