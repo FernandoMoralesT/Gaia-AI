@@ -29,7 +29,7 @@ def dividir_tiles(tiles, etiquetas, val_pct=0.1, test_pct=0.1, seed=42):
     por_clase = {}
     for nombre in sorted(tiles):
         clase = etiquetas[nombre]
-        por_clase.setdefault(clase, []).append(nombre)  # agrega `nombre` a la lista de su clase
+        por_clase.setdefault(clase, []).append(nombre)  
 
     rng = random.Random(seed)
     train, val, test = [], [], []
@@ -39,8 +39,8 @@ def dividir_tiles(tiles, etiquetas, val_pct=0.1, test_pct=0.1, seed=42):
         n_val = max(1, round(val_pct * len(nombres)))
         n_test = max(1, round(test_pct * len(nombres)))
         val += nombres[:n_val]
-        test += nombres[n_val:n_val + n_test]    # los siguientes n_test nombres
-        train += nombres[n_val + n_test:]   # todos los que quedan
+        test += nombres[n_val:n_val + n_test]    
+        train += nombres[n_val + n_test:]   
     return train, val, test
 
 def reducir_tile(data, factor = 3):

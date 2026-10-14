@@ -236,3 +236,54 @@ calculado antes de correr el script.
 - Registrar las coordenadas de los dos tiles manuales.
 
 Tag de cierre: `sprint-05`.
+
+## Sprint 6 — Arquitectura y datos para la cGAN (en curso)
+
+### Decisión de arquitectura
+
+Se compararon DCGAN, VAE y GAN condicional (cGAN) con las restricciones del proyecto: entrenamiento en CPU, muestras de 120×120 y pocas muestras de train. Se eligió **cGAN**, porque el objetivo es poder pedir el tipo de terreno ("montaña", "meseta") y recibirlo. Esto amplía el alcance del anteproyecto y agrega un objetivo específico: generar terreno según una clase solicitada. Riesgos registrados: la cGAN hereda la inestabilidad de las GAN; si no converge, queda el VAE condicional como alternativa.
+
+### Clases
+
+Se definieron 6 clases discretas: llanura, lomas, valle, montaña, meseta y volcán. Las cuatro primeras clases propuestas (por rango de elevación) se reemplazaron porque miden cuánto relieve hay y no qué forma tiene. Las clases de forma se etiquetan a mano; el id numérico de cada clase está fijo en `CLASES` (`dem_dataset.py`).
+
+### Ampliación del dataset
+
+- De 14 tiles de 0.05° (180 px) a 60 tiles de 0.1° (360 px, ~11 km). Los 14 anteriores quedaron en `data/raw_v1/`.
+- Los lugares se eligieron por tipo de terreno (`src/descargar_lote.py`) y las etiquetas están en `data/etiquetas.json`.
+- La API de OpenTopography respondió "API maximum rate limit reached (50 API calls/24hrs)" con código HTTP 401. Límite confirmado: 50 llamadas por 24 horas; la descarga tomó dos días (48 tiles el 5 de octubre y 12 el 7).
+- El script es reanudable: omite archivos existentes y se detiene ante un rechazo del servidor.
+
+**Errores resueltos**
+- `JSONDecodeError` al leer `etiquetas.json`: el archivo existía vacío; la función ahora lee el texto y solo interpreta JSON si hay contenido.
+- `ConnectionAbortedError 10053` y una descarga colgada: `requests.get` no tenía `timeout`; se agregó `timeout=(10, 120)` y hasta 3 reintentos ante fallos de red.
+- `.env` apareció en `git status` porque `.gitingnore` tenía una errata en el nombre. Se detectó antes del commit; `git log --all -- .env` salió vacío, así que la clave nunca entró al historial.
+
+### Etiquetas
+
+Cambios sobre la propuesta inicial: `dem_23.57_23.68_-106.02_-105.92` de lomas a montaña (rango de 1121 m), `dem_23.18_23.28_-106.44_-106.34` de llanura a lomas (264 m) y descarte del tile de Table Mountain (incluye mar y ciudad). Conteo final: llanura 10, lomas 11, valle 8, montaña 14, meseta 8, volcán 9. Quedan 9 etiquetas dudosas por confirmar visualmente.
+
+### Normalización y ventana de entrada
+
+Se compararon normalización global (0-9000 m) y por tile. Con la global, una llanura (relieve de 19 a 274 m) ocupa menos del 1 % de la escala. Se eligió **normalizar por tile de −1 a 1**, porque el objetivo es un terreno vistoso y no a escala real. Consecuencia: la red no aprende la altura absoluta; el demo asignará la altura según la clase.
+
+La ventana de entrada es el tile completo reducido de 360×360 a **120×120** por promedio de bloques de 3×3 (90 m por píxel). Cubre ~11 km y 120 = 15 × 2³, así que el generador parte de 15×15 y duplica tres veces. `recortar` y `normalizar_dem` quedan fuera de este flujo.
+
+### Implementación y verificación
+
+- `reducir_tile`: `reshape(n, factor, n, factor)` y `mean(axis=(1, 3))`. Prueba: (360, 360) → (120, 120); rango de 2234.6 a 2768.9 m → −1.0 a 1.0 en `float32`.
+- `cargar_bach_dem` ahora devuelve un diccionario nombre → array, y `cargar_etiquetas` lee el JSON.
+- `dividir_tiles` reparte por clase (80/10/10, mínimo 1 tile en val y en test, semilla 42): 48 / 6 / 6 tiles, 1 de cada clase en val y en test, sin traslape.
+- `DEMDataset` devuelve el par (mapa de forma [1, 120, 120], etiqueta `long`). Se conserva `astype("float32")` porque corrige los pasos negativos de las vistas de `fliplr`, `flipud` y `rot90`.
+- `procesar_tiles` y `pipeline_dataset_dem` verificados: 72 / 9 / 9 lotes de 4, primer lote `[4, 1, 120, 120]`, mínimo −1.0, máximo 1.0, ids `[5, 4, 3, 3]`.
+
+**Errores resueltos:** `np.reshape` con argumentos sueltos; `axis` con los cuatro ejes en lugar de (1, 3); `por_clase` construido al revés (nombre → clase) y rebanadas de test vacías en `dividir_tiles`; `etiqueta = ID_CLASE` (diccionario entero en lugar del id de la muestra); confusión entre las tres tablas `tiles`, `etiquetas` e `ID_CLASE`.
+
+### Pendiente
+
+- Generador (esqueleto en curso) y discriminador en `src/model/`; verificar la forma de salida (MVP del sprint).
+- Confirmación visual de las 9 etiquetas dudosas.
+- Validar con `resumen_dataset.py` los 12 tiles de la segunda tanda.
+- Actualizar el anteproyecto con el objetivo nuevo, y la presentación y la escaleta.
+
+Tag de cierre: `sprint-06` (al terminar el MVP).

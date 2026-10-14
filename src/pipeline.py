@@ -12,9 +12,9 @@ def pipeline_ruido_procedural(width, height, scale, octaves, seed, persistence, 
 def procesar_tiles(nombres, tiles, etiquetas, batch_size, shuffle=False):
     muestras, clases = [], []
     for nombre in nombres:
-        reducido = reducir_tile(tiles[nombre])       # reducir_tile sobre el array de este tile
-        normalizado = normalizar_tile(reducido)    # normalizar_tile sobre el reducido
-        id_clase = ID_CLASE[etiquetas[nombre]]   # ¿con qué clave buscas la clase de este tile en `etiquetas`?
+        reducido = reducir_tile(tiles[nombre])       
+        normalizado = normalizar_tile(reducido)    
+        id_clase = ID_CLASE[etiquetas[nombre]]   
         for variante in generar_variantes(normalizado):
             muestras.append(variante)
             clases.append(id_clase)
