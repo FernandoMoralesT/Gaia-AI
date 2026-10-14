@@ -7,9 +7,7 @@ from dataset.descargar_dem import descargar_tile, nombre_tile
 LADO = 0.1
 CARPETA = "data/raw"
 RUTA_ETIQUETAS = "data/etiquetas.json"
-MAX_SOLICITUDES = 45  # margen bajo la cuota diaria
-
-# (nombre, clase propuesta, lat centro, lon centro)
+MAX_SOLICITUDES = 45
 ANTIGUOS = [
     ("Lote 1", "montaña", 23.725, -105.875),
     ("Lote 2", "montaña", 23.825, -105.725),
@@ -23,7 +21,7 @@ ANTIGUOS = [
     ("Lote 10", "llanura", 25.825, -108.925),
     ("Prueba", "lomas", 23.57, -106.375),
 ]
-NUEVOS = [  # (nombre, clase, lat, lon)
+NUEVOS = [
     # llanura
     ("Mérida", "llanura", 20.9674, -89.5926),
     ("Valladolid", "llanura", 20.6896, -88.2018),
@@ -66,7 +64,6 @@ NUEVOS = [  # (nombre, clase, lat, lon)
     ("Grand Mesa", "meseta", 39.0600, -107.9900),
     ("Island in the Sky", "meseta", 38.4600, -109.8200),
     ("Mesa Verde", "meseta", 37.1840, -108.4890),
-    ("Table Mountain, Ciudad del Cabo", "meseta", -33.9628, 18.4098),
     ("Roraima", "meseta", 5.1433, -60.7619),
     ("Oruro (Altiplano)", "meseta", -17.9647, -67.1060),
     ("Meseta Pajarito, Los Álamos", "meseta", 35.8800, -106.3031),

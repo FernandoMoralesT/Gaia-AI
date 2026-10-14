@@ -1,34 +1,39 @@
 from torch.utils.data import DataLoader
 from noise.Unificacion_Y_Exportacion import fractal_noise_2d, exportar_para_godot, remap, clasificar_biomas, generar_y_exportar_terreno
-from dataset.dem_dataset import DEMDataset
-from dataset.cargar_dem import cargar_bach_dem
-from dataset.procesamiento import recortar, normalizar_dem,generar_variantes, dividir_tiles
+from dataset.dem_dataset import DEMDataset, ID_CLASE
+from dataset.cargar_dem import cargar_bach_dem, cargar_etiquetas
+from dataset.procesamiento import recortar, normalizar_dem, normalizar_tile, reducir_tile,generar_variantes, dividir_tiles
 from dataset.descargar_dem import descargar_tile
 
 def pipeline_ruido_procedural(width, height, scale, octaves, seed, persistence, lacunarity):
     mapa_crudo, biomas = generar_y_exportar_terreno(width, height, scale, octaves, seed, persistence, lacunarity)
     return mapa_crudo, biomas
 
-def procesar_tiles(tiles, size_recorte, batch_size):
-    todas_las_muestras = []
-    for tile in tiles:
-        variantes = generar_variantes(tile)
-        for variante in variantes:
-            recortada = recortar(variante, size=size_recorte)
-            normalizada = normalizar_dem(recortada)
-            todas_las_muestras.append(normalizada)
+def procesar_tiles(nombres, tiles, etiquetas, batch_size, shuffle=False):
+    muestras, clases = [], []
+    for nombre in nombres:
+        reducido = reducir_tile(tiles[nombre])       # reducir_tile sobre el array de este tile
+        normalizado = normalizar_tile(reducido)    # normalizar_tile sobre el reducido
+        id_clase = ID_CLASE[etiquetas[nombre]]   # ¿con qué clave buscas la clase de este tile en `etiquetas`?
+        for variante in generar_variantes(normalizado):
+            muestras.append(variante)
+            clases.append(id_clase)
+    dataset = DEMDataset(muestras, clases)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
-    dataset = DEMDataset(todas_las_muestras)
-    return DataLoader(dataset, batch_size=batch_size)
-
-def pipeline_dataset_dem(carpeta_datos, size_recorte, batch_size):
-    todos_los_tiles = cargar_bach_dem(carpeta_datos)
-    train_tiles, val_tiles, test_tiles =  dividir_tiles(todos_los_tiles)
-    loader_train = procesar_tiles(train_tiles, size_recorte, batch_size)
-    loader_val = procesar_tiles(val_tiles, size_recorte, batch_size)
-    loader_test = procesar_tiles(test_tiles, size_recorte, batch_size)
+def pipeline_dataset_dem(carpeta_datos, batch_size):
+    tiles = cargar_bach_dem(carpeta_datos)
+    etiquetas = cargar_etiquetas()
+    train, val, test = dividir_tiles(tiles, etiquetas)
+    loader_train = procesar_tiles(train, tiles, etiquetas, batch_size, shuffle=True)
+    loader_val = procesar_tiles(val, tiles, etiquetas, batch_size)
+    loader_test = procesar_tiles(test, tiles, etiquetas, batch_size)
     return loader_train, loader_val, loader_test
 
 if __name__ == "__main__":
-    loader_train, loader_val, loader_test = pipeline_dataset_dem("data/raw", size_recorte=100, batch_size=4)
+    loader_train, loader_val, loader_test = pipeline_dataset_dem("data/raw", batch_size=4)
     print(len(loader_train), len(loader_val), len(loader_test))
+
+    mapas, ids = next(iter(loader_train))
+    print(mapas.shape, mapas.dtype, mapas.min().item(), mapas.max().item())
+    print(ids)

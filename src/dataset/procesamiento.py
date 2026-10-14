@@ -25,13 +25,30 @@ def generar_variantes(data):
     variantes.append(rotar_90(data, 3))
     return variantes
 
-def dividir_tiles(tiles, train_pct=0.8,val_pct=0.1, seed=42):
-    random.Random(seed).shuffle(tiles)
-    n = len(tiles)
-    n_train = int(n*train_pct)
-    n_val = int(n*val_pct)
-    train = tiles[:n_train]
-    val = tiles[n_train:n_train+n_val]
-    test = tiles[n_train + n_val:]
+def dividir_tiles(tiles, etiquetas, val_pct=0.1, test_pct=0.1, seed=42):
+    por_clase = {}
+    for nombre in sorted(tiles):
+        clase = etiquetas[nombre]
+        por_clase.setdefault(clase, []).append(nombre)  # agrega `nombre` a la lista de su clase
+
+    rng = random.Random(seed)
+    train, val, test = [], [], []
+    for clase in sorted(por_clase):
+        nombres = por_clase[clase]
+        rng.shuffle(nombres)
+        n_val = max(1, round(val_pct * len(nombres)))
+        n_test = max(1, round(test_pct * len(nombres)))
+        val += nombres[:n_val]
+        test += nombres[n_val:n_val + n_test]    # los siguientes n_test nombres
+        train += nombres[n_val + n_test:]   # todos los que quedan
     return train, val, test
 
+def reducir_tile(data, factor = 3):
+    n = data.shape[0] // factor
+    bloque = data.reshape(n, factor, n, factor)
+    resultado = bloque.mean(axis =(1,3))
+    return resultado
+
+def normalizar_tile(data):
+    resultado = remap(data, data.min(),data.max(), -1, 1)
+    return resultado.astype(np.float32)
