@@ -4,6 +4,9 @@ from dataset.dem_dataset import DEMDataset, ID_CLASE
 from dataset.cargar_dem import cargar_bach_dem, cargar_etiquetas
 from dataset.procesamiento import recortar, normalizar_dem, normalizar_tile, reducir_tile,generar_variantes, dividir_tiles
 from dataset.descargar_dem import descargar_tile
+from model.generador import Generador
+from model.discrimidador import Discriminador
+import torch
 
 def pipeline_ruido_procedural(width, height, scale, octaves, seed, persistence, lacunarity):
     mapa_crudo, biomas = generar_y_exportar_terreno(width, height, scale, octaves, seed, persistence, lacunarity)
@@ -31,9 +34,13 @@ def pipeline_dataset_dem(carpeta_datos, batch_size):
     return loader_train, loader_val, loader_test
 
 if __name__ == "__main__":
-    loader_train, loader_val, loader_test = pipeline_dataset_dem("data/raw", batch_size=4)
-    print(len(loader_train), len(loader_val), len(loader_test))
+    g = Generador()
+    z = torch.randn(4, 100)
+    etiquetas = torch.tensor([0, 1, 2, 3])
+    salida = g(z, etiquetas)
 
-    mapas, ids = next(iter(loader_train))
-    print(mapas.shape, mapas.dtype, mapas.min().item(), mapas.max().item())
-    print(ids)
+    d = Discriminador()
+    puntaje = d(salida, etiquetas)    # `salida` y `etiquetas` son las de la prueba del generador
+    print(puntaje.shape)
+    print(sum(p.numel() for p in g.parameters()), "parámetros en G")
+    print(sum(p.numel() for p in d.parameters()), "parámetros en D")
