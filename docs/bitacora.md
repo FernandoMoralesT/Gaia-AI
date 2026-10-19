@@ -279,10 +279,30 @@ La ventana de entrada es el tile completo reducido de 360×360 a **120×120** po
 
 **Errores resueltos:** `np.reshape` con argumentos sueltos; `axis` con los cuatro ejes en lugar de (1, 3); `por_clase` construido al revés (nombre → clase) y rebanadas de test vacías en `dividir_tiles`; `etiqueta = ID_CLASE` (diccionario entero en lugar del id de la muestra); confusión entre las tres tablas `tiles`, `etiquetas` e `ID_CLASE`.
 
+### Generador y discriminador (MVP del sprint)
+
+**Generador** (`src/model/generador.py`). Recibe ruido z (100 números) y el id de la clase. `nn.Embedding(6, 10)` convierte la clase en 10 números que se pegan al ruido, y una capa lineal los estira a 128 × 15 × 15. Tres `ConvTranspose2d(4, 2, 1)` duplican el tamaño (15 → 30 → 60 → 120) y reducen los canales (128 → 64 → 32 → 1), con `BatchNorm2d` y `ReLU` entre capas. Termina en `Tanh`, que coincide con el rango −1 a 1 de la normalización por tile. Salida: `[B, 1, 120, 120]`.
+
+**Discriminador** (`src/model/discriminador.py`). Recibe el mapa y el id de clase. La clase entra como una hoja extra de 120 × 120 (`nn.Embedding(6, 14400)`) apilada al mapa, así que la entrada tiene 2 canales. Tres `Conv2d(4, 2, 1)` reducen el tamaño (120 → 60 → 30 → 15) y duplican los canales (2 → 32 → 64 → 128), con `LeakyReLU(0.2)`, y `BatchNorm2d` desde la segunda capa. Una capa lineal final da un solo número por terreno, sin `Sigmoid`: la función de pérdida del Sprint 7 lo incluye.
+
+**Tamaños.** `ConvTranspose2d` y `Conv2d` con kernel 4, paso 2 y relleno 1 duplican o reducen a la mitad el tamaño. Por eso la ventana es de 120 (= 15 × 2³).
+
+**Parámetros.** Generador: 3,361,501, con el 95 % en la capa lineal inicial. Discriminador: 280,673. El generador pesa unas 12 veces más; es un punto a vigilar en el entrenamiento.
+
+**Verificación.** Generador: `[4, 1, 120, 120]`, rango de −0.9999 a 0.9996. Discriminador: `[4, 1]`. Los conteos de parámetros coinciden con el cálculo a mano.
+
+**Errores resueltos**
+- `BatchNorm2d` con `canales // 4` y `canales // 2` en el discriminador: en el generador los canales se dividen, en el discriminador se multiplican; cada `BatchNorm2d` lleva los canales de la convolución inmediata anterior.
+- `Linear` final con `canales * 15 * 15`: faltaba el factor 4 de las hojas que quedan tras las tres convoluciones.
+- Canales escritos como números fijos en las convoluciones, en lugar de expresiones de `canales`.
+
+**Conceptos trabajados:** canales como hojas apiladas, `nn.Embedding` para condicionar por clase, `Tanh` por el rango de salida.
+
 ### Pendiente
 
-- Generador (esqueleto en curso) y discriminador en `src/model/`; verificar la forma de salida (MVP del sprint).
-- Confirmación visual de las 9 etiquetas dudosas.
-- Los 12 tiles de la segunda tanda se validaron con `resumen_dataset.py`: 60 tiles de 360 × 360, 0 píxeles `nodata`, elevación global de −30 a 8748 m, sin etiquetas sobrantes ni faltantes.
+- Sprint 7: ciclo de entrenamiento (pérdida con logits, optimizador Adam), checkpoints y muestras generadas.
+- Revisar el desbalance entre el generador y el discriminador, y reducir la capa lineal inicial si hace falta.
+- Confirmar visualmente las etiquetas dudosas, antes de entrenar: una etiqueta equivocada enseña a la red que "valle" produce montañas.
+- Actualizar el anteproyecto con el objetivo nuevo (terreno según la clase solicitada), la presentación y la escaleta.
 
-Tag de cierre: `sprint-06` (al terminar el MVP).
+Tag de cierre: `sprint-06`.

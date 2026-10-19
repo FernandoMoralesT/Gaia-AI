@@ -6,6 +6,7 @@ from dataset.procesamiento import recortar, normalizar_dem, normalizar_tile, red
 from dataset.descargar_dem import descargar_tile
 from model.generador import Generador
 from model.discrimidador import Discriminador
+from model.entrenar import paso_entrenamiento, entrenar
 import torch
 
 def pipeline_ruido_procedural(width, height, scale, octaves, seed, persistence, lacunarity):
@@ -34,13 +35,15 @@ def pipeline_dataset_dem(carpeta_datos, batch_size):
     return loader_train, loader_val, loader_test
 
 if __name__ == "__main__":
-    g = Generador()
-    z = torch.randn(4, 100)
-    etiquetas = torch.tensor([0, 1, 2, 3])
-    salida = g(z, etiquetas)
+    import torch
+    import torch.nn as nn
 
+    loader_train, loader_val, loader_test = pipeline_dataset_dem("data/raw", batch_size=4)
+
+    g = Generador()
     d = Discriminador()
-    puntaje = d(salida, etiquetas)    # `salida` y `etiquetas` son las de la prueba del generador
-    print(puntaje.shape)
-    print(sum(p.numel() for p in g.parameters()), "parámetros en G")
-    print(sum(p.numel() for p in d.parameters()), "parámetros en D")
+    criterio = nn.BCEWithLogitsLoss()
+    opt_g = torch.optim.Adam(g.parameters(), lr=2e-4, betas=(0.5, 0.999))
+    opt_d = torch.optim.Adam(d.parameters(), lr=2e-4, betas=(0.5, 0.999))
+
+    historial = entrenar(g, d, loader_train, 30, criterio, opt_g, opt_d)
