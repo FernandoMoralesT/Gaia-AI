@@ -27,10 +27,15 @@ def paso_entrenamiento(g, d, mapas, ids, criterio, opt_g, opt_d, z_dim=100):
 
     return perdida_d.item(), perdida_g.item()
 
-def entrenar(g, d, loader, epocas, criterio, opt_g, opt_d, z_dim = 100):
+def entrenar(g, d, loader, epocas, criterio, opt_g, opt_d, z_dim=100,
+            cada_muestras=10, cada_numerado=50):
     historial = []
     ids_fijos = torch.arange(len(CLASES)).repeat_interleave(3)
     z_fijo = torch.randn(len(CLASES) * 3, z_dim)
+    os.makedirs("salidas", exist_ok=True)
+    with open("salidas/historial.csv", "w") as f:
+        f.write("epoca,D,G\n")
+
     for epoca in range(epocas):
         inicio = time.perf_counter()
         suma_d, suma_g, n = 0.0, 0.0, 0
@@ -39,17 +44,19 @@ def entrenar(g, d, loader, epocas, criterio, opt_g, opt_d, z_dim = 100):
             suma_d += pd
             suma_g += pg
             n += 1
-        prom_d = suma_d/n
-        prom_g = suma_g/n
+        prom_d = suma_d / n
+        prom_g = suma_g / n
         historial.append((prom_d, prom_g))
-        print(f"epoca {epoca + 1}/{epocas} | D {prom_d:.3f} | G{prom_g:.3f} | {time.perf_counter()-inicio:.1f} s")
-        if epoca == 0 or (epoca + 1) % 5 == 0:
-            t = time.perf_counter()
+        print(f"epoca {epoca + 1}/{epocas} | D {prom_d:.3f} | G {prom_g:.3f} | {time.perf_counter() - inicio:.1f} s")
+
+        with open("salidas/historial.csv", "a") as f:
+            f.write(f"{epoca + 1},{prom_d:.4f},{prom_g:.4f}\n")
+        if epoca == 0 or (epoca + 1) % cada_muestras == 0:
             guardar_muestras(g, epoca + 1, z_fijo, ids_fijos)
-            print(f"  muestras: {time.perf_counter() - t:.1f} s")
-        t = time.perf_counter()
         guardar_checkpoint(g, d, opt_g, opt_d, epoca + 1)
-        print(f"  checkpoint: {time.perf_counter() - t:.1f} s")
+        if (epoca + 1) % cada_numerado == 0:
+            guardar_checkpoint(g, d, opt_g, opt_d, epoca + 1,
+                            ruta=f"salidas/checkpoints/epoca_{epoca + 1:03d}.pt")
     return historial
 
 def guardar_muestras(g, epoca, z_fijo, ids_fijos, carpeta="salidas/muestras"):
@@ -81,3 +88,13 @@ def guardar_checkpoint(g, d, opt_g, opt_d, epoca, ruta="salidas/checkpoints/ulti
         "opt_d": opt_d.state_dict(),
         "clases": CLASES,
     }, ruta)
+
+def cargar_checkpoint(g, d, ruta, opt_g = None, opt_d = None):
+    checkpoint = torch.load(ruta, map_location="cpu", weights_only=True)
+    g.load_state_dict(checkpoint["g"])
+    d.load_state_dict(checkpoint["d"])
+    if opt_g is not None:
+        opt_g.load_state_dict(checkpoint["opt_g"])
+    if opt_d is not None:
+        opt_d.load_state_dict(checkpoint["opt_d"])
+    return checkpoint["epoca"]

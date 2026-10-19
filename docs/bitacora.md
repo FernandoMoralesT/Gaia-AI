@@ -298,11 +298,42 @@ La ventana de entrada es el tile completo reducido de 360×360 a **120×120** po
 
 **Conceptos trabajados:** canales como hojas apiladas, `nn.Embedding` para condicionar por clase, `Tanh` por el rango de salida.
 
-### Pendiente
-
-- Sprint 7: ciclo de entrenamiento (pérdida con logits, optimizador Adam), checkpoints y muestras generadas.
-- Revisar el desbalance entre el generador y el discriminador, y reducir la capa lineal inicial si hace falta.
-- Confirmar visualmente las etiquetas dudosas, antes de entrenar: una etiqueta equivocada enseña a la red que "valle" produce montañas.
-- Actualizar el anteproyecto con el objetivo nuevo (terreno según la clase solicitada), la presentación y la escaleta.
-
 Tag de cierre: `sprint-06`.
+
+## Sprint 7: Ciclo de entrenamiento y selección del checkpoint
+
+### Qué se construyó
+- `paso_entrenamiento`: un paso de GAN (turno del discriminador con `falso.detach()`, luego turno del generador).
+- `entrenar`: ciclo por épocas con `historial.csv`, muestras fijas cada 10 épocas, `ultimo.pt` cada época y checkpoints numerados cada 50.
+- `cargar_checkpoint(g, d, ruta, opt_g=None, opt_d=None)`: restaura pesos y, opcionalmente, optimizadores; devuelve la época. Verificada: carga `epoca_150.pt`, imprime 150 y genera muestras.
+- Rendimiento en CPU: ~5 s por época; 500 épocas ≈ 48 min.
+
+### Corrida de referencia (500 épocas, semilla 42, etiquetas corregidas)
+- D se mantuvo sobre 1.0 en valores individuales hasta ~época 186 y cayó de forma sostenida desde ~189.
+- Final: D = 0.226, G = 4.457. El discriminador dominó y el generador dejó de recibir señal útil.
+
+### Criterio numérico (media móvil de 10 épocas, D_media > 1.0 y G_media < 2.5)
+- Zona sana: épocas 10 a 115.
+- Mayor equilibrio (D ≈ 1.4–1.5, G ≈ 1.3): épocas 15 a 40.
+- Deriva lenta hacia el discriminador: D_media baja de 1.50 (ép. 15) a 1.02 (ép. 114); G_media sube de 1.25 (ép. 24) a 1.95 (ép. 114).
+- Época 150: D_media = [0.84802], G_media = [2.27881].
+
+### Criterio visual (épocas 100, 150 y 200, mismo z_fijo)
+- Volcán y valle: estables y claros en las tres.
+- Llanura: la 150 es la más plana (verde/amarillo); la 100 mezcla zonas de montaña y la 200 tiene más ruido.
+- Montaña: ninguna es claramente buena.
+- Sin artefactos de puntos rojos en 100, 150 ni 200 (aparecen en la 300).
+
+### Decisión
+Se usa `epoca_150.pt` como modelo del demo, por criterio visual.
+
+**Salvedad:** el criterio numérico no coincide con el visual. Las pérdidas indican que el equilibrio más sano está en las primeras épocas (10–115), pero ahí el generador tiene menos entrenamiento. La 150 está fuera de la zona sana por pérdidas, aunque antes del colapso (~189). En una GAN la pérdida mide el equilibrio entre D y G, no la calidad del mapa; por eso se priorizó la inspección visual.
+
+### Limitaciones detectadas
+- Lomas: las muestras se parecen a valle (zonas azules grandes).
+- Montaña y meseta: poco distinguibles entre sí.
+- Checkpoints solo cada 50 épocas; no hay granularidad fina entre 100 y 200.
+
+### Pendiente
+- Comparar `epoca_100.pt` contra `epoca_150.pt` con el mismo z_fijo.
+- Opción B (retomar desde la 150 con D frenado) si sobra tiempo.

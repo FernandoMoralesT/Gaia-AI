@@ -5,7 +5,7 @@ from dataset.cargar_dem import cargar_bach_dem, cargar_etiquetas
 from dataset.procesamiento import recortar, normalizar_dem, normalizar_tile, reducir_tile,generar_variantes, dividir_tiles
 from dataset.descargar_dem import descargar_tile
 from model.generador import Generador
-from model.discrimidador import Discriminador
+from src.model.discriminador import Discriminador
 from model.entrenar import paso_entrenamiento, entrenar
 import torch
 
@@ -40,10 +40,11 @@ if __name__ == "__main__":
 
     loader_train, loader_val, loader_test = pipeline_dataset_dem("data/raw", batch_size=4)
 
+    torch.manual_seed(42)
     g = Generador()
     d = Discriminador()
     criterio = nn.BCEWithLogitsLoss()
     opt_g = torch.optim.Adam(g.parameters(), lr=2e-4, betas=(0.5, 0.999))
     opt_d = torch.optim.Adam(d.parameters(), lr=2e-4, betas=(0.5, 0.999))
 
-    historial = entrenar(g, d, loader_train, 30, criterio, opt_g, opt_d)
+    historial = entrenar(g, d, loader_train, 500, criterio, opt_g, opt_d)
