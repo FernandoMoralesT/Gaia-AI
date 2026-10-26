@@ -8,3 +8,10 @@ data/processed/
 *.raw
 *.npy
 salidas/
+
+# MemPalace per-project files (issue #185)
+mempalace.yaml
+entities.json
+
+# Mapas de ejemplo del visor de Godot (excepción a *.raw)
+!godot/gaia-visor/mapas/*.raw
