@@ -395,3 +395,11 @@ Queda como respaldo `epoca_100.pt`, que sí está dentro de la zona sana (D_medi
 - Confirmar en 3D que sigma = 2 no deja granulado visible.
 
 Tag de cierre: `sprint-08`.
+
+
+## Preparación del Sprint 9: hallazgo del cráter y decisión de demo
+
+- Medición en los 9 volcanes reales a 120×120 (90 m/píxel), profundidad = máximo del anillo de 4-20 px menos el centro: 3 positivos claros (Nevado de Toluca +435 m, El Pinacate +227 m, Colima +166 m), 1 marginal (Ceboruco +52 m) y 5 sin cráter. En Colima la cima está a 60 px del centro, así que su valor puede venir de la ladera.
+- `generar_terreno("volcán", 42)` da un cono sin hueco: +0.025 con sigma 0, +0.031 con sigma 1 y +0.056 con sigma 2. El suavizado no crea ni borra el cráter; el aumento con sigma viene del ensanchamiento de la cima.
+- Causa: los cráteres de los estratovolcanes (Popocatépetl, Fuji) son menores que la resolución y casi no hay ejemplos en el dataset. Se documenta como limitación.
+- Decisión del Sprint 9: generación en vivo con un servidor local (`src/servidor.py`, `127.0.0.1:8765`) que devuelve el `.raw`, con respaldo de los mapas pregenerados de `godot/gaia-visor/mapas/` si no responde.

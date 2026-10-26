@@ -2,65 +2,88 @@
 
 IA local que genera terreno procedural (mapas de altura) con una cGAN entrenada con elevación real (SRTM). Proyecto de Fernando (Ingeniería en Sistemas, FIMAZ-UAS, Mazatlán) con equipo de 3, para Estructura de Datos y una expo de IA. Nació como herramienta de mapas para su juego "A Stupid RPG" (en pausa).
 
-Repo: github.com/FernandoMoralesT/Gaia-AI
-Plan: 10 sprints de 1 semana (reestructurado de 16 a 10 semanas).
+Repo: github.com/FernandoMoralesT/Gaia-AI · Plan: 10 sprints de 1 semana.
+
+## Navegación (leer primero)
+- Para saber qué depende de qué, lee `docs/grafo.md` (lo genera `scrips/generar_grafo.py`).
+- Ubica con grep/glob antes de abrir archivos completos.
+- No leas `godot/` ni `docs/` salvo que la tarea lo pida. No leas todo el repo al iniciar.
+- La carpeta de scripts se llama `scrips` (sin "t").
 
 ## Estado actual
-- Sprints 1 a 8: concluidos (último tag: `sprint-08`).
-- Sprint 9: demo visual en Godot (siguiente). Sprint 10: documentación, PDF y v1.0.
-- Modelo demo elegido: época 150 (`epoca_150.pt`), por criterio visual.
+- Sprints 1 a 8 concluidos. Último tag: `sprint-08` (inferencia, postprocesado, visor y 23 tests).
+- Sprint 9 en preparación (demo visual en Godot). Sprint 10: documentación, PDF y v1.0.
+- Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100.
+
+## Sprint 9: decisión y pendientes
+Generación en vivo: un servidor local en Python, `src/servidor.py`, escuchando solo en `127.0.0.1:8765`.
+- `GET /salud`: comprobar que está vivo.
+- `GET /terreno?clase=&semilla=&sigma=`: responde los bytes del `.raw` que Godot ya sabe leer.
+- Respaldo: si el servidor no responde, el visor usa los mapas pregenerados de `godot/gaia-visor/mapas/`.
+
+MVP: un lanzador abre el visor, arranca el servidor y, al pulsar "Generar", muestra en color un terreno nuevo generado por el modelo.
+
+Pasos pendientes:
+1. Servidor y sus tests.
+2. Selector de clase, semilla y sigma en el visor.
+3. Paleta por clase (volcán sin nieve).
+4. Cámara orbital.
+5. `iniciar_demo.bat`.
+6. Exportación a `.exe`.
+7. Cierre: bitácora y tag `sprint-09`.
 
 ## Stack
-- Python + PyTorch, entrenamiento en CPU (la GPU es AMD Radeon; no hay CUDA).
-- numpy, rasterio (lectura de .tif SRTM), python-dotenv, scipy (suavizado), pytest (tests).
-- Datos: SRTM GL1 (30 m) vía API globaldem de OpenTopography. La clave vive en `.env` (fuera de git).
-- Visor 3D en Godot 4.5, renderer Compatibility, en `godot/gaia-visor/`.
+- Python + PyTorch, CPU (GPU AMD Radeon, sin CUDA). numpy, rasterio, python-dotenv, scipy, pytest.
+- Datos: SRTM GL1 (30 m) vía OpenTopography; la clave vive en `.env` (fuera de git).
+- Visor: Godot 4.5, renderer Compatibility, en `godot/gaia-visor/`.
 
 ## Archivos clave
-- `src/dataset/dem_dataset.py`: dataset y `CLASES` (orden canónico, NUNCA reordenar).
-- `src/model/entrenar.py`: ciclo de entrenamiento y `cargar_checkpoint()`.
+Mapa completo en `docs/grafo.md`. Los más usados:
+- `src/dataset/dem_dataset.py`: `CLASES` (orden canónico, NUNCA reordenar) e `ID_CLASE`.
+- `src/model/entrenar.py`: entrenamiento y `cargar_checkpoint()`.
 - `src/inferencia.py`: `generar_terreno(clase, semilla, sigma=2)`, `suavizar`, `normalizar`, `exportar_raw`.
-- `scrips/exportar_generador.py`: exporta solo el generador (la carpeta se llama `scrips`, sin "t").
-- `test/test_inferencia.py`: 23 tests de pytest (`python -m pytest test/`).
-- `godot/gaia-visor/`: `terreno.gd` (lee el `.raw` y arma la malla), `terreno.gdshader` (color por altura), `mundo.tscn`, `mapas/` (`.raw` de ejemplo, versionados).
+- `test/test_inferencia.py`: `python -m pytest test/`.
 - `data/etiquetas.json`: fuente de verdad de las etiquetas por tile.
 - `docs/bitacora.md`, `docs/dataset.md`: decisiones y razones por sprint.
-- `salidas/historial.csv`: curva de pérdida de 500 épocas (gitignored, solo local).
-- `salidas/checkpoints/epoca_NNN.pt`: copias cada 50 épocas.
-- `modelos/generador_epoca150.pt`: checkpoint solo-generador (~12.8 MB), versionado en git.
+- `salidas/`: historial, muestras y `checkpoints/epoca_NNN.pt` (solo local, gitignored).
 
 ## Modelo (cGAN)
-- 6 clases: llanura, lomas, valle, montaña, meseta, volcán (definidas por forma, no por metros).
-- Cada tile se normaliza por separado a [-1, 1]. Mapas de 120×120.
-- Generador: ruido (100) + clase (embedding de 10) → capa lineal a 128×15×15 → 3 bloques ConvTranspose2d (30, 60, 120 px) con BatchNorm y ReLU → Tanh. 3,361,501 parámetros.
-- Discriminador: la clase entra como canal extra de 120×120; 3 Conv2d con LeakyReLU(0.2); sin Sigmoid porque se usa BCEWithLogitsLoss. 280,673 parámetros.
-- Dataset: 60 tiles SRTM (0.1°), división estratificada 80/10/10 por tile (seed 42), augmentation de 6 variantes (original, 2 volteos, 3 rotaciones). 288/36/36 muestras.
-- Entrenamiento: 500 épocas, Adam, ~5 s por época en CPU, seed 42.
+- 6 clases definidas por forma, no por metros: llanura, lomas, valle, montaña, meseta, volcán.
+- Cada tile se normaliza por separado a [-1, 1]; mapas de 120×120 (90 m/píxel).
+- Generador: ruido 100 + embedding de clase 10 → lineal a 128×15×15 → 3 ConvTranspose2d con BatchNorm y ReLU → Tanh. 3,361,501 parámetros.
+- Discriminador: clase como canal extra; 3 Conv2d con LeakyReLU(0.2); sin Sigmoid (BCEWithLogitsLoss). 280,673 parámetros.
+- Dataset: 60 tiles, división 80/10/10 por tile (seed 42), 6 variantes por tile; 288/36/36 muestras.
+- Entrenamiento: 500 épocas, Adam, ~5 s por época, seed 42.
 
-## Resultados conocidos
-- El discriminador domina desde la época ~189 (D final 0.226, G final 4.457).
-- Por pérdidas (media móvil de 10 épocas) la zona sana va de la 10 a la ~115; la 150 queda fuera, pero se eligió por comparación visual (épocas 100/150/200). La 100 es el respaldo. La discrepancia está documentada en la bitácora.
-- Débiles: lomas, montaña y meseta se parecen entre sí. Claros: volcán, valle y llanura.
+## Inferencia y visor
+- `generar_terreno`: modelo en caché, `eval()`, `no_grad`, `torch.Generator` local (no toca la semilla global). Devuelve `float32` de 120×120.
+- `suavizar`: `gaussian_filter` con reescalado al min/max original; `sigma=0` = salida cruda.
+- `exportar_raw`: min-max a [0, 1]; encabezado `<u4` (ancho, alto) y datos `<f4` fila por fila.
+- Las alturas no son metros. Escala vertical en Godot: `escala_altura` (por clase) × `multiplicador_altura` (3). Luz a 25°, cámara a 30°.
 
-## Inferencia y visor (Sprint 8)
-- `generar_terreno`: modelo en caché, `eval()`, `no_grad`, ruido con `torch.Generator` local (no toca la semilla global). Devuelve `float32` 120×120.
-- `suavizar`: `gaussian_filter` y reescalado al min/max original; `sigma=0` = salida cruda en [-1, 1].
-- `exportar_raw`: normaliza min-max a [0, 1]; encabezado `<u4` (ancho, alto) + datos `<f4` fila por fila.
-- Las alturas no son metros (normalización por tile). La escala vertical se decide en Godot: `escala_altura` (por clase) × `multiplicador_altura` (3).
-- Escena: luz direccional a 25° de elevación, cámara a 30°.
+## Hallazgos
+- El discriminador domina desde la época ~189. Por pérdidas, la zona sana es la 10–115; la 150 se eligió por criterio visual (comparando 100/150/200). La discrepancia está en la bitácora.
+- Clases débiles: lomas, montaña y meseta se parecen. Claras: volcán, valle y llanura.
+- Cráter (medido en los 9 volcanes reales a 120×120): solo 3 dan profundidad positiva clara (Nevado de Toluca, El Pinacate y Colima), 1 es marginal (Ceboruco) y 5 no muestran cráter. En Colima la cima está a 60 px del centro, así que su valor puede venir de la ladera. El modelo genera un cono sin hueco. El suavizado no es la causa (con sigma 0 ya daba +0.025): es una limitación de resolución y de datos.
 
 ## Reglas del repo
 - Nunca reordenar `CLASES` ni cambiar `data/etiquetas.json` sin anotarlo en la bitácora.
-- Cada sprint cierra con entrada en `docs/bitacora.md`, commit y tag `sprint-NN`.
 - Claves y tokens solo en `.env`; nunca en git.
-- Dividir siempre por tile, no por muestra, para evitar fuga de datos.
-- Guardar checkpoints numerados; nunca sobrescribir el modelo demo.
+- Dividir siempre por tile, no por muestra.
+- Checkpoints numerados; nunca sobrescribir el modelo del demo.
+- Mensajes de commit sin comillas internas (PowerShell los rompe).
+
+## Rutina de cierre de sprint
+1. `python scrips/generar_grafo.py`.
+2. Entrada en `docs/bitacora.md` y estado actualizado en este archivo.
+3. Commit y tag `sprint-NN`.
 
 ## Pendientes sueltos
-- 3 coordenadas de tiles manuales en `data/raw_v1/` (anteriores al Sprint 6) sin registrar.
-- El anteproyecto `.docx` aún describe el enfoque anterior; falta actualizarlo al pivote cGAN.
-- Visor: tabla de escala vertical por clase, sombras y confirmar en 3D que sigma = 2 no deja granulado.
-- Mejora opcional de entrenamiento (frenar al discriminador, menor tasa de aprendizaje, label smoothing), solo si sobra tiempo tras el Sprint 10.
+- 3 tiles manuales en `data/raw_v1/` sin coordenadas registradas.
+- El anteproyecto `.docx` aún describe el enfoque anterior al pivote cGAN.
+- Visor: escala vertical por clase, sombras, confirmar en 3D que sigma = 2 no deja granulado.
+- Tiles de volcán donde el cono no domina el centro: Paricutín y Colima.
+- Mejora opcional de entrenamiento (frenar al discriminador, menor tasa, label smoothing), solo si sobra tiempo tras el Sprint 10.
 
 ## Cómo trabajar con Fernando
 - Responder en español.
