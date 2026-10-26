@@ -316,7 +316,7 @@ Tag de cierre: `sprint-06`.
 - Zona sana: épocas 10 a 115.
 - Mayor equilibrio (D ≈ 1.4–1.5, G ≈ 1.3): épocas 15 a 40.
 - Deriva lenta hacia el discriminador: D_media baja de 1.50 (ép. 15) a 1.02 (ép. 114); G_media sube de 1.25 (ép. 24) a 1.95 (ép. 114).
-- Época 150: D_media = [0.84802], G_media = [2.27881].
+- Época 150: D_media = 0.848, G_media = 2.279, D_std = 0.096 (fuera de la zona sana por criterio numérico; D_media ya está por debajo de 1.0).
 
 ### Criterio visual (épocas 100, 150 y 200, mismo z_fijo)
 - Volcán y valle: estables y claros en las tres.
@@ -326,6 +326,7 @@ Tag de cierre: `sprint-06`.
 
 ### Decisión
 Se usa `epoca_150.pt` como modelo del demo, por criterio visual.
+Queda como respaldo `epoca_100.pt`, que sí está dentro de la zona sana (D_media = 1.064, G_media = 1.919).
 
 **Salvedad:** el criterio numérico no coincide con el visual. Las pérdidas indican que el equilibrio más sano está en las primeras épocas (10–115), pero ahí el generador tiene menos entrenamiento. La 150 está fuera de la zona sana por pérdidas, aunque antes del colapso (~189). En una GAN la pérdida mide el equilibrio entre D y G, no la calidad del mapa; por eso se priorizó la inspección visual.
 
@@ -335,5 +336,62 @@ Se usa `epoca_150.pt` como modelo del demo, por criterio visual.
 - Checkpoints solo cada 50 épocas; no hay granularidad fina entre 100 y 200.
 
 ### Pendiente
-- Comparar `epoca_100.pt` contra `epoca_150.pt` con el mismo z_fijo.
 - Opción B (retomar desde la 150 con D frenado) si sobra tiempo.
+
+## Sprint 8: Inferencia local, postprocesado y visor en Godot
+
+### Exportación del generador
+- `scrips/exportar_generador.py` carga `epoca_150.pt` con `cargar_checkpoint` y guarda solo el `state_dict` del generador en `modelos/generador_epoca150.pt` (13,453,757 bytes, ~12.8 MB).
+- Verificado: carga estricta sin llaves faltantes ni sobrantes, 3,361,501 parámetros y pesos idénticos a `epoca_150.pt["g"]`.
+- **Decisión:** `modelos/` se versiona en git. Así cualquier integrante puede generar terreno sin tener los checkpoints de entrenamiento (`salidas/` sigue fuera de git).
+
+### `src/inferencia.py`
+- `generar_terreno(clase, semilla, sigma=2)` devuelve un `numpy` `float32` de 120×120.
+- El modelo se carga una sola vez y queda en caché en una variable del módulo (`_obtener_generador`), en modo `eval()` y con `weights_only=True`.
+- La inferencia corre dentro de `torch.no_grad()`.
+- El ruido sale de un `torch.Generator` propio con la semilla; no se toca la semilla global de PyTorch.
+- La clase se convierte con `ID_CLASE` (equivale a `CLASES.index`, verificado para las 6) y una clase desconocida lanza `ValueError` con las válidas.
+- **Por qué `eval()`:** con un lote de 1 mapa, `BatchNorm2d` en modo `train()` usaría el promedio de ese único mapa. Comparado con el camino de `guardar_muestras` (lote de 18): en `eval()` la diferencia es de 5.4e-07 (redondeo); en `train()` sube a 0.21.
+
+### Postprocesado
+- `normalizar(mapa)`: min-max a [0, 1]. Se aplica **al exportar**, no en `generar_terreno`, para poder probar la salida del modelo en [-1, 1]. Reproduce la convención del dataset, donde cada tile iba exactamente de -1 a 1.
+- `suavizar(mapa, sigma)`: `gaussian_filter` de scipy y reescalado al min/max original. `sigma=0` devuelve la salida cruda.
+- Comparación con volcán, semilla 42 (rugosidad = diferencia media entre píxeles vecinos):
+
+| sigma | rugosidad | media |
+| --- | --- | --- |
+| 0 | 0.147 | -0.292 |
+| 1 | 0.037 | -0.295 |
+| 1.5 | 0.031 | -0.289 |
+| 2 | 0.029 | -0.281 |
+| 3 | 0.027 | -0.268 |
+
+- Sigma 1 ya quita ~75 % del granulado; después la mejora es pequeña. Efecto secundario del reescalado: la cima se ensancha al subir sigma. Se fijó **sigma = 2** por defecto.
+- **Alturas:** la red no conoce metros (normalización por tile), así que no hay altura real que recuperar. La escala vertical se decide en Godot.
+
+### Exportación `.raw` para Godot
+- `exportar_raw(mapa, ruta)`: encabezado `width`, `height` como `uint32` little-endian (`<u4`), luego los datos `float32` little-endian (`<f4`) fila por fila. 120×120 → 57,608 bytes.
+- Se abre en modo `"wb"`: en modo texto, Windows convertiría cada byte `0x0A` en `0x0D 0x0A` y corrompería los datos.
+
+### Visor en Godot (`godot/gaia-visor`)
+- Godot 4.5, renderer *Compatibility*.
+- `terreno.gd` lee el `.raw` (valida que el tamaño sea 8 + ancho × alto × 4), arma la malla con `SurfaceTool` (dos triángulos por celda, en sentido horario) y calcula normales.
+- Parámetros editables: `escala_altura` (20, pensada para la escala por clase), `multiplicador_altura` (3, exageración general) y `tamano_celda`.
+- `terreno.gdshader` colorea por altura normalizada (llega como color de vértice): verde, café desde 0.35 y gris claro desde 0.75, con transición suave.
+- Escena: luz direccional a 25° de elevación y cámara a 30° sobre el terreno.
+- Los mapas de ejemplo de `godot/gaia-visor/mapas/` se versionan como excepción al `*.raw` del `.gitignore`.
+
+### Tests (`test/test_inferencia.py`)
+23 pruebas con pytest, todas pasan: forma y tipo, las 6 clases, rango crudo, determinismo por semilla, semillas y clases distintas, clase inválida, semilla global intacta, modelo en `eval()` y en caché, pesos iguales al checkpoint (se omite si no existe `salidas/`), `normalizar`, `suavizar` y el formato `.raw` (incluido un mapa de 2×3 para detectar ancho y alto invertidos).
+
+### Errores resueltos
+- El código de inferencia se guardó en `scrips/exportar_generador.py` y reemplazó al script de exportación; `src/inferencia.py` quedó vacío (`ImportError`). Se movió y se restauró el script.
+- `torch.rand` en lugar de `torch.randn`: ruido uniforme de 0 a 1 en vez de la normal con la que se entrenó. No da error; solo se nota en los mapas.
+- Godot `error 7` (`ERR_FILE_NOT_FOUND`): `mapas/` quedó fuera de la carpeta del proyecto; `res://` apunta a la carpeta de `project.godot`.
+
+### Pendiente
+- Tabla de escala vertical por clase en Godot (llanura baja, montaña y volcán altas), ajustada a ojo.
+- Probar sombras de la luz direccional.
+- Confirmar en 3D que sigma = 2 no deja granulado visible.
+
+Tag de cierre: `sprint-08`.

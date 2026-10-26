@@ -6,27 +6,28 @@ Repo: github.com/FernandoMoralesT/Gaia-AI
 Plan: 10 sprints de 1 semana (reestructurado de 16 a 10 semanas).
 
 ## Estado actual
-- Sprints 1 a 7: concluidos (último tag: `sprint-07`).
-- Sprint 8: en progreso (ver "Sprint 8").
-- Sprint 9: demo visual en Godot. Sprint 10: documentación, PDF y v1.0.
+- Sprints 1 a 8: concluidos (último tag: `sprint-08`).
+- Sprint 9: demo visual en Godot (siguiente). Sprint 10: documentación, PDF y v1.0.
 - Modelo demo elegido: época 150 (`epoca_150.pt`), por criterio visual.
 
 ## Stack
 - Python + PyTorch, entrenamiento en CPU (la GPU es AMD Radeon; no hay CUDA).
-- numpy, rasterio (lectura de .tif SRTM), python-dotenv.
+- numpy, rasterio (lectura de .tif SRTM), python-dotenv, scipy (suavizado), pytest (tests).
 - Datos: SRTM GL1 (30 m) vía API globaldem de OpenTopography. La clave vive en `.env` (fuera de git).
-- Visor 3D en Godot (integración deliberadamente al final).
+- Visor 3D en Godot 4.5, renderer Compatibility, en `godot/gaia-visor/`.
 
 ## Archivos clave
 - `src/dataset/dem_dataset.py`: dataset y `CLASES` (orden canónico, NUNCA reordenar).
 - `src/model/entrenar.py`: ciclo de entrenamiento y `cargar_checkpoint()`.
-- `src/inferencia.py`: `generar_terreno(clase, semilla)` (por crear en Sprint 8).
-- `scrips/exportar_generador.py`: exporta solo el generador (verifica el nombre real de la carpeta con `ls`).
+- `src/inferencia.py`: `generar_terreno(clase, semilla, sigma=2)`, `suavizar`, `normalizar`, `exportar_raw`.
+- `scrips/exportar_generador.py`: exporta solo el generador (la carpeta se llama `scrips`, sin "t").
+- `test/test_inferencia.py`: 23 tests de pytest (`python -m pytest test/`).
+- `godot/gaia-visor/`: `terreno.gd` (lee el `.raw` y arma la malla), `terreno.gdshader` (color por altura), `mundo.tscn`, `mapas/` (`.raw` de ejemplo, versionados).
 - `data/etiquetas.json`: fuente de verdad de las etiquetas por tile.
 - `docs/bitacora.md`, `docs/dataset.md`: decisiones y razones por sprint.
 - `salidas/historial.csv`: curva de pérdida de 500 épocas (gitignored, solo local).
 - `salidas/checkpoints/epoca_NNN.pt`: copias cada 50 épocas.
-- `modelos/generador_epoca150.pt`: checkpoint solo-generador (~12.8 MB; confirmar que existe).
+- `modelos/generador_epoca150.pt`: checkpoint solo-generador (~12.8 MB), versionado en git.
 
 ## Modelo (cGAN)
 - 6 clases: llanura, lomas, valle, montaña, meseta, volcán (definidas por forma, no por metros).
@@ -41,13 +42,12 @@ Plan: 10 sprints de 1 semana (reestructurado de 16 a 10 semanas).
 - Por pérdidas (media móvil de 10 épocas) la zona sana va de la 10 a la ~115; la 150 queda fuera, pero se eligió por comparación visual (épocas 100/150/200). La 100 es el respaldo. La discrepancia está documentada en la bitácora.
 - Débiles: lomas, montaña y meseta se parecen entre sí. Claros: volcán, valle y llanura.
 
-## Sprint 8 (pendiente)
-1. Exportar el generador (confirmar que `scrips/exportar_generador.py` corrió bien y creó `modelos/generador_epoca150.pt`).
-2. `generar_terreno(clase, semilla)` en `src/inferencia.py`. Pregunta abierta: cachear el modelo entre llamadas para no recargarlo cada vez.
-3. Postprocesado.
-4. Tests.
-5. Exportar `.raw` para Godot: encabezado con width y height (uint32) + datos float32. La integración con Godot se deja para el final del sprint.
-6. Cierre: entrada en bitácora, commit y tag `sprint-08`.
+## Inferencia y visor (Sprint 8)
+- `generar_terreno`: modelo en caché, `eval()`, `no_grad`, ruido con `torch.Generator` local (no toca la semilla global). Devuelve `float32` 120×120.
+- `suavizar`: `gaussian_filter` y reescalado al min/max original; `sigma=0` = salida cruda en [-1, 1].
+- `exportar_raw`: normaliza min-max a [0, 1]; encabezado `<u4` (ancho, alto) + datos `<f4` fila por fila.
+- Las alturas no son metros (normalización por tile). La escala vertical se decide en Godot: `escala_altura` (por clase) × `multiplicador_altura` (3).
+- Escena: luz direccional a 25° de elevación, cámara a 30°.
 
 ## Reglas del repo
 - Nunca reordenar `CLASES` ni cambiar `data/etiquetas.json` sin anotarlo en la bitácora.
@@ -59,6 +59,7 @@ Plan: 10 sprints de 1 semana (reestructurado de 16 a 10 semanas).
 ## Pendientes sueltos
 - 3 coordenadas de tiles manuales en `data/raw_v1/` (anteriores al Sprint 6) sin registrar.
 - El anteproyecto `.docx` aún describe el enfoque anterior; falta actualizarlo al pivote cGAN.
+- Visor: tabla de escala vertical por clase, sombras y confirmar en 3D que sigma = 2 no deja granulado.
 - Mejora opcional de entrenamiento (frenar al discriminador, menor tasa de aprendizaje, label smoothing), solo si sobra tiempo tras el Sprint 10.
 
 ## Cómo trabajar con Fernando
