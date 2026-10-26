@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://3k8ee13ytvb"]
+
+[ext_resource type="Script" uid="uid://bfnbat5l8ok5t" path="res://terreno.gd" id="1_6ba58"]
+[ext_resource type="Shader" uid="uid://bqjwdd1afji6t" path="res://terreno.gdshader" id="2_shd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_alt"]
+render_priority = 0
+shader = ExtResource("2_shd")
+shader_parameter/color_bajo = Color(0.3, 0.5, 0.2, 1)
+shader_parameter/color_medio = Color(0.45, 0.32, 0.2, 1)
+shader_parameter/color_alto = Color(0.85, 0.85, 0.82, 1)
+shader_parameter/inicio_cafe = 0.35
+shader_parameter/inicio_gris = 0.75
+shader_parameter/transicion = 0.08
+
+[node name="Mundo" type="Node3D"]
+
+[node name="Terreno" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_alt")
+script = ExtResource("1_6ba58")
+
+[node name="Camara" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 85, 147.22432)
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, -0.21130913, 0.45315388, 0, 0.9063078, 0.42261827, -0.5, -0.36599815, 0.7848856, 0, 0, 0)
