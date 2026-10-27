@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="gaia-visor"
-run/main_scene="uid://3k8ee13ytvb"
+run/main_scene="res://intro.tscn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 

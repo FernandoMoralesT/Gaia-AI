@@ -39,6 +39,7 @@ func _ready() -> void:
 		%Semilla.text_changed.connect(_al_cambiar_semilla)
 		%Semilla.text_submitted.connect(func(_t): generar())
 		%Generar.pressed.connect(generar)
+		%Menu.pressed.connect(volver_al_menu)
 		%Inspeccionar.toggled.connect(func(activo): %Inspeccion.visible = activo)
 		%Peticion.request_completed.connect(_al_recibir)
 		%Salud.request_completed.connect(_al_responder_salud)
@@ -55,6 +56,16 @@ func _ready() -> void:
 		info = {"clase": clase, "semilla": SEMILLA_RESPALDO, "sigma": SIGMA_RESPALDO,
 				"en_vivo": false, "ms": -1}
 		actualizar_inspeccion()
+
+
+func _unhandled_input(evento: InputEvent) -> void:
+		if evento.is_action_pressed("ui_cancel"):
+				get_viewport().set_input_as_handled()
+				volver_al_menu()
+
+
+func volver_al_menu() -> void:
+		get_tree().change_scene_to_file("res://intro.tscn")
 
 
 func generar() -> void:

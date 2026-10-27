@@ -1,0 +1,96 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://intro.gd" id="1_intro"]
+[ext_resource type="Theme" path="res://tema.tres" id="2_tema"]
+[ext_resource type="Shader" path="res://fondo_2d.gdshader" id="3_fondo"]
+[ext_resource type="PackedScene" path="res://titulo.tscn" id="4_tit"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fondo"]
+shader = ExtResource("3_fondo")
+
+[sub_resource type="StyleBoxEmpty" id="plano"]
+content_margin_left = 0.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+
+[node name="Intro" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_tema")
+script = ExtResource("1_intro")
+
+[node name="Fondo" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_fondo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margen" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 72
+theme_override_constants/margin_right = 72
+
+[node name="Centro" type="VBoxContainer" parent="Margen"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="Titulo" parent="Margen/Centro" instance=ExtResource("4_tit")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(920, 240)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Subtitulo" type="Label" parent="Margen/Centro"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6627, 0.7137, 0.8784, 1)
+theme_override_font_sizes/font_size = 22
+text = "Terrenos que nunca existieron, dibujados por una IA"
+
+[node name="Espacio" type="Control" parent="Margen/Centro"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="Explorar" type="Button" parent="Margen/Centro"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"BotonPrincipal"
+text = "Explorar terrenos"
+
+[node name="Info" type="Button" parent="Margen/Centro"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("plano")
+theme_override_styles/hover = SubResource("plano")
+theme_override_styles/pressed = SubResource("plano")
+theme_override_styles/hover_pressed = SubResource("plano")
+text = "Cómo funciona Gaia"
+alignment = 0
+
+[node name="Acerca" type="Button" parent="Margen/Centro"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("plano")
+theme_override_styles/hover = SubResource("plano")
+theme_override_styles/pressed = SubResource("plano")
+theme_override_styles/hover_pressed = SubResource("plano")
+text = "Acerca de nosotros"
+alignment = 0

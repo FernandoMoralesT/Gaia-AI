@@ -1,0 +1,86 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://pagina.gd" id="1_pag"]
+[ext_resource type="Theme" path="res://tema.tres" id="2_tema"]
+[ext_resource type="Shader" path="res://fondo_2d.gdshader" id="3_fondo"]
+[ext_resource type="PackedScene" path="res://desplegable.tscn" id="4_des"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fondo"]
+shader = ExtResource("3_fondo")
+
+[node name="Acerca" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_tema")
+script = ExtResource("1_pag")
+
+[node name="Fondo" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_fondo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margen" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 72
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 72
+theme_override_constants/margin_bottom = 32
+
+[node name="Columna" type="VBoxContainer" parent="Margen"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Volver" type="Button" parent="Margen/Columna"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Volver"
+
+[node name="Titulo" type="Label" parent="Margen/Columna"]
+layout_mode = 2
+theme_type_variation = &"Titulo"
+theme_override_font_sizes/font_size = 40
+text = "Acerca de nosotros"
+
+[node name="Desplazar" type="ScrollContainer" parent="Margen/Columna"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Lista" type="VBoxContainer" parent="Margen/Columna/Desplazar"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="D0" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "Quiénes somos"
+texto = "Somos Luis Fernando Morales Toledo, Sebastian Aguillon Peinado y Cristoff Salvador Garcia Mendoza, de Ingeniería en Sistemas en la FIMAZ-UAS, en Mazatlán. Esto empezó como proyecto de Estructura de Datos y terminó en la expo de IA."
+
+[node name="D1" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "Cómo empezó"
+texto = "Fernando quería mapas para su juego, A Stupid RPG. Hacerlos a mano era eterno, así que se nos ocurrió que una IA los inventara."
+
+[node name="D2" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "Lo que nos costó"
+texto = "Entrenamos todo en una laptop sin tarjeta gráfica compatible: 500 rondas de unos 5 segundos cada una. A partir de la ronda 190, más o menos, la red juez le empezó a ganar a la que dibuja, así que nos quedamos con la ronda 150, escogida a ojo comparando mapas."
+
+[node name="D3" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "Cómo lo hicimos"
+texto = "10 semanas, una meta por semana. Python y PyTorch para la IA, Godot para lo que estás viendo."

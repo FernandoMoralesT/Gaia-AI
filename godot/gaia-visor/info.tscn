@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://pagina.gd" id="1_pag"]
+[ext_resource type="Theme" path="res://tema.tres" id="2_tema"]
+[ext_resource type="Shader" path="res://fondo_2d.gdshader" id="3_fondo"]
+[ext_resource type="PackedScene" path="res://desplegable.tscn" id="4_des"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fondo"]
+shader = ExtResource("3_fondo")
+
+[node name="Info" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_tema")
+script = ExtResource("1_pag")
+
+[node name="Fondo" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_fondo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margen" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 72
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 72
+theme_override_constants/margin_bottom = 32
+
+[node name="Columna" type="VBoxContainer" parent="Margen"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Volver" type="Button" parent="Margen/Columna"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Volver"
+
+[node name="Titulo" type="Label" parent="Margen/Columna"]
+layout_mode = 2
+theme_type_variation = &"Titulo"
+theme_override_font_sizes/font_size = 40
+text = "Cómo funciona Gaia"
+
+[node name="Desplazar" type="ScrollContainer" parent="Margen/Columna"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Lista" type="VBoxContainer" parent="Margen/Columna/Desplazar"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="D0" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "¿Qué es Gaia-AI?"
+texto = "Una IA que dibuja terrenos que no existen. Por dentro son dos redes que compiten: una dibuja mapas de altura y la otra trata de adivinar si son reales o inventados. A fuerza de equivocarse, la que dibuja aprende a engañar a la otra."
+
+[node name="D1" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "¿De dónde aprendió?"
+texto = "De 60 recortes de elevación real medida por satélite (SRTM). Cada recorte se reduce a 120 × 120 puntos, unos 90 m por punto, y se le dice qué forma tiene."
+
+[node name="D2" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "Las seis formas"
+texto = "Llanura, lomas, valle, montaña, meseta y volcán. Se eligen por la forma del terreno, no por su altura en metros."
+
+[node name="D3" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "Qué hace bien y qué le cuesta"
+texto = "Volcanes, valles y llanuras le salen claros. Lomas, montañas y mesetas a veces se le confunden. Y sus volcanes no tienen cráter: a esta resolución, la mayoría de los volcanes reales tampoco lo muestran."
+
+[node name="D4" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
+layout_mode = 2
+titulo = "Cómo usar el visor"
+texto = "Elige una forma y pulsa \"Generar\". Gira con W A S D o las flechas, acerca con la rueda o Q y E. \"Inspeccionar\" muestra la semilla: escríbela para repetir un terreno."

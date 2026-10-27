@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://desplegable.gd" id="1_des"]
+
+[sub_resource type="StyleBoxEmpty" id="plano"]
+content_margin_left = 0.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+
+[node name="Desplegable" type="VBoxContainer"]
+theme_override_constants/separation = 4
+script = ExtResource("1_des")
+
+[node name="Encabezado" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.6627, 0.7137, 0.8784, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("plano")
+theme_override_styles/hover = SubResource("plano")
+theme_override_styles/pressed = SubResource("plano")
+theme_override_styles/hover_pressed = SubResource("plano")
+text = "+ "
+alignment = 0
+
+[node name="Cuerpo" type="Label" parent="."]
+visible = false
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.6627, 0.7137, 0.8784, 1)
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
