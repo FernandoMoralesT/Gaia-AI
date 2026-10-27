@@ -13,9 +13,9 @@ func _initialize() -> void:
 		root.add_child(campo)
 
 		await process_frame
-		var lim := {"inclinacion_min": 10.0, "inclinacion_max": 80.0, "distancia_min": 70.0, "distancia_max": 260.0}
+		var lim: Dictionary = cam._limites()
 		Afirmar.afirmar(cam.limitar(95.0, 300.0, lim) == Vector2(80, 260), "limitar maximos")
-		Afirmar.afirmar(cam.limitar(0.0, 10.0, lim) == Vector2(10, 70), "limitar minimos")
+		Afirmar.afirmar(cam.limitar(0.0, 10.0, lim) == Vector2(10, 110), "limitar minimos")
 
 		Afirmar.afirmar(cam.teclado_libre(), "teclado libre sin foco")
 		campo.grab_focus()
@@ -29,5 +29,15 @@ func _initialize() -> void:
 		cam._process(1.0)
 		Afirmar.afirmar(is_equal_approx(cam.giro, antes + 90.0), "girar_der suma 90 grados en 1 s")
 		Input.action_release("girar_der")
+
+		# A distancia minima la camara nunca queda dentro del bloque (119x119, altura max 66)
+		cam.giro = 45.0
+		for incl in [10.0, 38.0, 80.0]:
+				cam.inclinacion = incl
+				cam.distancia = 0.0
+				cam._colocar()
+				var p: Vector3 = cam.get_node("Camara").global_position
+				var dentro := absf(p.x) <= 59.5 and absf(p.z) <= 59.5 and p.y <= 66.0
+				Afirmar.afirmar(not dentro, "camara fuera del bloque a inclinacion %s (pos %s)" % [incl, p])
 
 		Afirmar.terminar("prueba_camara")

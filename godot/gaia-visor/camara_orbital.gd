@@ -7,7 +7,7 @@ extends Node3D
 @export var inclinacion_min := 10.0
 @export var inclinacion_max := 80.0
 @export var distancia := 170.0
-@export var distancia_min := 70.0
+@export var distancia_min := 110.0
 @export var distancia_max := 260.0
 @export var paso_rueda := 12.0
 
