@@ -58,10 +58,15 @@ func _ready() -> void:
 		actualizar_inspeccion()
 
 
-func _unhandled_input(evento: InputEvent) -> void:
+func _input(evento: InputEvent) -> void:
 		if evento.is_action_pressed("ui_cancel"):
 				get_viewport().set_input_as_handled()
-				volver_al_menu()
+				# Mientras se escribe, Esc solo suelta el campo; el segundo Esc sale.
+				var foco := get_viewport().gui_get_focus_owner()
+				if foco is LineEdit:
+						foco.release_focus()
+				else:
+						volver_al_menu()
 
 
 func volver_al_menu() -> void:
