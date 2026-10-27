@@ -1,31 +1,65 @@
 extends MeshInstance3D
 
-@export_file("*.raw") var ruta_raw := "res://mapas/volcan_42_s3.raw"
+@export_file("*.raw") var ruta_raw := "res://mapas/respaldo_volcan.raw"
 @export var escala_altura := 20.0
 @export var multiplicador_altura := 3.0
 @export var tamano_celda := 1.0
 
+var mapa_actual := {}
+
 
 func _ready() -> void:
-		var mapa := leer_raw(ruta_raw)
-		if mapa.is_empty():
-				return
-		mesh = construir_malla(mapa)
+		cargar_archivo(ruta_raw)
 
 
-func leer_raw(ruta: String) -> Dictionary:
-		var f := FileAccess.open(ruta, FileAccess.READ)
-		if f == null:
-				push_error("No se pudo abrir %s (error %d)" % [ruta, FileAccess.get_open_error()])
+func cargar_archivo(ruta: String) -> bool:
+		if not FileAccess.file_exists(ruta):
+				return false
+		return cargar_bytes(FileAccess.get_file_as_bytes(ruta))
+
+
+# Formato .raw: encabezado <u4 (ancho, alto) y datos <f4 fila por fila.
+func cargar_bytes(bytes: PackedByteArray) -> bool:
+		if bytes.size() < 8:
+				return false
+		var ancho := bytes.decode_u32(0)
+		var alto := bytes.decode_u32(4)
+		if ancho < 2 or alto < 2 or bytes.size() != 8 + ancho * alto * 4:
+				return false
+		var datos := bytes.slice(8).to_float32_array()
+		mapa_actual = {"ancho": ancho, "alto": alto, "datos": datos}
+		mesh = construir_malla(mapa_actual)
+		return true
+
+
+# Datos relativos (0 = punto más bajo, 1 = más alto); no son metros.
+func estadisticas() -> Dictionary:
+		if mapa_actual.is_empty():
 				return {}
-		var ancho := f.get_32()
-		var alto := f.get_32()
-		var esperado := 8 + ancho * alto * 4
-		if f.get_length() != esperado:
-				push_error("Tamaño incorrecto: %d bytes, se esperaban %d" % [f.get_length(), esperado])
-				return {}
-		var datos := f.get_buffer(ancho * alto * 4).to_float32_array()
-		return {"ancho": ancho, "alto": alto, "datos": datos}
+		var datos: PackedFloat32Array = mapa_actual.datos
+		var ancho: int = mapa_actual.ancho
+		var n := datos.size()
+		var suma := 0.0
+		var altos := 0
+		var i_cima := 0
+		for i in n:
+				suma += datos[i]
+				if datos[i] > 0.75:
+						altos += 1
+				if datos[i] > datos[i_cima]:
+						i_cima = i
+		var media := suma / n
+		var varianza := 0.0
+		for v in datos:
+				varianza += (v - media) * (v - media)
+		return {
+				"ancho": ancho,
+				"alto": mapa_actual.alto,
+				"media": media,
+				"rugosidad": sqrt(varianza / n),
+				"zona_alta": float(altos) / n,
+				"cima": Vector2i(i_cima % ancho, i_cima / ancho),
+		}
 
 
 func construir_malla(mapa: Dictionary) -> ArrayMesh:

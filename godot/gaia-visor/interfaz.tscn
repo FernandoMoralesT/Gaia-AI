@@ -1,0 +1,161 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://interfaz.gd" id="1_int"]
+[ext_resource type="Theme" path="res://tema.tres" id="2_tema"]
+
+[node name="Interfaz" type="CanvasLayer"]
+script = ExtResource("1_int")
+
+[node name="Raiz" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_tema")
+
+[node name="Controles" type="PanelContainer" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -130.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Columna" type="VBoxContainer" parent="Raiz/Controles"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FilaClases" type="HBoxContainer" parent="Raiz/Controles/Columna"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="EtiquetaTerreno" type="Label" parent="Raiz/Controles/Columna/FilaClases"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_type_variation = &"Etiqueta"
+text = "Terreno"
+
+[node name="Clases" type="HBoxContainer" parent="Raiz/Controles/Columna/FilaClases"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="FilaAjustes" type="HBoxContainer" parent="Raiz/Controles/Columna"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="EtiquetaSemilla" type="Label" parent="Raiz/Controles/Columna/FilaAjustes"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_type_variation = &"Etiqueta"
+text = "Semilla"
+
+[node name="Semilla" type="LineEdit" parent="Raiz/Controles/Columna/FilaAjustes"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+placeholder_text = "Al azar"
+max_length = 10
+
+[node name="EtiquetaSigma" type="Label" parent="Raiz/Controles/Columna/FilaAjustes"]
+layout_mode = 2
+theme_type_variation = &"Etiqueta"
+text = "Suavizado"
+
+[node name="Sigma" type="HSlider" parent="Raiz/Controles/Columna/FilaAjustes"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 5.0
+step = 0.5
+value = 2.0
+
+[node name="ValorSigma" type="Label" parent="Raiz/Controles/Columna/FilaAjustes"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_type_variation = &"Valor"
+text = "2.0"
+
+[node name="Espacio" type="Control" parent="Raiz/Controles/Columna/FilaAjustes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Inspeccionar" type="Button" parent="Raiz/Controles/Columna/FilaAjustes"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "Inspeccionar"
+
+[node name="Generar" type="Button" parent="Raiz/Controles/Columna/FilaAjustes"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_type_variation = &"BotonPrincipal"
+text = "Generar"
+
+[node name="Nota" type="Label" parent="Raiz/Controles/Columna"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"Nota"
+
+[node name="Inspeccion" type="PanelContainer" parent="Raiz"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -286.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 300.0
+grow_horizontal = 0
+
+[node name="Columna" type="VBoxContainer" parent="Raiz/Inspeccion"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TituloClase" type="Label" parent="Raiz/Inspeccion/Columna"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Titulo"
+text = "Volcán"
+
+[node name="Mapa" type="TextureRect" parent="Raiz/Inspeccion/Columna"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(176, 176)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Leyenda" type="Label" parent="Raiz/Inspeccion/Columna"]
+layout_mode = 2
+theme_type_variation = &"Nota"
+text = "Curvas de nivel cada 10 % de altura"
+
+[node name="Datos" type="GridContainer" parent="Raiz/Inspeccion/Columna"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="Peticion" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+timeout = 4.0
+
+[node name="Salud" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+timeout = 2.0
