@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://titulo.gd" id="1_tit"]
+[ext_resource type="FontFile" path="res://fuentes/LilitaOne-Regular.ttf" id="2_fuente"]
+[ext_resource type="Shader" path="res://titulo.gdshader" id="3_shader"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tit"]
+resource_local_to_scene = true
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tit"]
+shader = ExtResource("3_shader")
+shader_parameter/crecimiento = 1.0
+shader_parameter/grosor_pasto = 18.0
+shader_parameter/alto_brizna = 14.0
+shader_parameter/grosor_contorno = 5.0
+
+[node name="Titulo" type="Control"]
+custom_minimum_size = Vector2(1000, 260)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1000.0
+offset_bottom = 260.0
+mouse_filter = 2
+script = ExtResource("1_tit")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1000, 260)
+render_target_update_mode = 1
+
+[node name="Texto" type="Label" parent="SubViewport"]
+offset_right = 1000.0
+offset_bottom = 260.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_fuente")
+theme_override_font_sizes/font_size = 150
+text = "Gaia-AI"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Imagen" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_tit")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_tit")
+expand_mode = 1
+stretch_mode = 5
