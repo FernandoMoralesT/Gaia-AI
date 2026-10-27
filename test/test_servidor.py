@@ -109,3 +109,11 @@ def test_parametros_invalidos_400(url_base, consulta):
 def test_ruta_desconocida_404(url_base):
     codigo, _, _ = pedir(f"{url_base}/otra")
     assert codigo == 404
+
+
+# --- sin consola (pythonw) ---------------------------------------------------
+
+def test_sin_consola_no_truena(url_base, monkeypatch):
+    monkeypatch.setattr(sys, "stderr", None)
+    codigo, _, _ = pedir(f"{url_base}/salud")
+    assert codigo == 200

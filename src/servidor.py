@@ -50,6 +50,12 @@ def leer_parametros(consulta):
     return clase, semilla, sigma
 
 class ManejadorGaia(BaseHTTPRequestHandler):
+    def log_message(self, formato, *args):
+        # con pythonw no hay consola: sys.stderr es None y el log original truena
+        if sys.stderr is None:
+            return
+        super().log_message(formato, *args)
+
     def do_GET(self):
         url = urlparse(self.path)
         if url.path == "/salud":
@@ -96,10 +102,12 @@ def crear_servidor(puerto=PUERTO):
 
 if __name__ == "__main__":
     servidor = crear_servidor()
-    print(f"Gaia-AI escuchando en http://{HOST}:{servidor.server_port}  (Ctrl+C para salir)")
+    if sys.stdout is not None:  # pythonw tampoco tiene stdout
+        print(f"Gaia-AI escuchando en http://{HOST}:{servidor.server_port}  (Ctrl+C para salir)")
     try:
         servidor.serve_forever()
     except KeyboardInterrupt:
-        print("\nServidor detenido.")
+        if sys.stdout is not None:
+            print("\nServidor detenido.")
     finally:
         servidor.server_close()
