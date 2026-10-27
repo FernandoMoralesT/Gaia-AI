@@ -52,12 +52,14 @@ def generar_terreno(clase, semilla, sigma=2):
         salida = g(z, id_clase)
     return suavizar(salida.squeeze().numpy(), sigma)
 
-def exportar_raw(mapa, ruta):
+def raw_a_bytes(mapa):
     mapa = normalizar(mapa)
     alto, ancho = mapa.shape
+    encabezado = np.array([ancho, alto], dtype="<u4").tobytes()
+    return encabezado + mapa.astype("<f4").tobytes()
+
+def exportar_raw(mapa, ruta):
     ruta = Path(ruta)
     ruta.parent.mkdir(parents=True, exist_ok=True)
-    with open(ruta, "wb") as f:
-        f.write(np.array([ancho, alto], dtype="<u4").tobytes())
-        f.write(mapa.astype("<f4").tobytes())
+    ruta.write_bytes(raw_a_bytes(mapa))
     return ruta
