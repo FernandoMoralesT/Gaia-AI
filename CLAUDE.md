@@ -11,26 +11,15 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · Plan: 10 sprints de 1 semana.
 - La carpeta de scripts se llama `scrips` (sin "t").
 
 ## Estado actual
-- Sprints 1 a 8 concluidos. Último tag: `sprint-08` (inferencia, postprocesado, visor y 23 tests).
-- Sprint 9 en preparación (demo visual en Godot). Sprint 10: documentación, PDF y v1.0.
+- Sprints 1 a 9 concluidos. Último tag: `sprint-09` (demo en Godot con generación en vivo, 37 tests de Python y 6 pruebas headless). Rama de trabajo: `visor-expo` (sin fusionar a `main`).
+- Sprint 10 pendiente: documentación, PDF y v1.0.
 - Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100.
 
-## Sprint 9: decisión y pendientes
-Generación en vivo: un servidor local en Python, `src/servidor.py`, escuchando solo en `127.0.0.1:8765`.
-- `GET /salud`: comprobar que está vivo.
-- `GET /terreno?clase=&semilla=&sigma=`: responde los bytes del `.raw` que Godot ya sabe leer.
-- Respaldo: si el servidor no responde, el visor usa los mapas pregenerados de `godot/gaia-visor/mapas/`.
-
-MVP: un lanzador abre el visor, arranca el servidor y, al pulsar "Generar", muestra en color un terreno nuevo generado por el modelo.
-
-Pasos pendientes:
-1. Servidor y sus tests.
-2. Selector de clase, semilla y sigma en el visor.
-3. Paleta por clase (volcán sin nieve).
-4. Cámara orbital.
-5. `iniciar_demo.bat`.
-6. Exportación a `.exe`.
-7. Cierre: bitácora y tag `sprint-09`.
+## Sprint 9: hecho
+- Servidor local `src/servidor.py` (`127.0.0.1:8765`): `GET /salud` y `GET /terreno?clase=&semilla=&sigma=` (bytes del `.raw`; semilla aleatoria si falta; encabezados `X-Clase`, `X-Semilla`, `X-Sigma`). Compatible con `pythonw`.
+- Visor: escena principal `intro.tscn` (título, menú, info, acerca de), interfaz con selector de clase, semilla y suavizado, botón Inspeccionar, bloque sólido con escala vertical por clase, cámara orbital (WASD/flechas, zoom con rueda o Q/E) y fondo "espacio latente". Chequeo de `/salud` cada 3 s; sin servidor usa `mapas/respaldo_<clase>.raw` (`scrips/generar_respaldos.py`).
+- `dist/Gaia-AI.exe` (ignorado en git) busca el repo y lanza/cierra el servidor con `pythonw`; requiere Python y dependencias instalados. Reemplaza a `iniciar_demo.bat`.
+- Pruebas Godot: `godot --headless --path godot/gaia-visor -s res://pruebas/prueba_X.gd`.
 
 ## Stack
 - Python + PyTorch, CPU (GPU AMD Radeon, sin CUDA). numpy, rasterio, python-dotenv, scipy, pytest.
@@ -81,7 +70,7 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 ## Pendientes sueltos
 - 3 tiles manuales en `data/raw_v1/` sin coordenadas registradas.
 - El anteproyecto `.docx` aún describe el enfoque anterior al pivote cGAN.
-- Visor: escala vertical por clase, sombras, confirmar en 3D que sigma = 2 no deja granulado.
+- Visor: sombras, confirmar en 3D que sigma = 2 no deja granulado.
 - Tiles de volcán donde el cono no domina el centro: Paricutín y Colima.
 - Mejora opcional de entrenamiento (frenar al discriminador, menor tasa, label smoothing), solo si sobra tiempo tras el Sprint 10.
 

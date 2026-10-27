@@ -403,3 +403,42 @@ Tag de cierre: `sprint-08`.
 - `generar_terreno("volcán", 42)` da un cono sin hueco: +0.025 con sigma 0, +0.031 con sigma 1 y +0.056 con sigma 2. El suavizado no crea ni borra el cráter; el aumento con sigma viene del ensanchamiento de la cima.
 - Causa: los cráteres de los estratovolcanes (Popocatépetl, Fuji) son menores que la resolución y casi no hay ejemplos en el dataset. Se documenta como limitación.
 - Decisión del Sprint 9: generación en vivo con un servidor local (`src/servidor.py`, `127.0.0.1:8765`) que devuelve el `.raw`, con respaldo de los mapas pregenerados de `godot/gaia-visor/mapas/` si no responde.
+
+
+## Sprint 9: demo en vivo en Godot
+
+Objetivo: que el visor genere terreno nuevo con el modelo en vivo y se pueda abrir con un solo ejecutable en la expo.
+
+### Servidor local (`src/servidor.py`)
+- Escucha solo en `127.0.0.1:8765`, para que nadie más en la red lo alcance.
+- `GET /salud` comprueba que está vivo. `GET /terreno?clase=&semilla=&sigma=` responde los bytes del `.raw`; si no llega semilla, elige una aleatoria. Los encabezados `X-Clase`, `X-Semilla` y `X-Sigma` dicen qué se generó, para poder repetirlo.
+- Funciona con `pythonw` (sin ventana de consola), que es como lo lanza el visor.
+
+### Visor
+- Interfaz con selector de clase, semilla y suavizado, y botón Inspeccionar con mini mapa de curvas de nivel y datos.
+- Respaldos por clase (`scrips/generar_respaldos.py` -> `mapas/respaldo_<clase>.raw`). El visor consulta `/salud` cada 3 s; si el servidor cae, cambia al respaldo al instante en lugar de esperar un tiempo de espera.
+- El terreno es un bloque sólido con paredes de estratos. Escala vertical por clase (llanura 4, lomas 8, valle 14, montaña 22, meseta 12, volcán 20; por 3 del multiplicador). El volcán lleva la cima de roca negra #2A2624 (sin nieve).
+- Cámara orbital (W A S D o flechas; zoom con rueda o Q/E).
+- Fondo "espacio latente" (degradado azul-morado con retícula) y luz de relleno opuesta al sol.
+- Intro con título "Gaia-AI" de tierra con pasto (Lilita One) y menú: Explorar terrenos, Cómo funciona Gaia, Acerca de nosotros. La interfaz escala a pantalla completa.
+
+### Decisiones
+- **El `.exe` lanza Python en vez de empaquetarlo:** PyTorch pesa varios GB; empaquetarlo haría el ejecutable enorme y frágil. A cambio el `.exe` (`dist/Gaia-AI.exe`, ignorado en git) busca el repo y requiere Python y dependencias en la laptop de la expo. Sin repo o sin Python usa los respaldos.
+- **Gira la cámara, no el bloque:** así la luz se mantiene a 25° respecto al terreno y el relieve se lee igual desde cualquier lado.
+- **`iniciar_demo.bat` queda reemplazado por el `.exe`:** hacía lo mismo con menos control (no cerraba el servidor).
+- **Paleta noche:** la tierra es lo cálido y la IA lo frío; el contraste separa el terreno del fondo.
+- **Distancia mínima de cámara 110 (no 70):** con 70 la cámara podía entrar al bloque.
+- **Luz de relleno:** sin ella la parte trasera del bloque se veía negra.
+- **Escalado `canvas_items`:** la interfaz se adapta a pantalla completa sin recolocar nada.
+- **Esc con el campo de semilla enfocado solo suelta el foco:** antes salía del visor mientras se escribía.
+
+### Tests
+- `python -m pytest test/ -q`: 37 pruebas pasan.
+- Godot headless (`pruebas/`): 6 scripts, todos dan OK.
+
+### Pendiente
+- Sombras de la luz direccional.
+- Confirmar en 3D que sigma = 2 no deja granulado visible.
+- Girar con el mouse (arrastrar), fuera de alcance de este sprint.
+
+Tag de cierre: `sprint-09`.

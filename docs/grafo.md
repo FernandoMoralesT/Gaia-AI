@@ -20,15 +20,20 @@ No editar a mano las secciones 1 y 3: volver a ejecutar el script.
 - `src/pipeline.py` → `src/model/entrenar.py`
 - `src/pipeline.py` → `src/model/generador.py`
 - `src/pipeline.py` → `src/noise/Unificacion_Y_Exportacion.py`
+- `src/servidor.py` → `src/dataset/dem_dataset.py`
+- `src/servidor.py` → `src/inferencia.py`
 - `scrips/exportar_generador.py` → `src/model/discriminador.py`
 - `scrips/exportar_generador.py` → `src/model/entrenar.py`
 - `scrips/exportar_generador.py` → `src/model/generador.py`
+- `scrips/generar_respaldos.py` → `src/dataset/dem_dataset.py`
+- `scrips/generar_respaldos.py` → `src/inferencia.py`
 - `scrips/probar_checkpoint.py` → `src/dataset/dem_dataset.py`
 - `scrips/probar_checkpoint.py` → `src/model/discriminador.py`
 - `scrips/probar_checkpoint.py` → `src/model/entrenar.py`
 - `scrips/probar_checkpoint.py` → `src/model/generador.py`
 - `test/test_inferencia.py` → `src/dataset/dem_dataset.py`
 - `test/test_inferencia.py` → `src/inferencia.py`
+- `test/test_servidor.py` → `src/servidor.py`
 
 Sin dependencias internas: `scrips/Practicatensores.py`, `scrips/comprobacion.py`, `scrips/comprobacion_reduccion.py`, `scrips/generar_grafo.py`, `scrips/resumen_dataset.py`, `scrips/sanos.py`, `scrips/validar_nodata.py`, `scrips/ver_clase.py`, `scrips/ver_dudosos.py`, `scrips/ver_tile.py`, `src/__init__.py`, `src/dataset/__init__.py`, `src/model/__init__.py`, `src/noise/Comprobacion.py`, `src/noise/__init__.py`, `src/noise/noise2D.py`, `src/noise/normalizacionDeRangos.py`, `src/noise/tempCodeRunnerFile.py`.
 
@@ -57,7 +62,7 @@ data/raw/*.tif + data/etiquetas.json
 - `src/model/generador.py`: Generador de la cGAN (ruido 100 + clase → 120×120). Exporta: `Generador`.
 - `src/model/discriminador.py`: Discriminador de la cGAN (clase como canal extra). Exporta: `Discriminador`.
 - `src/model/entrenar.py`: Ciclo de entrenamiento, muestras, checkpoints y su carga. Exporta: `paso_entrenamiento`, `entrenar`, `guardar_muestras`, `guardar_checkpoint`, `cargar_checkpoint`.
-- `src/inferencia.py`: Inferencia local: terreno por clase y semilla, suavizado y exportación .raw. Exporta: `RUTA_MODELO`, `Z_DIM`, `normalizar`, `suavizar`, `generar_terreno`, `exportar_raw`.
+- `src/inferencia.py`: Inferencia local: terreno por clase y semilla, suavizado y exportación .raw. Exporta: `RUTA_MODELO`, `Z_DIM`, `normalizar`, `suavizar`, `generar_terreno`, `raw_a_bytes`, `exportar_raw`.
 - `src/noise/Unificacion_Y_Exportacion.py`: Generador clásico de ruido y exportación (Sprints 1-3). Exporta: `Noise2D`, `fractal_noise_2d`, `remap`, `clasificar_biomas`, `exportar_para_godot`, `generar_y_exportar_terreno`.
 - `scrips/exportar_generador.py`: Extrae el generador de epoca_150.pt a modelos/generador_epoca150.pt. Script ejecutable.
 - `scrips/generar_grafo.py`: Este script: regenera docs/grafo.md. Script ejecutable.
