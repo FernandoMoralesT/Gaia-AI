@@ -10,9 +10,33 @@ extends MeshInstance3D
 
 var mapa_actual := {}
 
+# Escala vertical y color de cumbre por clase (las alturas no son metros).
+const NIEVE := Color("D9D9D1")
+const PERFILES := {
+		"llanura": {"escala": 4.0, "color_alto": NIEVE},
+		"lomas": {"escala": 8.0, "color_alto": NIEVE},
+		"valle": {"escala": 14.0, "color_alto": NIEVE},
+		"montaña": {"escala": 22.0, "color_alto": NIEVE},
+		"meseta": {"escala": 12.0, "color_alto": NIEVE},
+		"volcán": {"escala": 20.0, "color_alto": Color("2A2624")},
+}
+
 
 func _ready() -> void:
+		aplicar_clase("volcán")
 		cargar_archivo(ruta_raw)
+
+
+# Fija el perfil de la clase; hay que llamarla antes de cargar el mapa.
+func aplicar_clase(clase: String) -> void:
+		if not PERFILES.has(clase):
+				return
+		var perfil: Dictionary = PERFILES[clase]
+		escala_altura = perfil.escala
+		if material_superficie != null:
+				material_superficie.set_shader_parameter("color_alto", perfil.color_alto)
+		if material_paredes != null:
+				material_paredes.set_shader_parameter("escala_vertical", escala_altura * multiplicador_altura)
 
 
 func cargar_archivo(ruta: String) -> bool:

@@ -79,7 +79,7 @@ func generar() -> void:
 
 
 func _al_recibir(resultado: int, codigo: int, encabezados: PackedStringArray, cuerpo: PackedByteArray) -> void:
-		if resultado == HTTPRequest.RESULT_SUCCESS and codigo == 200 and terreno.cargar_bytes(cuerpo):
+		if resultado == HTTPRequest.RESULT_SUCCESS and codigo == 200 and _cargar_en_vivo(cuerpo):
 				var enc := _leer_encabezados(encabezados)
 				info = {
 						"clase": enc.get("x-clase", clase.uri_encode()).uri_decode(),
@@ -93,6 +93,11 @@ func _al_recibir(resultado: int, codigo: int, encabezados: PackedStringArray, cu
 				servidor_activo = false
 				_usar_respaldo()
 		_terminar()
+
+
+func _cargar_en_vivo(cuerpo: PackedByteArray) -> bool:
+		terreno.aplicar_clase(clase)
+		return terreno.cargar_bytes(cuerpo)
 
 
 func _al_vencer_reloj() -> void:
@@ -117,6 +122,7 @@ func _al_responder_salud(resultado: int, codigo: int, _encabezados: PackedString
 
 func _usar_respaldo() -> void:
 		var archivo := clase.replace("á", "a").replace("ñ", "n")
+		terreno.aplicar_clase(clase)
 		terreno.cargar_archivo("res://mapas/respaldo_%s.raw" % archivo)
 		info = {"clase": clase, "semilla": SEMILLA_RESPALDO, "sigma": SIGMA_RESPALDO,
 				"en_vivo": false, "ms": -1}
