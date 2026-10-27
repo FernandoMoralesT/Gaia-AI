@@ -23,5 +23,5 @@ func _initialize() -> void:
 		terreno.aplicar_clase("desierto")
 		Afirmar.afirmar(terreno.escala_altura == 22.0, "clase desconocida no cambia")
 
-		print("OK prueba_perfil_clase")
-		quit(0)
+		terreno.free()
+		Afirmar.terminar("prueba_perfil_clase")
