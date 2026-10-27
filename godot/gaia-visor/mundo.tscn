@@ -51,6 +51,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 170)
 [node name="Sol" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.8660254, -0.21130913, 0.45315388, 0, 0.9063078, 0.42261827, -0.5, -0.36599815, 0.7848856, 0, 0, 0)
 
+[node name="Relleno" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, 0.2113091, -0.4531539, 0.0000000, 0.9063078, 0.4226183, 0.5000000, 0.3659982, -0.7848856, 0, 0, 0)
+light_color = Color(0.7843, 0.8157, 0.9333, 1)
+light_energy = 0.35
+shadow_enabled = false
+
 [node name="Ambiente" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fondo")
 
