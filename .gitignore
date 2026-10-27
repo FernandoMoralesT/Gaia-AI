@@ -15,3 +15,6 @@ entities.json
 
 # Mapas de ejemplo del visor de Godot (excepción a *.raw)
 !godot/gaia-visor/mapas/*.raw
+
+# Ejecutable exportado del visor
+dist/
