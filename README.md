@@ -16,7 +16,7 @@ Desarrollo con Scrum, 1 sprint por semana, 10 sprints en total.
 | 6 | Arquitectura cGAN | Concluido |
 | 7 | Entrenamiento y selección del checkpoint | Concluido |
 | 8 | Inferencia local, postprocesado y visor en Godot | Concluido |
-| 9 | Demo visual en Godot | Pendiente |
+| 9 | Demo visual en Godot | Concluido |
 | 10 | Documentación y entrega (v1.0) | Pendiente |
 
 El modelo es una GAN condicional (cGAN) entrenada con 60 tiles SRTM en 6 clases de terreno: llanura, lomas, valle, montaña, meseta y volcán. El modelo del demo es el generador de la época 150 (`modelos/generador_epoca150.pt`), incluido en el repositorio.
@@ -25,7 +25,7 @@ El modelo es una GAN condicional (cGAN) entrenada con 60 tiles SRTM en 6 clases 
 
 - Python 3.13
 - Dependencias de `requirements.txt`
-- Godot 4 (solo para el visor 3D)
+- Godot 4.5.1 (visor 3D); para crear el `.exe`, sus plantillas de exportación (*Editor → Manage Export Templates*)
 - Cuenta en OpenTopography y su clave de API (solo para descargar tiles nuevos)
 
 ## Instalación
@@ -78,11 +78,32 @@ exportar_raw(mapa, "godot/gaia-visor/mapas/volcan_42.raw")
 
 Las alturas no están en metros: cada tile se normalizó por separado, así que la red aprende la forma y no la altura real. La escala vertical se ajusta en el visor.
 
+### Servidor local
+
+```powershell
+python src/servidor.py
+```
+
+Escucha solo en `127.0.0.1:8765`:
+
+- `GET /salud`: responde `{"estado": "ok"}`.
+- `GET /terreno?clase=&semilla=&sigma=`: devuelve los bytes del `.raw`. Si falta `semilla`, se elige una al azar; la clase, la semilla y el sigma usados van en los encabezados `X-Clase`, `X-Semilla` y `X-Sigma`.
+
 ### Visor en Godot
 
-1. Abre `godot/gaia-visor/project.godot` con Godot 4.5 o más reciente.
-2. Ejecuta la escena `mundo.tscn` (F6).
-3. En el nodo `Terreno` puedes cambiar `ruta_raw` (por ejemplo `res://mapas/volcan_42_s2.raw`), `escala_altura` y `multiplicador_altura`. Los colores por altura se editan en su *Material Override*.
+1. Abre `godot/gaia-visor/project.godot` con Godot 4.5.1 y ejecuta el proyecto (F5). Empieza en la intro, con el menú *Explorar terrenos*, *Cómo funciona Gaia* y *Acerca de nosotros*.
+2. Al abrirse, el visor enciende el servidor local si encuentra el repo y Python, y lo apaga al cerrar. Sin servidor, usa los mapas guardados de `mapas/respaldo_<clase>.raw` (se regeneran con `python scrips/generar_respaldos.py`).
+3. Controles: W A S D o flechas para girar, rueda del mouse o Q y E para acercar y alejar, Esc para volver al menú.
+
+### Demo (.exe)
+
+Desde Godot o en terminal:
+
+```powershell
+godot --headless --path godot/gaia-visor --export-release "Windows Desktop" ../../dist/Gaia-AI.exe
+```
+
+`dist/Gaia-AI.exe` no se versiona. Debe quedarse dentro del repo (en `dist/`) para encontrar `src/servidor.py`, y necesita Python con las dependencias instaladas. Si se mueve a otra carpeta, funciona solo con los mapas guardados.
 
 ### Tests
 
@@ -90,21 +111,29 @@ Las alturas no están en metros: cada tile se normalizó por separado, así que 
 python -m pytest test/ -v
 ```
 
+Pruebas del visor (una por archivo de `godot/gaia-visor/pruebas/`):
+
+```powershell
+godot --headless --path godot/gaia-visor -s res://pruebas/prueba_bloque.gd
+```
+
 ## Estructura
 
 ```text
 data/raw/        tiles originales (.tif)
 data/processed/  salidas generadas (.raw, .npy), no versionadas
+dist/            Gaia-AI.exe exportado (no versionado)
 docs/            bitácora y documentación del dataset
-godot/gaia-visor proyecto de Godot del visor 3D y mapas de ejemplo
+godot/gaia-visor proyecto de Godot: intro, visor 3D, mapas de respaldo y pruebas
 modelos/         generador exportado para inferencia (época 150)
 notebooks/       exploración
 salidas/         historial, muestras y checkpoints del entrenamiento (no versionado)
-scrips/          scripts sueltos (exportar_generador.py, revisiones del dataset)
+scrips/          scripts sueltos (exportar_generador.py, generar_respaldos.py, revisiones del dataset)
 src/noise/       generador clásico de ruido y exportación (Sprints 1-3)
 src/dataset/     descarga, carga y preprocesamiento de elevación
 src/model/       generador, discriminador y entrenamiento de la cGAN
 src/inferencia.py  generar_terreno, suavizado y exportación .raw
+src/servidor.py  servidor local para la generación en vivo
 src/pipeline.py  punto de entrada del dataset
 test/            pruebas (pytest)
 ```
