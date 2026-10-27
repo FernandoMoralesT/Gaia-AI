@@ -1,7 +1,7 @@
 extends CanvasLayer
 
-# Paleta (ver tema.tres): basalto #2B2622, tierra #5B3A24, musgo #4F6B34,
-# ocre #C9A15A, liquen #B8C29A, caliza #ECE7DA.
+# Paleta noche (ver tema.tres): abismo #0A1235, índigo #33196B, noche #141B3D,
+# borde #34408A, bruma #A9B6E0, ocre #E3AE48, musgo #4C8527, caliza #F4F0E6.
 
 const URL_SERVIDOR := "http://127.0.0.1:8765"
 # Mismo orden que CLASES en src/dataset/dem_dataset.py.
@@ -203,7 +203,7 @@ func dibujar_minimapa(cima: Vector2i) -> Image:
 		var medio: Color = material.get_shader_parameter("color_medio")
 		var cumbre: Color = material.get_shader_parameter("color_alto")
 		var tinta := Color("2B2622")
-		var marca := Color("C9A15A")
+		var marca := Color("E3AE48")
 
 		var n := LADO_MINIMAPA
 		var alturas := PackedFloat32Array()

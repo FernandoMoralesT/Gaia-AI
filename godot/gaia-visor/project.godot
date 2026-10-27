@@ -46,4 +46,3 @@ alejar={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.231, 0.239, 0.212, 1)

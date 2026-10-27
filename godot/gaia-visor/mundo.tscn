@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://3k8ee13ytvb"]
+[gd_scene load_steps=12 format=3 uid="uid://3k8ee13ytvb"]
 
 [ext_resource type="Script" uid="uid://bfnbat5l8ok5t" path="res://terreno.gd" id="1_6ba58"]
 [ext_resource type="Shader" uid="uid://bqjwdd1afji6t" path="res://terreno.gdshader" id="2_shd"]
 [ext_resource type="Shader" path="res://estratos.gdshader" id="4_est"]
 [ext_resource type="Script" path="res://camara_orbital.gd" id="5_cam"]
 [ext_resource type="PackedScene" path="res://interfaz.tscn" id="3_int"]
+[ext_resource type="Shader" path="res://fondo_cielo.gdshader" id="6_cielo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_alt"]
 render_priority = 0
@@ -21,6 +22,19 @@ shader = ExtResource("4_est")
 shader_parameter/escala_vertical = 60.0
 shader_parameter/grosor_pasto = 1.2
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cielo"]
+shader = ExtResource("6_cielo")
+
+[sub_resource type="Sky" id="Sky_fondo"]
+sky_material = SubResource("ShaderMaterial_cielo")
+
+[sub_resource type="Environment" id="Environment_fondo"]
+background_mode = 2
+sky = SubResource("Sky_fondo")
+ambient_light_source = 2
+ambient_light_color = Color(0.2275, 0.2471, 0.3608, 1)
+ambient_light_energy = 0.5
+
 [node name="Mundo" type="Node3D"]
 
 [node name="Terreno" type="MeshInstance3D" parent="."]
@@ -36,6 +50,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 170)
 
 [node name="Sol" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.8660254, -0.21130913, 0.45315388, 0, 0.9063078, 0.42261827, -0.5, -0.36599815, 0.7848856, 0, 0, 0)
+
+[node name="Ambiente" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_fondo")
 
 [node name="Interfaz" parent="." node_paths=PackedStringArray("terreno") instance=ExtResource("3_int")]
 terreno = NodePath("../Terreno")
