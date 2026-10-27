@@ -3,7 +3,6 @@ extends CanvasLayer
 # Paleta noche (ver tema.tres): abismo #0A1235, índigo #33196B, noche #141B3D,
 # borde #34408A, bruma #A9B6E0, ocre #E3AE48, musgo #4C8527, caliza #F4F0E6.
 
-const URL_SERVIDOR := "http://127.0.0.1:8765"
 # Mismo orden que CLASES en src/dataset/dem_dataset.py.
 const CLASES := ["llanura", "lomas", "valle", "montaña", "meseta", "volcán"]
 const SEMILLA_MAX := 2147483647
@@ -73,7 +72,7 @@ func generar() -> void:
 		var consulta := "clase=%s&sigma=%s" % [clase.uri_encode(), str(%Sigma.value)]
 		if not %Semilla.text.is_empty():
 				consulta += "&semilla=" + %Semilla.text
-		if %Peticion.request(URL_SERVIDOR + "/terreno?" + consulta) != OK:
+		if %Peticion.request(ServidorLocal.URL + "/terreno?" + consulta) != OK:
 				_usar_respaldo()
 				_terminar()
 
@@ -109,7 +108,7 @@ func _comprobar_servidor() -> void:
 		if comprobando:
 				return
 		comprobando = true
-		if %Salud.request(URL_SERVIDOR + "/salud") != OK:
+		if %Salud.request(ServidorLocal.URL + "/salud") != OK:
 				comprobando = false
 
 
