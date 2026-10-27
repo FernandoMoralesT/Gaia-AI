@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 # Paleta noche (ver tema.tres): abismo #0A1235, índigo #33196B, noche #141B3D,
-# borde #34408A, bruma #A9B6E0, ocre #E3AE48, musgo #4C8527, caliza #F4F0E6.
+# borde #34408A, bruma #A9B6E0, ocre #E3AE48, musgo #4A8225, caliza #F4F0E6.
 
 # Mismo orden que CLASES en src/dataset/dem_dataset.py.
 const CLASES := ["llanura", "lomas", "valle", "montaña", "meseta", "volcán"]
@@ -15,6 +15,8 @@ const NIVELES_CURVAS := 10
 @export var terreno: MeshInstance3D
 
 var clase := "volcán"
+# Clase con la que se envió la petición en curso.
+var clase_pedida := "volcán"
 var ocupado := false
 var inicio_ms := 0
 var info := {}
@@ -30,11 +32,15 @@ func _ready() -> void:
 				boton.text = nombre.capitalize()
 				boton.theme_type_variation = &"BotonClase"
 				boton.toggle_mode = true
+				boton.focus_mode = Control.FOCUS_NONE
 				boton.button_group = grupo
 				boton.button_pressed = nombre == clase
 				boton.pressed.connect(func(): clase = nombre)
 				%Clases.add_child(boton)
 
+		# Solo la semilla toma foco; así las flechas mueven únicamente la cámara.
+		for c in [%Sigma, %Menu, %Inspeccionar, %Generar]:
+				c.focus_mode = Control.FOCUS_NONE
 		%Sigma.value_changed.connect(func(v): %ValorSigma.text = "%.1f" % v)
 		%Semilla.text_changed.connect(_al_cambiar_semilla)
 		%Semilla.text_submitted.connect(func(_t): generar())
@@ -85,6 +91,7 @@ func generar() -> void:
 				_usar_respaldo()
 				_terminar()
 				return
+		clase_pedida = clase
 		var consulta := "clase=%s&sigma=%s" % [clase.uri_encode(), str(%Sigma.value)]
 		if not %Semilla.text.is_empty():
 				consulta += "&semilla=" + %Semilla.text
@@ -97,7 +104,7 @@ func _al_recibir(resultado: int, codigo: int, encabezados: PackedStringArray, cu
 		if resultado == HTTPRequest.RESULT_SUCCESS and codigo == 200 and _cargar_en_vivo(cuerpo):
 				var enc := _leer_encabezados(encabezados)
 				info = {
-						"clase": enc.get("x-clase", clase.uri_encode()).uri_decode(),
+						"clase": enc.get("x-clase", clase_pedida.uri_encode()).uri_decode(),
 						"semilla": int(enc.get("x-semilla", "0")),
 						"sigma": float(enc.get("x-sigma", str(%Sigma.value))),
 						"en_vivo": true,
@@ -111,7 +118,7 @@ func _al_recibir(resultado: int, codigo: int, encabezados: PackedStringArray, cu
 
 
 func _cargar_en_vivo(cuerpo: PackedByteArray) -> bool:
-		terreno.aplicar_clase(clase)
+		terreno.aplicar_clase(clase_pedida)
 		return terreno.cargar_bytes(cuerpo)
 
 

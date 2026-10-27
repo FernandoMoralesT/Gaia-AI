@@ -59,8 +59,10 @@ func _al_responder_salud(resultado: int, codigo: int, _cab: PackedStringArray, _
 
 func _lanzar() -> void:
 		var repo := buscar_repo(carpeta_inicio())
+		if repo == "":
+				return
 		var pythonw := resolver_pythonw()
-		if repo == "" or pythonw == "":
+		if pythonw == "":
 				return
 		pid = OS.create_process(pythonw, [repo + "/src/servidor.py"])
 

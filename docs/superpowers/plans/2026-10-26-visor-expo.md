@@ -48,7 +48,7 @@
 | Bruma | `#A9B6E0` | Texto secundario (sustituye a liquen) |
 | Borde | `#34408A` | Bordes de paneles y botones secundarios |
 | Ocre | `#E3AE48` | Clase seleccionada, foco, marca de la cima (antes `#C9A15A`, más vivo) |
-| Musgo | `#4C8527` | Botón "Generar" (antes `#4F6B34`, más vivo; contraste ≥ 4.5 con texto blanco) |
+| Musgo | `#4A8225` | Botón "Generar" (antes `#4F6B34`, más vivo; contraste ≥ 4.5 con texto blanco) |
 | Caliza | `#F4F0E6` | Texto principal |
 
 Fernando pidió colores menos apagados (requisito 8): los tokens de acento ya son los vivos de esta tabla; no se cambia la distribución.
