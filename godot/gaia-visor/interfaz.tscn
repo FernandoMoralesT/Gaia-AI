@@ -110,6 +110,12 @@ visible = false
 layout_mode = 2
 theme_type_variation = &"Nota"
 
+[node name="NotaCamara" type="Label" parent="Raiz/Controles/Columna"]
+layout_mode = 2
+theme_type_variation = &"Nota"
+text = "Gira con W A S D o las flechas · acerca con la rueda o Q y E"
+autowrap_mode = 3
+
 [node name="Inspeccion" type="PanelContainer" parent="Raiz"]
 unique_name_in_owner = true
 visible = false

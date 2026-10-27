@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://3k8ee13ytvb"]
+[gd_scene load_steps=8 format=3 uid="uid://3k8ee13ytvb"]
 
 [ext_resource type="Script" uid="uid://bfnbat5l8ok5t" path="res://terreno.gd" id="1_6ba58"]
 [ext_resource type="Shader" uid="uid://bqjwdd1afji6t" path="res://terreno.gdshader" id="2_shd"]
 [ext_resource type="Shader" path="res://estratos.gdshader" id="4_est"]
+[ext_resource type="Script" path="res://camara_orbital.gd" id="5_cam"]
 [ext_resource type="PackedScene" path="res://interfaz.tscn" id="3_int"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_alt"]
@@ -27,8 +28,11 @@ script = ExtResource("1_6ba58")
 material_superficie = SubResource("ShaderMaterial_alt")
 material_paredes = SubResource("ShaderMaterial_est")
 
-[node name="Camara" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 85, 147.22432)
+[node name="Pivote" type="Node3D" parent="."]
+script = ExtResource("5_cam")
+
+[node name="Camara" type="Camera3D" parent="Pivote"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 170)
 
 [node name="Sol" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.8660254, -0.21130913, 0.45315388, 0, 0.9063078, 0.42261827, -0.5, -0.36599815, 0.7848856, 0, 0, 0)
