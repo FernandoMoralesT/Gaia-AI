@@ -192,7 +192,7 @@ func dibujar_minimapa(cima: Vector2i) -> Image:
 		var ancho: int = mapa.ancho
 		var alto: int = mapa.alto
 		var datos: PackedFloat32Array = mapa.datos
-		var material: ShaderMaterial = terreno.material_override
+		var material: ShaderMaterial = terreno.material_superficie
 		var bajo: Color = material.get_shader_parameter("color_bajo")
 		var medio: Color = material.get_shader_parameter("color_medio")
 		var cumbre: Color = material.get_shader_parameter("color_alto")
