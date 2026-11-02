@@ -442,3 +442,36 @@ Objetivo: que el visor genere terreno nuevo con el modelo en vivo y se pueda abr
 - Girar con el mouse (arrastrar), fuera de alcance de este sprint.
 
 Tag de cierre: `sprint-09`.
+
+
+## Sprint 10: versión 1.0
+
+Objetivo: cerrar los pendientes del visor y de la documentación, y publicar la v1.0. El PDF queda fuera de esta versión.
+
+### Visor
+- **Sombras del sol** (`shadow_enabled`, modo ortogonal y distancia máxima de 400): 400 es la distancia máxima de la cámara (260) más la diagonal del bloque (~170). Con opacidad 1.0, las laderas que miran al sol pero quedan bajo la sombra de otro pico salían negro puro, porque la luz de relleno ilumina el lado contrario; se dejó `shadow_opacity = 0.7`. El relleno sigue sin sombra, para que cada pico no proyecte dos. El `shadow_bias` por defecto no dejó rayas (acné) a distancias de 110, 170 y 260.
+- **Granulado con sigma = 2:** se descarta. Capturas en `docs/img/granulado/` (volcán y montaña, semilla 42): con sigma 0 hay granulado fuerte, con sigma 1 una rugosidad fina, y con sigma 2 laderas lisas sin picos aislados. Se mantiene sigma = 2.
+- **Girar con el mouse:** arrastrar con clic izquierdo gira (0.3 grados por píxel). Va en `_unhandled_input` para que arrastrar sobre los paneles no mueva la cámara. Usa `screen_relative` (píxeles reales) y no `relative`, que viene escalado por `canvas_items` y haría que el giro cambiara de velocidad en pantalla completa.
+- **F11 y Salir:** un autoload nuevo, `Pantalla`, alterna la pantalla completa en todas las escenas. El botón Salir solo llama a `get_tree().quit()`, porque el autoload `ServidorLocal` ya apaga `pythonw` en su `_exit_tree`; se comprobó en el Administrador de tareas.
+- **Intro centrada:** además de centrar los contenedores, hubo que centrar la etiqueta interna del título, porque la caja estaba centrada pero las letras se dibujaban a la izquierda.
+- **Fondo de curvas de nivel** en las páginas 2D, elegido por el equipo entre dos propuestas: curvas tenues de un terreno que se deforma despacio (un ciclo por minuto), con una curva maestra de cada cinco. El degradado se separó en `degradado_fondo()` para no duplicarlo; el cielo 3D no cambia.
+
+### Datos y documentación
+- **Coordenadas de los 3 tiles manuales de `raw_v1`:** se leyeron del propio GeoTIFF con `scrips/coordenadas_raw_v1.py` y quedaron en `docs/dataset.md`. Ninguno es duplicado de los 11 tiles con nombre.
+- **Comparación contra la línea base Simplex** (`scrips/comparar_simplex.py`, `docs/comparacion_simplex.md`): con el mismo `fractal_noise_2d` del Sprint 3, escalado a 120 px. En variedad, el Simplex (0.45) y la cGAN (0.21 a 0.60) quedan en el rango real (0.29 a 0.62); la diferencia está en el control de la forma por clase. Sin suavizar, la cGAN es de 1.5 a 4 veces más rugosa que el terreno real, lo que confirma con números que el suavizado del demo hace falta.
+- **Anteproyecto actualizado** (`docs/Gaia-AI_Anteproyecto_v1.docx`): ahora describe la cGAN, los 10 sprints y al equipo. La hipótesis conserva su afirmación original; el resultado (variedad similar a la del Simplex) se reporta en Análisis en lugar de ajustar la hipótesis.
+- **Licencia MIT** a nombre de los tres integrantes, y créditos de terceros en el README: fuentes OFL, SRTM de dominio público, Godot MIT y PyTorch BSD-3.
+- **Notas de la versión** en `docs/release-v1.0.md`. La Release de GitHub no adjunta el `.exe`, porque sin el repositorio y Python no funciona; las notas explican cómo clonar e instalar.
+
+### Tests
+- `python -m pytest test/ -q`: 42 pruebas pasan (5 nuevas: coordenadas y comparación).
+- Godot headless: 9 scripts, todos OK. Son nuevos `prueba_sombras` y `prueba_pantalla`, y `prueba_camara` ahora cubre el arrastre.
+
+### Trabajo futuro
+- El PDF del proyecto.
+- Mejorar el entrenamiento: frenar al discriminador, bajar la tasa de aprendizaje o usar label smoothing.
+- Tiles de volcán donde el cono no domina el centro: Paricutín y Colima.
+- Cráteres: necesitan más resolución o más ejemplos.
+- Evaluar con tiles que el modelo nunca vio.
+
+Tags de cierre: `sprint-10` y `v1.0`.

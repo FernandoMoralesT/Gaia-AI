@@ -11,8 +11,8 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · Plan: 10 sprints de 1 semana.
 - La carpeta de scripts se llama `scrips` (sin "t").
 
 ## Estado actual
-- Sprints 1 a 9 concluidos. Último tag: `sprint-09` (demo en Godot con generación en vivo, 37 tests de Python y 6 pruebas headless). Rama de trabajo: `visor-expo` (sin fusionar a `main`).
-- Sprint 10 pendiente: documentación, PDF y v1.0.
+- Proyecto en v1.0: sprints 1 a 10 concluidos. Últimos tags: `sprint-10` y `v1.0` (42 tests de Python y 9 pruebas headless). Rama de trabajo: `main`.
+- Fuera de la v1.0: el PDF del proyecto.
 - Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100.
 
 ## Sprint 9: hecho
@@ -20,6 +20,12 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · Plan: 10 sprints de 1 semana.
 - Visor: escena principal `intro.tscn` (título, menú, info, acerca de), interfaz con selector de clase, semilla y suavizado, botón Inspeccionar, bloque sólido con escala vertical por clase, cámara orbital (WASD/flechas, zoom con rueda o Q/E) y fondo "espacio latente". Chequeo de `/salud` cada 3 s; sin servidor usa `mapas/respaldo_<clase>.raw` (`scrips/generar_respaldos.py`).
 - `dist/Gaia-AI.exe` (ignorado en git) busca el repo y lanza/cierra el servidor con `pythonw`; requiere Python y dependencias instalados. Reemplaza a `iniciar_demo.bat`.
 - Pruebas Godot: `godot --headless --path godot/gaia-visor -s res://pruebas/prueba_X.gd`.
+
+## Sprint 10: hecho
+- Visor: sombras del sol (opacidad 0.7), giro arrastrando el mouse (`screen_relative`), autoload `Pantalla` (F11), botón Salir, intro centrada y fondo de curvas de nivel en las páginas 2D.
+- `scrips/comparar_simplex.py` y `docs/comparacion_simplex.md`: cGAN contra Simplex y terreno real (rugosidad y variedad).
+- `scrips/coordenadas_raw_v1.py`: límites de los 3 tiles manuales, documentados en `docs/dataset.md`.
+- `LICENSE` MIT (3 integrantes), anteproyecto en `docs/Gaia-AI_Anteproyecto_v1.docx` y notas en `docs/release-v1.0.md`.
 
 ## Stack
 - Python + PyTorch, CPU (GPU AMD Radeon, sin CUDA). numpy, rasterio, python-dotenv, scipy, pytest.
@@ -68,9 +74,7 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 3. Commit y tag `sprint-NN`.
 
 ## Pendientes sueltos
-- 3 tiles manuales en `data/raw_v1/` sin coordenadas registradas.
-- El anteproyecto `.docx` aún describe el enfoque anterior al pivote cGAN.
-- Visor: sombras, confirmar en 3D que sigma = 2 no deja granulado.
+- PDF del proyecto.
 - Tiles de volcán donde el cono no domina el centro: Paricutín y Colima.
 - Mejora opcional de entrenamiento (frenar al discriminador, menor tasa, label smoothing), solo si sobra tiempo tras el Sprint 10.
 

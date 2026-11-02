@@ -17,7 +17,9 @@ Desarrollo con Scrum, 1 sprint por semana, 10 sprints en total.
 | 7 | Entrenamiento y selección del checkpoint | Concluido |
 | 8 | Inferencia local, postprocesado y visor en Godot | Concluido |
 | 9 | Demo visual en Godot | Concluido |
-| 10 | Documentación y entrega (v1.0) | Pendiente |
+| 10 | Documentación y entrega (v1.0) | Concluido |
+
+Versión actual: **v1.0** (ver [notas de la versión](docs/release-v1.0.md)).
 
 El modelo es una GAN condicional (cGAN) entrenada con 60 tiles SRTM en 6 clases de terreno: llanura, lomas, valle, montaña, meseta y volcán. El modelo del demo es el generador de la época 150 (`modelos/generador_epoca150.pt`), incluido en el repositorio.
 
@@ -91,9 +93,9 @@ Escucha solo en `127.0.0.1:8765`:
 
 ### Visor en Godot
 
-1. Abre `godot/gaia-visor/project.godot` con Godot 4.5.1 y ejecuta el proyecto (F5). Empieza en la intro, con el menú *Explorar terrenos*, *Cómo funciona Gaia* y *Acerca de nosotros*.
+1. Abre `godot/gaia-visor/project.godot` con Godot 4.5.1 y ejecuta el proyecto (F5). Empieza en la intro, con el menú *Explorar terrenos*, *Cómo funciona Gaia*, *Acerca de nosotros* y *Salir*.
 2. Al abrirse, el visor enciende el servidor local si encuentra el repo y Python, y lo apaga al cerrar. Sin servidor, usa los mapas guardados de `mapas/respaldo_<clase>.raw` (se regeneran con `python scrips/generar_respaldos.py`).
-3. Controles: W A S D o flechas para girar, rueda del mouse o Q y E para acercar y alejar, Esc para volver al menú.
+3. Controles: W A S D, flechas o arrastrar con clic izquierdo para girar; rueda del mouse o Q y E para acercar y alejar; F11 para pantalla completa; Esc para volver al menú.
 
 ### Demo (.exe)
 
@@ -142,6 +144,9 @@ test/            pruebas (pytest)
 
 - [`docs/bitacora.md`](docs/bitacora.md): decisiones y problemas por sprint.
 - [`docs/dataset.md`](docs/dataset.md): fuente, tiles, procesamiento y limitaciones del dataset.
+- [`docs/comparacion_simplex.md`](docs/comparacion_simplex.md): comparación de la cGAN contra el ruido Simplex y el terreno real.
+- [`docs/Gaia-AI_Anteproyecto_v1.docx`](docs/Gaia-AI_Anteproyecto_v1.docx): anteproyecto actualizado al enfoque cGAN.
+- [`docs/release-v1.0.md`](docs/release-v1.0.md): notas de la versión 1.0.
 
 ## Datos
 

@@ -88,4 +88,4 @@ texto = "Volcanes, valles y llanuras le salen claros. Lomas, montañas y mesetas
 [node name="D4" parent="Margen/Columna/Desplazar/Lista" instance=ExtResource("4_des")]
 layout_mode = 2
 titulo = "Cómo usar el visor"
-texto = "Elige una forma y pulsa \"Generar\". Gira con W A S D o las flechas, acerca con la rueda o Q y E. \"Inspeccionar\" muestra la semilla: escríbela para repetir un terreno."
+texto = "Elige una forma y pulsa \"Generar\". Gira con W A S D, las flechas o arrastrando con el mouse, y acerca con la rueda o Q y E. F11 cambia a pantalla completa. \"Inspeccionar\" muestra la semilla: escríbela para repetir un terreno."
