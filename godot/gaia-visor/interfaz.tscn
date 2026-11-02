@@ -118,7 +118,7 @@ theme_type_variation = &"Nota"
 [node name="NotaCamara" type="Label" parent="Raiz/Controles/Columna"]
 layout_mode = 2
 theme_type_variation = &"Nota"
-text = "Gira con W A S D o las flechas · acerca con la rueda o Q y E"
+text = "Gira con W A S D, las flechas o arrastrando · acerca con la rueda o Q y E · F11 pantalla completa"
 autowrap_mode = 3
 
 [node name="Inspeccion" type="PanelContainer" parent="Raiz"]
