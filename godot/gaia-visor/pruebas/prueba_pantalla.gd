@@ -19,8 +19,24 @@ func _initialize() -> void:
 		Afirmar.afirmar(ProjectSettings.get_setting("autoload/Pantalla", "") == "*res://pantalla.gd",
 				"Pantalla es autoload")
 
-		var intro: Node = load("res://intro.tscn").instantiate()
+		# La intro en un viewport del tamaño base del proyecto (1152x648).
+		var vista := SubViewport.new()
+		vista.size = Vector2i(1152, 648)
+		root.add_child(vista)
+		var intro: Control = load("res://intro.tscn").instantiate()
+		vista.add_child(intro)
 		Afirmar.afirmar(intro.get_node_or_null("%Salir") is Button, "la intro tiene boton Salir")
-		intro.free()
+		await process_frame
+		await process_frame
+		for nombre in ["Explorar", "Info", "Acerca", "Salir"]:
+				var boton: Control = intro.get_node("%" + nombre)
+				var centro := boton.get_global_rect().get_center().x
+				Afirmar.afirmar(absf(centro - 576.0) <= 2.0, "%s centrado (centro x %s)" % [nombre, centro])
+		var titulo: Control = intro.get_node("%Titulo")
+		Afirmar.afirmar(absf(titulo.get_global_rect().get_center().x - 576.0) <= 2.0, "titulo centrado")
+		# El texto se dibuja en un SubViewport del ancho de la caja; debe ir centrado dentro.
+		var texto: Label = titulo.get_node("SubViewport/Texto")
+		Afirmar.afirmar(texto.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER, "letras del titulo centradas")
+		vista.free()
 
 		Afirmar.terminar("prueba_pantalla")

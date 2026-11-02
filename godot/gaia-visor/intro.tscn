@@ -9,7 +9,7 @@
 shader = ExtResource("3_fondo")
 
 [sub_resource type="StyleBoxEmpty" id="plano"]
-content_margin_left = 0.0
+content_margin_left = 12.0
 content_margin_top = 6.0
 content_margin_right = 12.0
 content_margin_bottom = 6.0
@@ -53,13 +53,14 @@ theme_override_constants/separation = 6
 unique_name_in_owner = true
 custom_minimum_size = Vector2(920, 240)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 
 [node name="Subtitulo" type="Label" parent="Margen/Centro"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6627, 0.7137, 0.8784, 1)
 theme_override_font_sizes/font_size = 22
 text = "Terrenos que nunca existieron, dibujados por una IA"
+horizontal_alignment = 1
 
 [node name="Espacio" type="Control" parent="Margen/Centro"]
 custom_minimum_size = Vector2(0, 28)
@@ -69,39 +70,42 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme_type_variation = &"BotonPrincipal"
 text = "Explorar terrenos"
 
 [node name="Info" type="Button" parent="Margen/Centro"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("plano")
 theme_override_styles/hover = SubResource("plano")
 theme_override_styles/pressed = SubResource("plano")
 theme_override_styles/hover_pressed = SubResource("plano")
 text = "Cómo funciona Gaia"
-alignment = 0
+alignment = 1
 
 [node name="Acerca" type="Button" parent="Margen/Centro"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("plano")
 theme_override_styles/hover = SubResource("plano")
 theme_override_styles/pressed = SubResource("plano")
 theme_override_styles/hover_pressed = SubResource("plano")
 text = "Acerca de nosotros"
-alignment = 0
+alignment = 1
 
 [node name="Salir" type="Button" parent="Margen/Centro"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("plano")
 theme_override_styles/hover = SubResource("plano")
 theme_override_styles/pressed = SubResource("plano")
 theme_override_styles/hover_pressed = SubResource("plano")
 text = "Salir"
-alignment = 0
+alignment = 1
