@@ -15,6 +15,14 @@
 | Tabla por tile         | `docs/dataset_tiles.md` (la genera `scrips/resumen_dataset.py`)|
 | Versión anterior       | 14 tiles en `data/raw_v1/` (11 de 0.05° y 3 descargas manuales); no se usan en el entrenamiento |
 
+Límites de las 3 descargas manuales de `raw_v1`, leídos del propio GeoTIFF con `python scrips/coordenadas_raw_v1.py` (Sprint 10). Ninguno coincide con los 11 tiles con nombre, así que no son duplicados.
+
+| Archivo | Latitud | Longitud | Píxeles |
+| --- | --- | --- | --- |
+| `output_SRTMGL1(1).tif` | 23.9885 a 24.0657 | -106.436 a -106.3226 | 408×278 |
+| `output_SRTMGL1(2).tif` | 23.5735 a 23.7107 | -105.4449 a -105.2362 | 751×494 |
+| `output_SRTMGL1.tif` | 23.4751 a 23.5143 | -106.4882 a -106.4371 | 184×141 |
+
 ## 2. Fuente y licencia
 
 NASA Shuttle Radar Topography Mission (SRTM). (2013). *Shuttle Radar Topography Mission (SRTM) Global* [Conjunto de datos]. Distribuido por OpenTopography. https://doi.org/10.5069/G9445JDF
@@ -114,5 +122,4 @@ La normalización es por tile, así que el modelo no aprende la altura absoluta;
 ## 9. Pendientes
 
 - Comparar las mesetas generadas con las reales después de la corrida larga; si salen disecadas y sin cima plana, revisar `dem_24.18_24.28_-105.52_-105.42` y el altiplano.
-- Registrar las coordenadas de los 3 tiles manuales de `raw_v1`, si se van a conservar.
 - Ampliar las clases con menos tiles si el entrenamiento lo exige.
