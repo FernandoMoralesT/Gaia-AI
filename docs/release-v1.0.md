@@ -35,7 +35,7 @@ Esta versión no incluye un `.exe` descargable. El ejecutable necesita estar den
 
 ## Limitaciones conocidas
 - Las alturas son relativas, no metros: cada mapa se normaliza por separado y la escala vertical depende de la clase.
-- Los volcanes salen como conos sin cráter: los cráteres reales son menores que la resolución de 90 m por píxel.
+- Los volcanes salen como conos sin cráter: a 90 m por píxel la mayoría de los cráteres reales no se distinguen, y hay muy pocos ejemplos en los datos.
 - Las clases lomas, montaña y meseta se parecen entre sí.
 - Solo CPU; el entrenamiento se hizo sin GPU.
 

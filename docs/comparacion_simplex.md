@@ -8,10 +8,10 @@ El anteproyecto planteó comparar la IA contra un generador clásico de ruido co
 - **cGAN:** el generador de la época 150, con 10 semillas por clase, sin suavizar (σ = 0) y con el suavizado del demo (σ = 2).
 - **Real:** los 60 tiles SRTM del dataset, reducidos a 120×120 como en el entrenamiento.
 
-En los tres casos cada mapa se normaliza por separado a [-1, 1], igual que en el entrenamiento, para que los números sean comparables.
+Los mapas Simplex y los reales se normalizan cada uno a [-1, 1], igual que en el entrenamiento. Los de la cGAN no se renormalizan: ya salen casi en ese rango por la tanh final (por ejemplo, de −0.98 a 0.96), así que su rugosidad y su variedad pueden quedar un 2 o 3 % por debajo.
 
 Se midieron dos cosas:
-- **Rugosidad:** la diferencia media de altura entre píxeles vecinos. Es la misma medida de la bitácora del Sprint 8. Un valor alto significa un terreno granulado o muy accidentado.
+- **Rugosidad:** la diferencia media de altura entre píxeles vecinos. En el Sprint 8 se sumaron las dos direcciones (horizontal y vertical); aquí se promedian, así que los valores son la mitad de los de aquella tabla. Un valor alto significa un terreno granulado o muy accidentado.
 - **Variedad entre semillas:** la diferencia media entre cada par de mapas de la misma fuente. Un valor alto significa que cada semilla da un terreno distinto.
 
 ## Resultados
@@ -34,7 +34,7 @@ Se midieron dos cosas:
 ## Lectura
 
 1. **En variedad no hay ganador.** El Simplex (0.45) queda dentro del rango del terreno real (0.29 a 0.62), y la cGAN se mueve en un rango parecido según la clase (0.21 a 0.60). Los dos generan mapas distintos con cada semilla.
-2. **La diferencia está en el control y la forma.** El Simplex no recibe una clase: con cualquier semilla produce el mismo tipo de manchas, sin conos ni cuencas. La cGAN genera la forma que se le pide, y en la figura el volcán y el valle se parecen a los reales. Además respeta el orden real de suavidad: el volcán es la clase más lisa tanto en los datos reales (0.0177) como en la cGAN (0.0145).
+2. **La diferencia está en el control y la forma.** El Simplex no recibe una clase: con cualquier semilla produce el mismo tipo de manchas, sin conos ni cuencas. La cGAN genera la forma que se le pide, y en la figura el volcán y el valle se parecen a los reales. Además coincide con el terreno real en los extremos: el volcán es la clase más lisa en los datos reales (0.0177) y en la cGAN con σ = 2 (0.0145), y sin suavizar la llanura es la más rugosa en ambos. El orden de las clases intermedias no coincide.
 3. **Sin suavizar, la cGAN es más granulada que el terreno real.** Con σ = 0 su rugosidad es de 1.5 a 4 veces la real; con σ = 2 queda un poco por debajo. Esto confirma con números lo que se vio en 3D: el suavizado del demo hace falta y no borra el relieve.
 4. **La llanura es un caso especial.** Su rugosidad real es alta (0.089) porque, al normalizar cada tile a [-1, 1], el poco relieve de una llanura se estira y su ruido fino se amplifica. La cGAN con σ = 2 la deja mucho más lisa.
 
