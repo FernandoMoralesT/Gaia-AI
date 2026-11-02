@@ -5,6 +5,8 @@ shader_type canvas_item;
 
 const float CURVAS = 14.0;       // curvas en todo el rango de altura
 const float VELOCIDAD = 0.017;   // ~1 ciclo por minuto
+// Lo actualiza el autoload RelojFondo: va y vuelve cada hora (TIME saltaba al reiniciarse).
+global uniform float tiempo_fondo;
 
 float ruido(vec2 p) {
 	vec2 i = floor(p);
@@ -31,7 +33,7 @@ void fragment() {
 	float aspecto = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
 	vec2 p = vec2(uv.x * aspecto, uv.y) * 1.4;
 
-	float nivel = altura(p, TIME) * CURVAS;
+	float nivel = altura(p, tiempo_fondo) * CURVAS;
 	// Distancia a la curva más cercana medida en píxeles: líneas de ~1 px a cualquier resolución.
 	float ancho = fwidth(nivel);
 	float dist = abs(fract(nivel - 0.5) - 0.5) / max(ancho, 1e-4);

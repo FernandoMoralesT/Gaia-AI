@@ -475,3 +475,13 @@ Objetivo: cerrar los pendientes del visor y de la documentación, y publicar la 
 - Evaluar con tiles que el modelo nunca vio.
 
 Tags de cierre: `sprint-10` y `v1.0`.
+
+
+## v1.0.1: el fondo ya no salta
+
+- **Problema:** las curvas de nivel del menú usaban `TIME`, que Godot reinicia a 0 cada hora. Las curvas saltaban de golpe; con el visor encendido todo el día en la expo, pasaría unas 8 veces.
+- **Solución:** un autoload nuevo, `RelojFondo`, cuenta el tiempo y lo pasa al shader en el global `tiempo_fondo` (declarado en `[shader_globals]` de `project.godot`). El valor sube de 0 a 3600 s y luego baja, así que al cumplirse la hora el recorrido se invierte en lugar de reiniciarse. Fue la petición de Fernando.
+- **Por qué un reloj propio:** el shader no puede saber si va en la primera hora o en la segunda, así que no podría invertir el sentido por sí mismo.
+- **Verificación:** `prueba_reloj_fondo` cubre la función de ida y vuelta, el autoload y el global. Además, capturas de la intro con el reloj en 3500 s y en 3700 s salen idénticas píxel por píxel.
+
+Tag: `v1.0.1`.

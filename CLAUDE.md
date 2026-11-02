@@ -11,7 +11,7 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · Plan: 10 sprints de 1 semana.
 - La carpeta de scripts se llama `scrips` (sin "t").
 
 ## Estado actual
-- Proyecto en v1.0: sprints 1 a 10 concluidos. Últimos tags: `sprint-10` y `v1.0` (42 tests de Python y 9 pruebas headless). Rama de trabajo: `main`.
+- Proyecto en v1.0: sprints 1 a 10 concluidos. Últimos tags: `sprint-10`, `v1.0` y `v1.0.1` (42 tests de Python y 10 pruebas headless). Rama de trabajo: `main`.
 - Fuera de la v1.0: el PDF del proyecto.
 - Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100.
 
@@ -22,7 +22,7 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · Plan: 10 sprints de 1 semana.
 - Pruebas Godot: `godot --headless --path godot/gaia-visor -s res://pruebas/prueba_X.gd`.
 
 ## Sprint 10: hecho
-- Visor: sombras del sol (opacidad 0.7), giro arrastrando el mouse (`screen_relative`), autoload `Pantalla` (F11), botón Salir, intro centrada y fondo de curvas de nivel en las páginas 2D.
+- Visor: sombras del sol (opacidad 0.7), giro arrastrando el mouse (`screen_relative`), autoload `Pantalla` (F11), autoload `RelojFondo` (v1.0.1: el fondo va y vuelve cada hora; global de shader `tiempo_fondo`), botón Salir, intro centrada y fondo de curvas de nivel en las páginas 2D.
 - `scrips/comparar_simplex.py` y `docs/comparacion_simplex.md`: cGAN contra Simplex y terreno real (rugosidad y variedad).
 - `scrips/coordenadas_raw_v1.py`: límites de los 3 tiles manuales, documentados en `docs/dataset.md`.
 - `LICENSE` MIT (3 integrantes), anteproyecto en `docs/Gaia-AI_Anteproyecto_v1.docx` y notas en `docs/release-v1.0.md`.

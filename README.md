@@ -19,7 +19,7 @@ Desarrollo con Scrum, 1 sprint por semana, 10 sprints en total.
 | 9 | Demo visual en Godot | Concluido |
 | 10 | Documentación y entrega (v1.0) | Concluido |
 
-Versión actual: **v1.0** (ver [notas de la versión](docs/release-v1.0.md)).
+Versión actual: **v1.0.1** (ver [notas de la v1.0](docs/release-v1.0.md); la v1.0.1 corrige el salto del fondo animado).
 
 El modelo es una GAN condicional (cGAN) entrenada con 60 tiles SRTM en 6 clases de terreno: llanura, lomas, valle, montaña, meseta y volcán. El modelo del demo es el generador de la época 150 (`modelos/generador_epoca150.pt`), incluido en el repositorio.
 
