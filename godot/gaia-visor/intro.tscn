@@ -94,3 +94,14 @@ theme_override_styles/pressed = SubResource("plano")
 theme_override_styles/hover_pressed = SubResource("plano")
 text = "Acerca de nosotros"
 alignment = 0
+
+[node name="Salir" type="Button" parent="Margen/Centro"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("plano")
+theme_override_styles/hover = SubResource("plano")
+theme_override_styles/pressed = SubResource("plano")
+theme_override_styles/hover_pressed = SubResource("plano")
+text = "Salir"
+alignment = 0
