@@ -10,6 +10,7 @@ extends Node3D
 @export var distancia_min := 110.0
 @export var distancia_max := 260.0
 @export var paso_rueda := 12.0
+@export var sensibilidad_mouse := 0.3  # grados por píxel arrastrado
 
 var giro := 0.0
 
@@ -18,6 +19,11 @@ static func limitar(incl: float, dist: float, lim: Dictionary) -> Vector2:
 		return Vector2(
 				clampf(incl, lim["inclinacion_min"], lim["inclinacion_max"]),
 				clampf(dist, lim["distancia_min"], lim["distancia_max"]))
+
+
+# Arrastrar a la derecha gira a la izquierda (como empujar el mundo); hacia abajo inclina más.
+static func girar_con_mouse(giro_actual: float, incl: float, relativo: Vector2, sens: float) -> Vector2:
+		return Vector2(giro_actual - relativo.x * sens, incl + relativo.y * sens)
 
 
 func teclado_libre() -> bool:
@@ -48,6 +54,13 @@ func _unhandled_input(evento: InputEvent) -> void:
 						distancia -= paso_rueda
 				elif evento.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 						distancia += paso_rueda
+				_colocar()
+		# Va en _unhandled_input: si el arrastre empieza sobre un panel, la interfaz lo consume.
+		# screen_relative: píxeles reales, así el giro no cambia con el escalado de pantalla completa.
+		elif evento is InputEventMouseMotion and evento.button_mask & MOUSE_BUTTON_MASK_LEFT:
+				var v := girar_con_mouse(giro, inclinacion, evento.screen_relative, sensibilidad_mouse)
+				giro = v.x
+				inclinacion = v.y
 				_colocar()
 
 

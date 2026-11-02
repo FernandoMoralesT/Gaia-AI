@@ -40,4 +40,33 @@ func _initialize() -> void:
 				var dentro := absf(p.x) <= 59.5 and absf(p.z) <= 59.5 and p.y <= 66.0
 				Afirmar.afirmar(not dentro, "camara fuera del bloque a inclinacion %s (pos %s)" % [incl, p])
 
+		# Arrastre con el mouse
+		Afirmar.afirmar(cam.girar_con_mouse(0.0, 30.0, Vector2(10, 0), 0.3) == Vector2(-3.0, 30.0),
+				"arrastre horizontal gira")
+		Afirmar.afirmar(cam.girar_con_mouse(0.0, 30.0, Vector2(0, 10), 0.3) == Vector2(0.0, 33.0),
+				"arrastre vertical inclina")
+
+		# Sin escalado de interfaz: posiciones del evento = posiciones de los controles.
+		root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+		cam.giro = 0.0
+		cam.inclinacion = 30.0
+		var mov := InputEventMouseMotion.new()
+		mov.position = Vector2(600, 400)  # lejos del LineEdit, que está en (0, 0)
+		mov.relative = Vector2(20, 0)
+		mov.screen_relative = Vector2(20, 0)
+		mov.button_mask = 0
+		root.push_input(mov)
+		Afirmar.afirmar(is_equal_approx(cam.giro, 0.0), "mover sin clic no gira")
+
+		mov = mov.duplicate()
+		mov.button_mask = MOUSE_BUTTON_MASK_LEFT
+		mov.position = campo.position + Vector2(2, 2)
+		root.push_input(mov)
+		Afirmar.afirmar(is_equal_approx(cam.giro, 0.0), "arrastrar sobre la interfaz no gira")
+
+		mov = mov.duplicate()
+		mov.position = Vector2(600, 400)
+		root.push_input(mov)
+		Afirmar.afirmar(is_equal_approx(cam.giro, -6.0), "arrastrar con clic izquierdo gira")
+
 		Afirmar.terminar("prueba_camara")
