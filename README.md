@@ -153,9 +153,9 @@ https://opentopography.org/usageterms
 
 ## Equipo
 
-- Aguillon Peinado Sebastian
-- Garcia Mendoza Cristoff Salvador
-- Morales Toledo Luis Fernando
+- Luis Fernando Morales Toledo: desarrollador principal.
+- Cristoff Salvador Garcia Mendoza: documentación y recabación de datos.
+- Sebastian Aguillon Peinado: frontend.
 
 ## Flujo de trabajo
 
@@ -165,4 +165,11 @@ https://opentopography.org/usageterms
 
 ## Licencia
 
-[Por definir]
+MIT, ver [`LICENSE`](LICENSE).
+
+## Créditos de terceros
+
+- Fuentes Lilita One y Barlow Semi Condensed: SIL Open Font License 1.1; sus textos están en `godot/gaia-visor/fuentes/`.
+- Datos SRTM GL1: NASA/USGS, dominio público, descargados vía OpenTopography (ver [Datos](#datos)).
+- Godot Engine: licencia MIT.
+- PyTorch: licencia BSD-3.
