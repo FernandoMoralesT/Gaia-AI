@@ -18,9 +18,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Dos volcanes y el paso entre ellos, con las llanuras de Puebla y Amecameca.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1470,
+        "max_m": 5406,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B02",
@@ -38,9 +52,23 @@
       "proposito": "entrenamiento",
       "justificacion": "El cráter más claro del dataset v1 (+435 m), rodeado de valles.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1526,
+        "max_m": 4662,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B03",
@@ -91,9 +119,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Paso gradual de lomas a llanura.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 336,
+        "max_m": 484,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B05",
@@ -111,9 +153,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Valle ancho entre sierras.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1455,
+        "max_m": 3313,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B06",
@@ -130,9 +186,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Valle glaciar y alta montaña.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 435,
+        "max_m": 4797,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B07",
@@ -149,9 +219,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Caldera grande: un cráter que sí se ve a 60 m.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 962,
+        "max_m": 2739,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B08",
@@ -167,9 +251,23 @@
       "proposito": "clase_pura",
       "justificacion": "Llanura pura de referencia.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 93,
+        "max_m": 180,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B09",
@@ -186,9 +284,23 @@
       "proposito": "entrenamiento",
       "justificacion": "La meseta con más plano alto del dataset v1, con sus bordes.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1445,
+        "max_m": 3417,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B10",
@@ -206,9 +318,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Tepui: cima plana y paredes verticales.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 370,
+        "max_m": 2424,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B11",
@@ -225,9 +351,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Dos tepuis completos en el recuadro.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 477,
+        "max_m": 2748,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B12",
@@ -245,9 +385,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Meseta alta con escarpes y cañones.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1059,
+        "max_m": 4443,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B13",
@@ -264,9 +418,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Meseta grande con borde abrupto.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1689,
+        "max_m": 2489,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B14",
@@ -284,9 +452,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cañones profundos que cortan la meseta de la Sierra Tarahumara.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 481,
+        "max_m": 2630,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B15",
@@ -337,9 +519,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cañón angosto junto al valle de Chiapa de Corzo.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 131,
+        "max_m": 2495,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B17",
@@ -357,9 +553,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cañón con volcanes alrededor.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1645,
+        "max_m": 6288,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B18",
@@ -377,9 +587,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Campo de dunas pegado al campo volcánico: transición duna–volcán.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": -44,
+        "max_m": 589,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B19",
@@ -397,9 +621,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Dunas aisladas entre sierras y llanura.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1069,
+        "max_m": 1816,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B20",
@@ -449,9 +687,23 @@
       "proposito": "clase_pura",
       "justificacion": "Dunas estrella grandes y regulares.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 411,
+        "max_m": 1056,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B22",
@@ -469,9 +721,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Reemplazo de Paricutín: recortar un tile con el cono centrado.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 661,
+        "max_m": 3842,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B23",
@@ -488,9 +754,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Reemplazo de Colima: recortar un tile con el cono centrado.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 422,
+        "max_m": 4247,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "R1",
@@ -510,9 +790,23 @@
       "proposito": "referencia",
       "justificacion": "Mezcla de 5 clases; solo para comparar mapas de 1024 y 2048 px, nunca para entrenar.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          4320,
+          4320
+        ],
+        "forma_esperada": [
+          4320,
+          4320
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 345,
+        "max_m": 2947,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "R2",
@@ -531,9 +825,23 @@
       "proposito": "referencia",
       "justificacion": "Mesas y cañones; solo para comparar, nunca para entrenar.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          4320,
+          4320
+        ],
+        "forma_esperada": [
+          4320,
+          4320
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1139,
+        "max_m": 3510,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B24",
@@ -550,9 +858,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Meseta con escarpe de cientos de metros y el cañón del Paria.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 903,
+        "max_m": 2501,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B25",
@@ -570,9 +892,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Meseta basáltica del Decán con su escarpe al oeste.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": -2,
+        "max_m": 1458,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B26",
@@ -590,9 +926,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Meseta alta cortada por un escarpe vertical continuo.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1173,
+        "max_m": 3360,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B27",
@@ -609,9 +959,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Mesas de cima plana con bordes abruptos.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 307,
+        "max_m": 1702,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B28",
@@ -628,9 +992,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Meseta de arenisca rodeada de llanura desértica.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 618,
+        "max_m": 1091,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B29",
@@ -647,9 +1025,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Campo de dunas alargado entre llanuras.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": -17,
+        "max_m": 809,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B30",
@@ -666,9 +1058,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Dunas de yeso de relieve bajo: caso difícil para separar de lomas.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1173,
+        "max_m": 2484,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B31",
@@ -685,9 +1091,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Erg compacto con dunas estrella altas.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 657,
+        "max_m": 1063,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B32",
@@ -703,9 +1123,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Mar de arena con dunas lineales regulares.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 104,
+        "max_m": 240,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B33",
@@ -722,9 +1156,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Megadunas, las más altas del mundo, con lagos entre ellas.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1134,
+        "max_m": 1657,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B34",
@@ -741,9 +1189,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cañón meandriforme cortado en una meseta.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 220,
+        "max_m": 1218,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B35",
@@ -760,9 +1222,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cañón profundo entre montañas, sin meseta: otro tipo de cañón.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 332,
+        "max_m": 2839,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B36",
@@ -780,9 +1256,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cañón al borde del escarpe de Drakensberg.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 405,
+        "max_m": 2035,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B37",
@@ -799,9 +1289,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cañones estrechos en una meseta de arenisca.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1600,
+        "max_m": 2898,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B38",
@@ -818,9 +1322,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cono enorme y aislado con cráter en la cima.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 874,
+        "max_m": 5886,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B39",
@@ -837,9 +1355,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Cono dentro de una caldera de varios km.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": -14,
+        "max_m": 3696,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B40",
@@ -856,9 +1388,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Caldera de unos 20 km: cráter clarísimo a 60 m.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 954,
+        "max_m": 3652,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B41",
@@ -876,9 +1422,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Estratovolcán con valles glaciares radiales.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 311,
+        "max_m": 4384,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B42",
@@ -894,9 +1454,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Lomas eólicas regulares: referencia de lomas frente a dunas.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 192,
+        "max_m": 1220,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B43",
@@ -913,9 +1487,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Lomas suaves con valles anchos.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 31,
+        "max_m": 1730,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B44",
@@ -933,9 +1521,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Fondo plano de valle entre sierras abruptas.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": -130,
+        "max_m": 3039,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B45",
@@ -952,9 +1554,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Valle profundo en alta montaña.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1806,
+        "max_m": 7765,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B46",
@@ -971,9 +1587,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Lomas disecadas por cárcavas: transición lomas–cañón.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 890,
+        "max_m": 1458,
+        "plausible": true,
+        "ok": true
+      }
     }
   ]
 }

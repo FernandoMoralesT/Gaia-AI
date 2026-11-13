@@ -562,3 +562,19 @@ Están en `docs/dataset_v3_decisiones.md`:
   - B15: el cañón del Colorado con la meseta de Kaibab al norte.
   - B20: el campo de dunas no se distingue en la vista completa, porque su relieve es pequeño frente a los 2000 m de la sierra. En un acercamiento se ven las crestas entre 37.73–37.82° N y 105.58–105.51° O.
 - **Tests:** 70 de Python (19 nuevos en `test/test_descargar_bloques.py`, sin red).
+
+### Cola completa (12/11/2026, 45 llamadas)
+- **Bloques nuevos:** Fernando pidió aprovechar la cuota del día, así que se agregaron 23 bloques (B24 a B46): mesetas claras, dunas, cañones, volcanes con cráter visible, y valles y lomas con transiciones. El manifiesto queda en 48 bloques, sin encimados entre ellos.
+- **Ver de cerca:** `scrips/ver_bloque.py` tiene ahora `--zona=oeste,sur,este,norte`, que recorta el bloque y ajusta el color al recorte, para ver relieves chicos como las dunas.
+- **Resultado:** 45 llamadas, 45 bloques descargados y 0 fallidos. Todos tienen la forma esperada y 0 % de nodata.
+  - En el día van 48 de 50 llamadas (3 del piloto y 45 de la cola).
+  - `data/bloques/` ocupa 204 MB.
+  - La clave no aparece en la salida.
+  - Ya no quedan bloques pendientes: una descarga diaria necesitará coordenadas nuevas en el manifiesto.
+- **Revisión visual** (hojas de miniaturas y acercamientos). Coinciden con lo esperado, entre otros, Crater Lake (caldera clara), Ngorongoro (caldera y el cráter de Olmoti), las mesetas Grand Mesa, Auyán-tepui, Roraima–Kukenán, Gilf Kebir y Paria, y las dunas de Namib, Badain Jaran, Rub' al Khali, Algodones y Erg Chebbi. Para revisar:
+  - **B18, Altar–El Pinacate:** las dunas se ven, pero el volcán de El Pinacate parece quedar al este, fuera del bloque. La clase volcán esperada quizá no está.
+  - **B19, Samalayuca:** se ven las sierras; las dunas solo se insinúan en la esquina sureste. No es concluyente.
+  - **B30, White Sands:** las dunas de yeso aparecen como una textura de 10 a 15 m de relieve, parecida al ruido de SRTM. Es probable que se pierdan a 60 m.
+  - **B39, Teide:** el bloque incluye mar. Hay que enmascararlo al recortar.
+  - **Mínimos negativos:** B18 (−44 m), B25 (−2 m), B29 (−17 m), B39 (−14 m) y B44 (−130 m, depresión real del Valle de la Muerte). Hay que distinguir el mar de las depresiones antes de recortar.
+- **Coordenadas verificadas por Fernando:** B03, B15 y B20. El resto sigue con `verificar_coordenadas: true` hasta su revisión.
