@@ -5,8 +5,6 @@ No editar a mano las secciones 1 y 3: volver a ejecutar el script.
 
 ## 1. Dependencias (archivo → archivo que importa)
 
-- `src/dataset/cargar_dem.py` → `src/dataset/dem_dataset.py`
-- `src/dataset/cargar_dem.py` → `src/dataset/procesamiento.py`
 - `src/dataset/procesamiento.py` → `src/noise/Unificacion_Y_Exportacion.py`
 - `src/descargar_lote.py` → `src/dataset/descargar_dem.py`
 - `src/inferencia.py` → `src/dataset/dem_dataset.py`

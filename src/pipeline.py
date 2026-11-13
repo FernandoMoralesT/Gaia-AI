@@ -5,7 +5,7 @@ from dataset.cargar_dem import cargar_bach_dem, cargar_etiquetas
 from dataset.procesamiento import recortar, normalizar_dem, normalizar_tile, reducir_tile,generar_variantes, dividir_tiles
 from dataset.descargar_dem import descargar_tile
 from model.generador import Generador
-from src.model.discriminador import Discriminador
+from model.discriminador import Discriminador
 from model.entrenar import paso_entrenamiento, entrenar
 import torch
 
