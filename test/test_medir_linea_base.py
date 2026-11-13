@@ -6,7 +6,10 @@ import pytest
 
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ / "scrips"))
-from medir_linea_base import Muestreador, cpu_a_maquina, cpu_a_nucleos, medir_repeticion, resumir_tiempos  # noqa: E402
+from medir_linea_base import (  # noqa: E402
+    Muestreador, armar_informe, cpu_a_maquina, cpu_a_nucleos, datos_entorno, main, medir_repeticion,
+    resumir_tiempos,
+)
 
 
 def test_resumir_tiempos_separa_calentamiento():
@@ -53,3 +56,24 @@ def test_medir_repeticion_no_escribe_archivos(tmp_path, monkeypatch):
     assert len(tiempos) == 2 and all(t > 0 for t in tiempos)
     assert recursos["muestras"] >= 1
     assert list(tmp_path.iterdir()) == []
+
+
+def test_epocas_menor_que_2_es_error():
+    with pytest.raises(SystemExit):
+        main(["--epocas", "1"])
+
+
+def test_informe_contiene_secciones():
+    entorno = {k: "x" for k in ["cpu", "python", "torch", "numpy", "so", "commit", "fecha"]}
+    entorno.update(nucleos_fisicos=8, nucleos_logicos=16, hilos_torch=8, hilos_interop=8, ram_total=16 * 2**30)
+    recursos = {"cpu_proceso": 400.0, "cpu_sistema": 30.0, "rss_max": 2**30, "muestras": 10}
+    texto = armar_informe(entorno, [([9.0, 5.0, 5.0], recursos)], None, "enchufada")
+    assert "25.0 %" in texto and "4.00 núcleos" in texto
+    assert "enchufada" in texto and "no disponible" in texto
+    assert "python scrips/medir_linea_base.py" in texto
+
+
+def test_datos_entorno_tiene_claves():
+    e = datos_entorno()
+    assert e["nucleos_logicos"] >= e["nucleos_fisicos"] >= 1
+    assert e["hilos_torch"] >= 1 and e["commit"]

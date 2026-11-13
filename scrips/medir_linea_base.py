@@ -6,12 +6,18 @@ Usa paso_entrenamiento() lote a lote con los mismos hiperparámetros del entrena
 Uso (desde cualquier carpeta):
     python scrips/medir_linea_base.py --nota "condiciones" --salida docs/linea_base.md
 """
+import argparse
+import os
+import platform
 import statistics
+import subprocess
 import sys
 import threading
 import time
+from datetime import datetime
 from pathlib import Path
 
+import numpy as np
 import psutil
 import torch
 import torch.nn as nn
@@ -112,3 +118,169 @@ def medir_repeticion(loader, epocas):
             paso_entrenamiento(g, d, mapas, ids, criterio, opt_g, opt_d)
         tiempos.append(time.perf_counter() - inicio)
     return tiempos, muestreador.detener()
+
+
+def _nombre_cpu():
+    if sys.platform == "win32":
+        import winreg
+        try:
+            with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"HARDWARE\DESCRIPTION\System\CentralProcessor\0") as k:
+                return winreg.QueryValueEx(k, "ProcessorNameString")[0].strip()
+        except OSError:
+            pass
+    return platform.processor() or "desconocido"
+
+
+def _commit():
+    """Hash corto; con -dirty si hay cambios sin commit, para no atribuir el número a otro código."""
+    try:
+        h = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=RAIZ,
+                           capture_output=True, text=True, check=True).stdout.strip()
+        cambios = subprocess.run(["git", "status", "--porcelain"], cwd=RAIZ,
+                                 capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "desconocido"
+    return h + ("-dirty" if cambios else "")
+
+
+def datos_entorno():
+    return {
+        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "commit": _commit(),
+        "cpu": _nombre_cpu(),
+        "nucleos_fisicos": psutil.cpu_count(logical=False),
+        "nucleos_logicos": psutil.cpu_count(logical=True),
+        "hilos_torch": torch.get_num_threads(),
+        "hilos_interop": torch.get_num_interop_threads(),
+        "ram_total": psutil.virtual_memory().total,
+        "python": platform.python_version(),
+        "torch": torch.__version__,
+        "numpy": np.__version__,
+        "so": platform.platform(),
+    }
+
+
+def _gib(n):
+    return f"{n / 2**30:.2f} GiB"
+
+
+def armar_informe(entorno, repeticiones, peak_wset, nota):
+    """Informe en Markdown. `repeticiones` es una lista de (tiempos, recursos) de medir_repeticion()."""
+    e = entorno
+    epocas = len(repeticiones[0][0])
+    nucleos = e["nucleos_logicos"]
+    l = [
+        "# Línea base del entrenamiento",
+        "",
+        "Generado por `scrips/medir_linea_base.py`. Todos los números salen de esta corrida.",
+        "",
+        "## Entorno",
+        "",
+        "| Dato | Valor |",
+        "|---|---|",
+        f"| Fecha | {e['fecha']} |",
+        f"| Commit | `{e['commit']}` |",
+        f"| CPU | {e['cpu']} |",
+        f"| Núcleos físicos / lógicos | {e['nucleos_fisicos']} / {nucleos} |",
+        f"| Hilos de torch (intra / interop) | {e['hilos_torch']} / {e['hilos_interop']} |",
+        f"| RAM total | {_gib(e['ram_total'])} |",
+        f"| Python / torch / numpy | {e['python']} / {e['torch']} / {e['numpy']} |",
+        f"| Sistema operativo | {e['so']} |",
+        "",
+        "## Condiciones",
+        "",
+        nota or "(sin nota)",
+        "",
+        f"## Tiempo por época ({epocas} épocas por repetición: 1 de calentamiento y {epocas - 1} medidas)",
+        "",
+        "| Repetición | Calentamiento (s) | Media (s) | Mediana (s) | Mín. (s) | Máx. (s) |",
+        "|---|---|---|---|---|---|",
+    ]
+    for i, (tiempos, _) in enumerate(repeticiones, 1):
+        r = resumir_tiempos(tiempos)
+        l.append(f"| {i} | {r['calentamiento']:.2f} | {r['media']:.2f} | {r['mediana']:.2f} | {r['min']:.2f} | {r['max']:.2f} |")
+    todos = [t for tiempos, _ in repeticiones for t in tiempos[1:]]
+    r = resumir_tiempos([None] + todos)
+    l.append(f"| Todas ({r['n']} épocas) | — | {r['media']:.2f} | {r['mediana']:.2f} | {r['min']:.2f} | {r['max']:.2f} |")
+
+    l += [
+        "",
+        "## CPU (durante las épocas medidas)",
+        "",
+        "| Repetición | Proceso (% de la máquina) | Proceso (núcleos equivalentes) | Sistema (%) | Muestras |",
+        "|---|---|---|---|---|",
+    ]
+    for i, (_, rec) in enumerate(repeticiones, 1):
+        l.append(f"| {i} | {cpu_a_maquina(rec['cpu_proceso'], nucleos):.1f} % | "
+                 f"{cpu_a_nucleos(rec['cpu_proceso']):.2f} núcleos | {rec['cpu_sistema']:.1f} % | {rec['muestras']} |")
+    l += [
+        "",
+        f"psutil mide el proceso en \"% de un núcleo\": 400 % son 4 núcleos ocupados. Dividido entre los "
+        f"{nucleos} núcleos lógicos da el % de la máquina completa "
+        f"(400 % en {nucleos} núcleos = {cpu_a_maquina(400, nucleos):.1f} %). "
+        "El uso del sistema incluye a todos los programas: si es mucho mayor que el del proceso, "
+        "había otros programas ocupando CPU.",
+        "",
+        "## RAM",
+        "",
+        f"- RSS máximo muestreado (épocas medidas): {_gib(max(rec['rss_max'] for _, rec in repeticiones))}",
+        f"- Pico del proceso (`peak_wset`, toda la corrida, incluye la carga del dataset): "
+        f"{_gib(peak_wset) if peak_wset is not None else 'no disponible'}",
+        f"- RAM total de la máquina: {_gib(e['ram_total'])}",
+        "",
+        "## Qué se mide y qué no",
+        "",
+        "Se mide el ciclo de lotes de una época (cargar cada lote y `paso_entrenamiento()`), con los mismos "
+        "hiperparámetros del entrenamiento real: lotes de 4, 72 lotes por época, Adam con lr 2e-4 y betas "
+        "(0.5, 0.999), semilla 42. No se mide el guardado por época que hace `entrenar()` (historial, "
+        "checkpoint y muestras), así que una época real de la v1.0 es un poco más lenta.",
+        "",
+        "## Cómo repetir",
+        "",
+        "```",
+        f"python scrips/medir_linea_base.py --epocas {epocas} --repeticiones {len(repeticiones)} --nota \"...\"",
+        "```",
+        "",
+    ]
+    return "\n".join(l)
+
+
+def _entero_minimo(minimo):
+    def convertir(texto):
+        n = int(texto)
+        if n < minimo:
+            raise argparse.ArgumentTypeError(f"debe ser al menos {minimo}")
+        return n
+    return convertir
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Mide la línea base del entrenamiento sin tocar salidas/.")
+    parser.add_argument("--epocas", type=_entero_minimo(2), default=6,
+                        help="épocas por repetición, incluida 1 de calentamiento (mínimo 2)")
+    parser.add_argument("--repeticiones", type=_entero_minimo(1), default=3)
+    parser.add_argument("--nota", default="", help="condiciones de la prueba")
+    parser.add_argument("--salida", help="archivo Markdown, relativo a la raíz del repo; sin él solo imprime")
+    args = parser.parse_args(argv)
+
+    os.chdir(RAIZ)  # cargar_etiquetas() usa una ruta relativa a la raíz
+    from pipeline import pipeline_dataset_dem
+    loader_train, _, _ = pipeline_dataset_dem("data/raw", batch_size=4)
+    if len(loader_train) != 72:
+        sys.exit(f"se esperaban 72 lotes por época y hay {len(loader_train)}")
+
+    entorno = datos_entorno()
+    repeticiones = []
+    for i in range(args.repeticiones):
+        print(f"repetición {i + 1}/{args.repeticiones}...", file=sys.stderr)
+        repeticiones.append(medir_repeticion(loader_train, args.epocas))
+    peak_wset = getattr(psutil.Process().memory_info(), "peak_wset", None)
+
+    informe = armar_informe(entorno, repeticiones, peak_wset, args.nota)
+    print(informe)
+    if args.salida:
+        Path(args.salida).write_text(informe, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()
