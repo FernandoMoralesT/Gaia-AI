@@ -66,12 +66,18 @@ class Muestreador:
         self.intervalo = intervalo
         self.proceso = psutil.Process()
         self._parar = threading.Event()
-        self._cpu_proceso, self._cpu_sistema, self._rss = [], [], []
+        self._cpu_proceso, self._cpu_sistema, self._rss, self._duracion = [], [], [], []
 
     def _muestra(self):
+        ahora = time.perf_counter()
+        self._duracion.append(ahora - self._anterior)  # cada muestra pesa lo que dura su ventana
+        self._anterior = ahora
         self._cpu_proceso.append(self.proceso.cpu_percent(None))
         self._cpu_sistema.append(psutil.cpu_percent(None))
         self._rss.append(self.proceso.memory_info().rss)
+
+    def _media_ponderada(self, valores):
+        return sum(v * w for v, w in zip(valores, self._duracion)) / sum(self._duracion)
 
     def _ciclo(self):
         while not self._parar.wait(self.intervalo):
@@ -81,6 +87,7 @@ class Muestreador:
         # La primera lectura de cpu_percent siempre da 0.0: solo marca el punto de partida.
         self.proceso.cpu_percent(None)
         psutil.cpu_percent(None)
+        self._anterior = time.perf_counter()
         self._hilo = threading.Thread(target=self._ciclo, daemon=True)
         self._hilo.start()
 
@@ -89,8 +96,8 @@ class Muestreador:
         self._hilo.join()
         self._muestra()  # al menos una muestra aunque el tramo dure menos que el intervalo
         return {
-            "cpu_proceso": statistics.mean(self._cpu_proceso),
-            "cpu_sistema": statistics.mean(self._cpu_sistema),
+            "cpu_proceso": self._media_ponderada(self._cpu_proceso),
+            "cpu_sistema": self._media_ponderada(self._cpu_sistema),
             "rss_max": max(self._rss),
             "muestras": len(self._rss),
         }

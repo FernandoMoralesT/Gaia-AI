@@ -77,3 +77,17 @@ def test_datos_entorno_tiene_claves():
     e = datos_entorno()
     assert e["nucleos_logicos"] >= e["nucleos_fisicos"] >= 1
     assert e["hilos_torch"] >= 1 and e["commit"]
+
+
+def test_muestreador_pondera_por_tiempo():
+    # 0.52 s ocupado (una muestra de 0.5 s cerca del 100 %) y 0.03 s en reposo antes de detener:
+    # la última muestra cubre ~0.05 s a ~40 %. El promedio simple da ~70 %; ponderado por tiempo, ~95 %.
+    import time
+    m = Muestreador(intervalo=0.5)
+    m.iniciar()
+    fin = time.perf_counter() + 0.52
+    while time.perf_counter() < fin:
+        pass
+    time.sleep(0.03)
+    r = m.detener()
+    assert r["cpu_proceso"] > 85
