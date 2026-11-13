@@ -257,3 +257,16 @@ def test_verificacion_fallida_se_reporta(tmp_path):
     r = descargar(m, tmp_path, PedirFalso(cuerpo=tif_falso(b["sur"], b["norte"], 0, LADO * 2)))  # forma mal
     assert b["verificacion"]["ok"] is False
     assert r["revisar"] == [b["id"]]
+
+
+def test_figura_bloque_con_zona_recorta_y_ajusta_el_color(tmp_path):
+    import matplotlib
+    matplotlib.use("Agg")
+    from ver_bloque import figura_bloque
+    ruta = tmp_path / "a.tif"
+    ruta.write_bytes(tif_falso(10, 10 + LADO, 0, LADO))
+    zona = (0.002, 10.002, 0.006, 10.006)  # oeste, sur, este, norte
+    fig = figura_bloque(ruta, "Zona", zona=zona)
+    imagen = fig.axes[0].get_images()[0]
+    assert imagen.get_extent() == pytest.approx([0.002, 0.006, 10.002, 10.006], abs=1 / 3600)  # se ajusta a la rejilla
+    assert all(abs(n - 0.004 * 3600) <= 1 for n in imagen.get_array().shape[:2])  # 14.4 px, a un píxel
