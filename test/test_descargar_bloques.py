@@ -68,7 +68,7 @@ def test_revisar_detecta_id_repetido_area_excesiva_y_referencia_encimada():
 def test_manifiesto_real_no_tiene_problemas():
     from descargar_bloques import RUTA_MANIFIESTO, cargar_manifiesto, revisar_manifiesto
     m = cargar_manifiesto(RUTA_MANIFIESTO)
-    assert len(m["bloques"]) == 25
+    assert len(m["bloques"]) == 48
     assert revisar_manifiesto(m) == []
 
 

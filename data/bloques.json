@@ -57,7 +57,7 @@
       ],
       "proposito": "entrenamiento",
       "justificacion": "Transición brusca de cordillera a valle plano.",
-      "verificar_coordenadas": true,
+      "verificar_coordenadas": false,
       "estado": "descargado",
       "fecha_descarga": "2026-11-12",
       "verificacion": {
@@ -302,7 +302,7 @@
       ],
       "proposito": "entrenamiento",
       "justificacion": "El cañón tipo: meseta de Kaibab cortada por el Colorado.",
-      "verificar_coordenadas": true,
+      "verificar_coordenadas": false,
       "estado": "descargado",
       "fecha_descarga": "2026-11-12",
       "verificacion": {
@@ -416,7 +416,7 @@
       ],
       "proposito": "entrenamiento",
       "justificacion": "Dunas contra la Sangre de Cristo y el valle de San Luis.",
-      "verificar_coordenadas": true,
+      "verificar_coordenadas": false,
       "estado": "descargado",
       "fecha_descarga": "2026-11-12",
       "verificacion": {
@@ -530,6 +530,446 @@
       ],
       "proposito": "referencia",
       "justificacion": "Mesas y cañones; solo para comparar, nunca para entrenar.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B24",
+      "sitio": "Paria Plateau–Vermilion Cliffs",
+      "sur": 36.55,
+      "norte": 37.05,
+      "oeste": -112.1,
+      "este": -111.6,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "cañón"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Meseta con escarpe de cientos de metros y el cañón del Paria.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B25",
+      "sitio": "Ghats occidentales (Mahabaleshwar)",
+      "sur": 17.7,
+      "norte": 18.2,
+      "oeste": 73.45,
+      "este": 73.95,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "montaña",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Meseta basáltica del Decán con su escarpe al oeste.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B26",
+      "sitio": "Drakensberg (Amphitheatre)",
+      "sur": -28.95,
+      "norte": -28.45,
+      "oeste": 28.65,
+      "este": 29.15,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "montaña",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Meseta alta cortada por un escarpe vertical continuo.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B27",
+      "sitio": "Chapada Diamantina",
+      "sur": -12.8,
+      "norte": -12.3,
+      "oeste": -41.7,
+      "este": -41.2,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Mesas de cima plana con bordes abruptos.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B28",
+      "sitio": "Gilf Kebir",
+      "sur": 23.05,
+      "norte": 23.55,
+      "oeste": 25.65,
+      "este": 26.15,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Meseta de arenisca rodeada de llanura desértica.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B29",
+      "sitio": "Algodones Dunes",
+      "sur": 32.7,
+      "norte": 33.2,
+      "oeste": -115.35,
+      "este": -114.85,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Campo de dunas alargado entre llanuras.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B30",
+      "sitio": "White Sands",
+      "sur": 32.6,
+      "norte": 33.1,
+      "oeste": -106.55,
+      "este": -106.05,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Dunas de yeso de relieve bajo: caso difícil para separar de lomas.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B31",
+      "sitio": "Erg Chebbi",
+      "sur": 30.9,
+      "norte": 31.4,
+      "oeste": -4.23,
+      "este": -3.73,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Erg compacto con dunas estrella altas.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B32",
+      "sitio": "Rub' al Khali",
+      "sur": 20.25,
+      "norte": 20.75,
+      "oeste": 51.25,
+      "este": 51.75,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Mar de arena con dunas lineales regulares.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B33",
+      "sitio": "Desierto de Badain Jaran",
+      "sur": 39.55,
+      "norte": 40.05,
+      "oeste": 102.15,
+      "este": 102.65,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Megadunas, las más altas del mundo, con lagos entre ellas.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B34",
+      "sitio": "Fish River Canyon",
+      "sur": -27.85,
+      "norte": -27.35,
+      "oeste": 17.35,
+      "este": 17.85,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "meseta"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cañón meandriforme cortado en una meseta.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B35",
+      "sitio": "Hells Canyon",
+      "sur": 45.05,
+      "norte": 45.55,
+      "oeste": -116.85,
+      "este": -116.35,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cañón profundo entre montañas, sin meseta: otro tipo de cañón.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B36",
+      "sitio": "Blyde River Canyon",
+      "sur": -24.8,
+      "norte": -24.3,
+      "oeste": 30.58,
+      "este": 31.08,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "meseta",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cañón al borde del escarpe de Drakensberg.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B37",
+      "sitio": "Canyon de Chelly",
+      "sur": 35.88,
+      "norte": 36.38,
+      "oeste": -109.65,
+      "este": -109.15,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "meseta"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cañones estrechos en una meseta de arenisca.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B38",
+      "sitio": "Kilimanjaro",
+      "sur": -3.32,
+      "norte": -2.82,
+      "oeste": 37.1,
+      "este": 37.6,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cono enorme y aislado con cráter en la cima.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B39",
+      "sitio": "Teide (Las Cañadas)",
+      "sur": 28.02,
+      "norte": 28.52,
+      "oeste": -16.89,
+      "este": -16.39,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "meseta"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cono dentro de una caldera de varios km.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B40",
+      "sitio": "Cráter del Ngorongoro",
+      "sur": -3.42,
+      "norte": -2.92,
+      "oeste": 35.33,
+      "este": 35.83,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Caldera de unos 20 km: cráter clarísimo a 60 m.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B41",
+      "sitio": "Monte Rainier",
+      "sur": 46.6,
+      "norte": 47.1,
+      "oeste": -122.01,
+      "este": -121.51,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "montaña",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Estratovolcán con valles glaciares radiales.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B42",
+      "sitio": "Palouse",
+      "sur": 46.5,
+      "norte": 47.0,
+      "oeste": -117.45,
+      "este": -116.95,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "lomas"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Lomas eólicas regulares: referencia de lomas frente a dunas.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B43",
+      "sitio": "Toscana (Val d'Orcia)",
+      "sur": 42.85,
+      "norte": 43.35,
+      "oeste": 11.3,
+      "este": 11.8,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "lomas",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Lomas suaves con valles anchos.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B44",
+      "sitio": "Valle de la Muerte",
+      "sur": 36.2,
+      "norte": 36.7,
+      "oeste": -117.1,
+      "este": -116.6,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "valle",
+        "montaña",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Fondo plano de valle entre sierras abruptas.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B45",
+      "sitio": "Valle de Hunza",
+      "sur": 36.05,
+      "norte": 36.55,
+      "oeste": 74.4,
+      "este": 74.9,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "valle",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Valle profundo en alta montaña.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B46",
+      "sitio": "Meseta de Loess (Yan'an)",
+      "sur": 36.35,
+      "norte": 36.85,
+      "oeste": 109.25,
+      "este": 109.75,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "lomas",
+        "cañón"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Lomas disecadas por cárcavas: transición lomas–cañón.",
       "verificar_coordenadas": true,
       "estado": "pendiente",
       "fecha_descarga": null,
