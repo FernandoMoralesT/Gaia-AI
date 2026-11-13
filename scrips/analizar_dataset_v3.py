@@ -217,13 +217,14 @@ def periodicidad(z):
     return banda.max() * 2 / banda.sum()  # x2: el espectro de una señal real es simétrico
 
 
-def metricas(t):
-    z = t["z"]
-    pend, gx, gy = pendiente_grados(z, t["dy"], t["dx"])
+def metricas(t, factor=1):
+    """Métricas de forma. factor 1 = tile nativo (30 m); factor 2 = promedio 2x2 (60 m)."""
+    z = reducir_tile(t["z"], factor) if factor > 1 else t["z"]
+    pend, gx, gy = pendiente_grados(z, t["dy"] * factor, t["dx"] * factor)
     p1, p99 = np.percentile(z, [1, 99])
     h = (z - p1) / (p99 - p1)  # altura relativa dentro del tile
     plano = pend < 2
-    suave = gaussian_filter(z, 5)
+    suave = gaussian_filter(z, 5 / factor)  # el mismo radio en metros (~150 m) en cualquier escala
     cima = np.unravel_index(np.argmax(suave), z.shape)
     yy, xx = np.indices(z.shape)
     dist = np.hypot(yy - cima[0], xx - cima[1])
@@ -283,26 +284,57 @@ def seccion_metricas(tiles):
 
     seccion_solape(tiles, claves)
     seccion_reglas(tiles)
+    seccion_nuevas(tiles)
     figura_metricas(tiles, claves)
 
 
-def clase_por_reglas(m):
-    """Criterio candidato, en orden. Cada umbral sale de un hueco entre clases en la tabla B2."""
+# Umbrales de pendiente: dependen de la escala, porque promediar suaviza las laderas.
+UMBRALES_30 = {"volcan_conicidad_min": 0.80, "volcan_pendiente_max": 22,
+               "montana_pendiente_min": 17}  # propuesta inicial, a 30 m
+# Criterio adoptado (v1.2.0, 12/11/2026), a 60 m. Pendientes: el entero siguiente al máximo de la
+# clase vecina. Conicidad: el mínimo de los volcanes redondeado hacia abajo a 2 decimales.
+UMBRALES_60 = {"volcan_conicidad_min": 0.79,  # Ceboruco: 0.7985
+               "volcan_pendiente_max": 21,    # el volcán más empinado: 20.8°
+               "montana_pendiente_min": 15}   # la meseta más empinada: 14.3°
+
+
+def clase_por_reglas(m, u=UMBRALES_30):
+    """Criterio por clase, en orden. Cada umbral sale de un hueco entre clases."""
     if m["relieve_m"] < 50:
-        return "llanura"   # llanura llega a 37 m y lomas empieza en 66 m
-    if m["conicidad"] >= 0.80 and m["relieve_m"] >= 700 and m["pendiente_deg"] <= 22:
+        return "llanura"   # llanura llega a 37 m y lomas empieza en 65 m (en las dos escalas)
+    if (m["conicidad"] >= u["volcan_conicidad_min"] and m["relieve_m"] >= 700
+            and m["pendiente_deg"] <= u["volcan_pendiente_max"]):
         return "volcán"    # mínimos y máximos de los 9 volcanes
     if m["posicion_centro"] < 0.30 and m["relieve_m"] >= 500:
         return "valle"     # valles <= 0.27 y montañas >= 0.42; 500 m deja fuera a lomas (máx. 478)
     if m["relieve_m"] < 500:
         return "lomas"
-    if m["posicion_centro"] >= 0.40 and m["pendiente_deg"] >= 17:
-        return "montaña"   # las mesetas no pasan de 15.1°
+    if m["posicion_centro"] >= 0.40 and m["pendiente_deg"] >= u["montana_pendiente_min"]:
+        return "montaña"
     return "meseta"
 
 
-def seccion_reglas(tiles):
-    print("## B3. Criterio candidato aplicado a los 60 tiles\n")
+def seccion_reglas_60(tiles):
+    for t in tiles.values():
+        t["m60"] = metricas(t, factor=2)
+    print("## B5. Criterio adoptado a 60 m/px\n")
+    print("Métricas recalculadas sobre los tiles promediados 2x2 (mínimo / máximo por clase):\n")
+    claves = ["relieve_m", "pendiente_deg", "conicidad", "posicion_centro"]
+    print("| Métrica | " + " | ".join(CLASES) + " |")
+    print("|---" * (len(CLASES) + 1) + "|")
+    for c in claves:
+        f = NOMBRES[c][1]
+        celdas = [f"{f.format(min(t['m60'][c] for t in tiles.values() if t['clase'] == cl))} / "
+                  f"{f.format(max(t['m60'][c] for t in tiles.values() if t['clase'] == cl))}" for cl in CLASES]
+        print(f"| {NOMBRES[c][0]} | " + " | ".join(celdas) + " |")
+    print(f"\nUmbrales a 60 m: volcán con conicidad >= {UMBRALES_60['volcan_conicidad_min']} y pendiente <= "
+          f"{UMBRALES_60['volcan_pendiente_max']}°; montaña con pendiente >= {UMBRALES_60['montana_pendiente_min']}°. "
+          "El resto de las reglas no cambia.\n")
+    seccion_reglas(tiles, "m60", UMBRALES_60, "### Resultado a 60 m")
+
+
+def seccion_reglas(tiles, clave="m", u=UMBRALES_30, titulo="## B3. Criterio candidato aplicado a los 60 tiles"):
+    print(f"{titulo}\n")
     print("| Etiqueta \\ Regla | " + " | ".join(CLASES) + " |")
     print("|---" * (len(CLASES) + 1) + "|")
     fallos = []
@@ -310,7 +342,7 @@ def seccion_reglas(tiles):
         fila = {c: 0 for c in CLASES}
         for k, t in tiles.items():
             if t["clase"] == real:
-                pred = clase_por_reglas(t["m"])
+                pred = clase_por_reglas(t[clave], u)
                 fila[pred] += 1
                 if pred != real:
                     fallos.append((k, t, pred))
@@ -320,7 +352,9 @@ def seccion_reglas(tiles):
         print(f"- `{k}` ({t['lugar']}): etiqueta {t['clase']}, la regla dice {pred}.")
     print()
 
-    # Clases nuevas: no hay tiles, así que solo se mide qué tiles actuales caerían en la regla (falsos positivos).
+
+def seccion_nuevas(tiles):
+    """Clases nuevas: no hay tiles, así que solo se mide qué tiles actuales caerían en la regla (falsos positivos)."""
     lomas = [t["m"] for t in tiles.values() if t["clase"] == "lomas"]
     per_max = max(m["periodicidad"] for m in lomas)
     ani_max = max(m["anisotropia"] for m in lomas)
@@ -476,6 +510,7 @@ def main():
     seccion_recortes(tiles)
     seccion_perdida(tiles)
     seccion_metricas(tiles)
+    seccion_reglas_60(tiles)
     seccion_normalizacion(tiles)
 
 

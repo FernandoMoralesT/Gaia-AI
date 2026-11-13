@@ -13,7 +13,7 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desd
 
 ## Estado actual
 - v1.1.0 concluida (limpieza de inconsistencias y línea base). Tags: `sprint-05` a `sprint-10`, `v1.0`, `v1.0.1` y `v1.1.0` (este último sobre `main` al fusionar el PR). 51 tests de Python y 10 pruebas headless de Godot. Rama base: `main`.
-- En curso: v1.2.0 (dataset v3). Lo primero: decidir la escala, 60 o 90 m/px.
+- En curso: v1.2.0 (dataset v3). Decisiones de datos tomadas (`docs/dataset_v3_decisiones.md`); sigue la descarga, con más tiles de meseta claros.
 - Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100. No se sobrescribe; los modelos nuevos de la v2.0 se guardan aparte.
 - Fuera de la v1.0: el PDF del proyecto (no es necesario para la expo).
 
@@ -26,7 +26,7 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desd
 - Tamaños de 64×64 a 2048×2048: accesos rápidos 64, 128, 512, 1024 y 2048, tamaño personalizado (múltiplo de 8) y mapas rectangulares. Un mapa más grande es más territorio, no el mismo con más detalle.
 - Mundos con más de una clase (mapa de clases) y dos clases nuevas: cañón (id 6) y duna (id 7), agregadas al final de `CLASES`.
 - Dataset v3, generador totalmente convolucional, entrenamiento que aproveche el CPU al máximo, exportación PNG16/OBJ/STL/GLB y visor integral con descarga.
-- Por decidir: escala 60 m/px (recomendada) o 90 m/px.
+- Decidido (12/11/2026): 60 m/px, criterio de 6 reglas a 60 m (`UMBRALES_60` en `scrips/analizar_dataset_v3.py`), cañón y duna aceptadas como hipótesis, y normalización relativa a la mediana del tile con S = 2500 m.
 
 ## v1.0: hecho
 - Servidor local `src/servidor.py` (`127.0.0.1:8765`): `GET /salud` y `GET /terreno?clase=&semilla=&sigma=` (bytes del `.raw`; encabezados `X-Clase`, `X-Semilla`, `X-Sigma`). Compatible con `pythonw`.

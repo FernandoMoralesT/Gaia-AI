@@ -2,7 +2,17 @@
 
 Análisis hecho solo con los 60 tiles que ya están en `data/raw/`, sin descargar nada. Todas las tablas salen de `python scrips/analizar_dataset_v3.py` (salida completa en el anexo) y las gráficas están en `docs/img/dataset_v3/`. Las cifras que no salen del script son cálculos que se muestran aquí mismo.
 
-**Estado: hay tres decisiones pendientes de Fernando:** la escala, el criterio por clase y la normalización. Cada una tiene opciones y una recomendación.
+## Decisiones tomadas (Fernando, 12/11/2026)
+
+| Tema | Decisión |
+|---|---|
+| Escala | **60 m/px** (tiles de 180 px, promedio 2 × 2) |
+| Criterio por clase | **Se adoptan las 6 reglas**, con los umbrales recalculados a 60 m (sección B5) |
+| Meseta | **El dataset v3 debe traer más tiles de meseta claros**: cima plana y bordes abruptos dentro del recuadro. Hoy solo 3 de 8 cumplen la regla. |
+| Cañón (id 6) y duna (id 7) | **Se aceptan**, con las reglas candidatas de B3b, sujetas a validación con tiles reales |
+| Normalización | **(b2), relativa a la mediana, con S = 2500 m** |
+
+Lo que sigue de este documento es el análisis con el que se tomaron estas decisiones.
 
 ---
 
@@ -204,6 +214,30 @@ Se aplica en este orden. Cada umbral sale de un hueco entre clases de la tabla B
 - **Las pendientes se midieron a 30 m.** Con la escala elegida bajan (ver A3), así que los umbrales de pendiente deben recalcularse sobre los tiles a 60 o 90 m antes de usarlos.
 - **Meseta es la clase débil.** Sus errores coinciden con lo que ya decía `dataset.md` del altiplano y de Lote 4. O la definición de meseta no se puede medir así a 11 km, o esos tiles no son mesetas en su recuadro. Es una decisión tuya, y cabe revisarla en la v1.3.0 con el etiquetador automático.
 
+### B5. Criterio adoptado, a 60 m/px
+
+Se recalcularon las métricas sobre los tiles promediados 2 × 2. Para que la conicidad mida lo mismo, su suavizado se mantuvo en ~150 m (2.5 px).
+
+**Qué cambia:**
+- **Pendientes:** bajan, y dos umbrales se ajustaron con el mismo criterio de antes (el entero siguiente al máximo de la clase vecina).
+- **Conicidad:** el volcán con menos conicidad, Ceboruco, baja de 0.80 a 0.7985. Su umbral se ajustó con el criterio de la propuesta a 30 m: el mínimo de los volcanes redondeado hacia abajo.
+
+| Regla | A 30 m (propuesta) | A 60 m (adoptado) | De dónde sale el umbral a 60 m |
+|---|---|---|---|
+| 1. Llanura | relieve < 50 m | igual | llanura llega a 37 m y lomas empieza en 65 m |
+| 2. Volcán | conicidad ≥ 0.80, relieve ≥ 700 m, pendiente ≤ 22° | conicidad ≥ **0.79**, relieve ≥ 700 m, pendiente ≤ **21°** | conicidad mínima de los volcanes, 0.7985 (Ceboruco); pendiente máxima, 20.8° |
+| 3. Valle | posición del centro < 0.30, relieve ≥ 500 m | igual | valles ≤ 0.27 y montañas ≥ 0.42; lomas llega a 475 m |
+| 4. Lomas | relieve < 500 m | igual | — |
+| 5. Montaña | posición del centro ≥ 0.40, pendiente ≥ 17° | posición del centro ≥ 0.40, pendiente ≥ **15°** | la meseta más empinada: 14.3° |
+| 6. Meseta | el resto | igual | — |
+
+**Resultado:** coinciden **51 de 60**, con los mismos 9 tiles que fallaban a 30 m:
+- dos valles de relieve bajo (Oaxaca y Valle de Bravo);
+- dos montañas (Torres del Paine y Cerro El Potosí);
+- cinco mesetas.
+
+Con 0.80 en lugar de 0.79, Ceboruco caía en meseta y el resultado era 50 de 60. Con 0.79 no entra ningún falso positivo nuevo. Los umbrales viven en `UMBRALES_60` de `scrips/analizar_dataset_v3.py`.
+
 ### B3b. Clases nuevas: cañón (id 6) y duna (id 7)
 
 Aún no hay tiles de estas clases, así que **los criterios son hipótesis**. Lo único que se puede medir hoy es qué tiles actuales caerían en ellos por error.
@@ -285,7 +319,9 @@ Sobre los tiles a 60 m:
 
 ---
 
-## Decisiones que te tocan
+## Preguntas que se hicieron
+
+Las respuestas están en "Decisiones tomadas", al inicio del documento.
 
 1. **Escala:** 60 m/px (recomendada) o 90 m/px.
 2. **Criterio por clase:**
@@ -494,6 +530,42 @@ Coinciden 51 de 60. No coinciden:
 
 - Caería en duna: `dem_37.13_37.23_-108.54_-108.44` (Mesa Verde, meseta), periodicidad 0.083, anisotropía 0.55.
 - Caería en cañón: `dem_37.7_37.8_-119.64_-119.54` (Yosemite, valle).
+
+### B5. Criterio adoptado a 60 m/px
+
+Métricas recalculadas sobre los tiles promediados 2x2 (mínimo / máximo por clase):
+
+| Métrica | llanura | lomas | valle | montaña | meseta | volcán |
+|---|---|---|---|---|---|---|
+| Relieve (m) | 10 / 37 | 65 / 475 | 371 / 2496 | 932 / 3049 | 262 / 1234 | 731 / 2366 |
+| Pendiente media (°) | 1.1 / 2.6 | 1.9 / 12.4 | 6.8 / 30.4 | 11.8 / 36.1 | 4.4 / 14.3 | 8.8 / 20.8 |
+| Conicidad | -0.04 / 0.81 | 0.00 / 0.87 | -0.30 / 0.44 | -0.17 / 0.89 | 0.13 / 0.84 | 0.80 / 0.96 |
+| Posición del centro | 0.26 / 0.73 | 0.05 / 0.62 | 0.05 / 0.27 | 0.42 / 0.88 | 0.09 / 0.85 | 0.33 / 0.87 |
+
+Umbrales a 60 m: volcán con conicidad >= 0.79 y pendiente <= 21°; montaña con pendiente >= 15°. El resto de las reglas no cambia.
+
+### Resultado a 60 m
+
+| Etiqueta \ Regla | llanura | lomas | valle | montaña | meseta | volcán |
+|---|---|---|---|---|---|---|
+| llanura | 9 | 0 | 0 | 0 | 0 | 0 |
+| lomas | 0 | 12 | 0 | 0 | 0 | 0 |
+| valle | 0 | 2 | 6 | 0 | 0 | 0 |
+| montaña | 0 | 0 | 0 | 12 | 1 | 1 |
+| meseta | 0 | 4 | 1 | 0 | 3 | 0 |
+| volcán | 0 | 0 | 0 | 0 | 0 | 9 |
+
+Coinciden 51 de 60. No coinciden:
+
+- `dem_17.01_17.11_-96.78_-96.68` (Valle de Oaxaca): etiqueta valle, la regla dice lomas.
+- `dem_19.14_19.25_-100.18_-100.08` (Valle de Bravo): etiqueta valle, la regla dice lomas.
+- `dem_-50.99_-50.89_-73.46_-73.36` (Torres del Paine): etiqueta montaña, la regla dice meseta.
+- `dem_24.82_24.92_-100.27_-100.17` (Cerro El Potosí): etiqueta montaña, la regla dice volcán.
+- `dem_-18.01_-17.91_-67.16_-67.06` (Oruro (Altiplano)): etiqueta meseta, la regla dice lomas.
+- `dem_24.18_24.28_-105.52_-105.42` (Lote 4): etiqueta meseta, la regla dice lomas.
+- `dem_35.83_35.93_-106.35_-106.25` (Meseta Pajarito, Los Álamos): etiqueta meseta, la regla dice valle.
+- `dem_36.95_37.05_-110.15_-110.05` (Monument Valley): etiqueta meseta, la regla dice lomas.
+- `dem_37.13_37.23_-108.54_-108.44` (Mesa Verde): etiqueta meseta, la regla dice lomas.
 
 ### C. Normalización (sobre los tiles a 60 m/px)
 
