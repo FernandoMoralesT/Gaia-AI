@@ -79,3 +79,110 @@ def test_guardar_y_cargar_manifiesto(tmp_path):
     guardar_manifiesto(m, ruta)
     assert cargar_manifiesto(ruta) == m
     assert [p.name for p in tmp_path.iterdir()] == ["m.json"]  # no deja el temporal
+
+
+# ---------------------------------------------------------------- cola de descarga
+
+LADO = 0.01  # 36 px a 1 segundo de arco: tifs chicos para las pruebas
+
+
+def tif_falso(s, n, w, e, nodata_pct=0.0):
+    """Bytes de un GeoTIFF int16 como los de SRTM GL1, con la forma que tendría ese recuadro."""
+    import numpy as np
+    from affine import Affine
+    from rasterio.io import MemoryFile
+    filas, cols = round((n - s) * 3600), round((e - w) * 3600)
+    datos = np.full((filas, cols), 100, dtype=np.int16)
+    datos.flat[:int(datos.size * nodata_pct / 100)] = -32768
+    # Affine directo: from_bounds dispara un aviso de rasterio por usar * en lugar de @.
+    transformacion = Affine((e - w) / cols, 0, w, 0, -(n - s) / filas, n)
+    with MemoryFile() as mem:
+        with mem.open(driver="GTiff", height=filas, width=cols, count=1, dtype="int16", nodata=-32768,
+                      crs="EPSG:4326", transform=transformacion) as dst:
+            dst.write(datos, 1)
+        return mem.read()
+
+
+def manifiesto(n):
+    return {"bloques": [bloque(f"B{i:02d}", i, i + LADO, 0, LADO) for i in range(n)]}
+
+
+class PedirFalso:
+    def __init__(self, falla_en=None, status=None, cuerpo=None):
+        self.llamadas, self.falla_en, self.status, self.cuerpo = 0, falla_en, status, cuerpo
+
+    def __call__(self, s, n, w, e):
+        self.llamadas += 1
+        if self.llamadas == self.falla_en:
+            raise descargar_dem.ErrorAPI(self.status, "rechazado")
+        return self.cuerpo if self.cuerpo is not None else tif_falso(s, n, w, e)
+
+
+def descargar(m, carpeta, pedir, **kw):
+    from descargar_bloques import descargar_pendientes
+    return descargar_pendientes(m, carpeta, pedir=pedir, esperar=lambda s: None, **kw)
+
+
+def test_reanuda_sin_gastar_llamadas(tmp_path):
+    from descargar_bloques import nombre_bloque
+    m = manifiesto(1)
+    b = m["bloques"][0]
+    (tmp_path / nombre_bloque(b["sur"], b["norte"], b["oeste"], b["este"])).write_bytes(
+        tif_falso(b["sur"], b["norte"], b["oeste"], b["este"]))
+    pedir = PedirFalso()
+    r = descargar(m, tmp_path, pedir)
+    assert pedir.llamadas == 0 and r["llamadas"] == 0
+    assert b["estado"] == "descargado" and b["verificacion"]["ok"]
+
+
+def test_tope_de_45(tmp_path):
+    m = manifiesto(50)
+    pedir = PedirFalso()
+    r = descargar(m, tmp_path, pedir)
+    assert pedir.llamadas == 45 and r["detenido_por"] == "tope"
+    assert sum(b["estado"] == "pendiente" for b in m["bloques"]) == 5
+
+
+def test_401_detiene_y_guarda(tmp_path):
+    from descargar_bloques import cargar_manifiesto, guardar_manifiesto
+    ruta = tmp_path / "m.json"
+    m = manifiesto(5)
+    r = descargar(m, tmp_path, PedirFalso(falla_en=3, status=401), guardar=lambda x: guardar_manifiesto(x, ruta))
+    assert r["detenido_por"] == 401
+    estados = [b["estado"] for b in cargar_manifiesto(ruta)["bloques"]]
+    assert estados == ["descargado", "descargado", "pendiente", "pendiente", "pendiente"]
+    assert cargar_manifiesto(ruta)["bloques"][0]["fecha_descarga"] is not None
+
+
+def test_400_marca_fallido_y_sigue(tmp_path):
+    m = manifiesto(3)
+    r = descargar(m, tmp_path, PedirFalso(falla_en=2, status=400))
+    assert [b["estado"] for b in m["bloques"]] == ["descargado", "fallido", "descargado"]
+    assert "400" in m["bloques"][1]["verificacion"]["motivo"]
+    assert r["detenido_por"] is None
+
+
+def test_respuesta_no_geotiff_queda_fallida(tmp_path):
+    m = manifiesto(1)
+    descargar(m, tmp_path, PedirFalso(cuerpo=b"<html>error</html>"))
+    assert m["bloques"][0]["estado"] == "fallido"
+    assert list(tmp_path.glob("*.tif")) == []
+
+
+def test_ids_limita_a_los_pedidos(tmp_path):
+    m = manifiesto(4)
+    pedir = PedirFalso()
+    descargar(m, tmp_path, pedir, ids={"B01", "B03"})
+    assert pedir.llamadas == 2
+    assert [b["estado"] for b in m["bloques"]] == ["pendiente", "descargado", "pendiente", "descargado"]
+
+
+def test_verificar_reporta_nodata_y_forma(tmp_path):
+    from descargar_bloques import verificar_bloque
+    b = bloque("A", 10, 10 + LADO, 0, LADO)
+    ruta = tmp_path / "a.tif"
+    ruta.write_bytes(tif_falso(b["sur"], b["norte"], b["oeste"], b["este"], nodata_pct=10))
+    v = verificar_bloque(ruta, b)
+    assert v["forma"] == v["forma_esperada"] == [36, 36]
+    assert v["nodata_pct"] == pytest.approx(10, abs=1)
+    assert v["min_m"] == 100 and v["plausible"]
