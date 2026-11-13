@@ -526,3 +526,39 @@ Tag: `v1.0.1`.
 - Pendientes menores del script de línea base: el texto del informe repite lr, betas y semilla a mano; los hiperparámetros están copiados de `pipeline.py` porque allá viven dentro de `__main__`.
 
 Tag de cierre: `v1.1.0`, sobre `main` tras fusionar el PR.
+
+
+## v1.2.0: dataset v3 (en curso)
+
+### Decisiones de datos (paso 1)
+Están en `docs/dataset_v3_decisiones.md`:
+- escala de 60 m/px;
+- criterio de 6 reglas a 60 m;
+- más mesetas claras en el dataset nuevo;
+- cañón y duna aceptadas como hipótesis;
+- normalización relativa a la mediana del tile con S = 2500 m.
+
+### Descarga por bloques (paso 2)
+- **Por qué bloques:** la v2.0 generará mapas de hasta 2048 px, la v1.4.0 entrena con recortes de 128 y la v1.3.0 necesita transiciones entre clases. Un bloque de 0.5° cuesta una sola llamada y se recorta en local.
+- **Archivos:** `data/bloques.json` es el manifiesto versionado: 23 bloques de 0.5° y 2 de referencia de 1.2°, en total 25 llamadas. Los `.tif` van a `data/bloques/`, fuera de git.
+- **`src/dataset/descargar_dem.py`:** nueva `pedir_dem()`, que devuelve los bytes sin escribir en `data/raw/`. `descargar_tile()` la usa y sigue igual.
+- **Protección de la clave:**
+  - los errores de red se relanzan sin la URL, que lleva la clave;
+  - la clave se reemplaza por `***` antes de recortar el texto del error.
+- **Protección de la cuota:**
+  - cada petición HTTP cuenta para el tope de 45, reintentos incluidos;
+  - un 401, un 429 o un 5xx detienen la corrida y el bloque queda pendiente;
+  - una respuesta que no es GeoTIFF también detiene la corrida, para no gastar una llamada por bloque si el servidor está mal;
+  - un 400 deja el bloque fallido y la corrida sigue.
+- **Revisión final independiente:** encontró 4 problemas importantes, todos corregidos con su prueba, y 7 menores, anotados como pendientes en el plan.
+- **Límite de área de la API:** 450,000 km² por petición para datos de 30 m, según la documentación pública de OpenTopography. Los bloques más grandes, los de referencia, tienen unos 13,900 km².
+
+### Piloto (12/11/2026, 3 llamadas)
+- **Bloques:** B03 (Grand Teton–Jackson Hole), B15 (Gran Cañón) y B20 (Great Sand Dunes).
+- **Verificación:** los tres de 1800 × 1800 px, con 0 % de nodata y elevaciones plausibles: 1872–4071, 647–2816 y 2275–4300 m.
+- **Tamaño:** cada archivo pesa unos 4 MB, no 6.5, porque el GeoTIFF viene comprimido.
+- **Revisión visual con `scrips/ver_bloque.py`:**
+  - B03: la cordillera y el valle plano de Jackson Hole.
+  - B15: el cañón del Colorado con la meseta de Kaibab al norte.
+  - B20: el campo de dunas no se distingue en la vista completa, porque su relieve es pequeño frente a los 2000 m de la sierra. En un acercamiento se ven las crestas entre 37.73–37.82° N y 105.58–105.51° O.
+- **Tests:** 70 de Python (19 nuevos en `test/test_descargar_bloques.py`, sin red).

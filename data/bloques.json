@@ -58,9 +58,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Transición brusca de cordillera a valle plano.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 1872,
+        "max_m": 4071,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B04",
@@ -289,9 +303,23 @@
       "proposito": "entrenamiento",
       "justificacion": "El cañón tipo: meseta de Kaibab cortada por el Colorado.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 647,
+        "max_m": 2816,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B16",
@@ -389,9 +417,23 @@
       "proposito": "entrenamiento",
       "justificacion": "Dunas contra la Sangre de Cristo y el valle de San Luis.",
       "verificar_coordenadas": true,
-      "estado": "pendiente",
-      "fecha_descarga": null,
-      "verificacion": null
+      "estado": "descargado",
+      "fecha_descarga": "2026-11-12",
+      "verificacion": {
+        "forma": [
+          1800,
+          1800
+        ],
+        "forma_esperada": [
+          1800,
+          1800
+        ],
+        "nodata_pct": 0.0,
+        "min_m": 2275,
+        "max_m": 4300,
+        "plausible": true,
+        "ok": true
+      }
     },
     {
       "id": "B21",
