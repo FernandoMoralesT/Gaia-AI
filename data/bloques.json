@@ -1,0 +1,497 @@
+{
+  "version": 1,
+  "descripcion": "Bloques SRTM GL1 del dataset v3 (v1.2.0). Coordenadas de memoria: verificar_coordenadas = true hasta revisarlas con scrips/ver_bloque.py.",
+  "bloques": [
+    {
+      "id": "B01",
+      "sitio": "Popocatépetl–Iztaccíhuatl",
+      "sur": 18.85,
+      "norte": 19.35,
+      "oeste": -98.9,
+      "este": -98.4,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "montaña",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Dos volcanes y el paso entre ellos, con las llanuras de Puebla y Amecameca.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B02",
+      "sitio": "Nevado de Toluca",
+      "sur": 18.85,
+      "norte": 19.35,
+      "oeste": -100.01,
+      "este": -99.51,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "valle",
+        "lomas"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "El cráter más claro del dataset v1 (+435 m), rodeado de valles.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B03",
+      "sitio": "Grand Teton–Jackson Hole",
+      "sur": 43.5,
+      "norte": 44.0,
+      "oeste": -111.0,
+      "este": -110.5,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "montaña",
+        "llanura",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Transición brusca de cordillera a valle plano.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B04",
+      "sitio": "Flint Hills–llanura de Kansas",
+      "sur": 38.35,
+      "norte": 38.85,
+      "oeste": -96.75,
+      "este": -96.25,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "lomas",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Paso gradual de lomas a llanura.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B05",
+      "sitio": "Valle de Oaxaca",
+      "sur": 16.8,
+      "norte": 17.3,
+      "oeste": -96.95,
+      "este": -96.45,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "valle",
+        "montaña",
+        "lomas"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Valle ancho entre sierras.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B06",
+      "sitio": "Mont Blanc–Chamonix",
+      "sur": 45.65,
+      "norte": 46.15,
+      "oeste": 6.65,
+      "este": 7.15,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "montaña",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Valle glaciar y alta montaña.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B07",
+      "sitio": "Crater Lake",
+      "sur": 42.69,
+      "norte": 43.19,
+      "oeste": -122.35,
+      "este": -121.85,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "meseta"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Caldera grande: un cráter que sí se ve a 60 m.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B08",
+      "sitio": "Pampa (General Pico)",
+      "sur": -35.95,
+      "norte": -35.45,
+      "oeste": -64.05,
+      "este": -63.55,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "llanura"
+      ],
+      "proposito": "clase_pura",
+      "justificacion": "Llanura pura de referencia.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B09",
+      "sitio": "Grand Mesa",
+      "sur": 38.8,
+      "norte": 39.3,
+      "oeste": -108.3,
+      "este": -107.8,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "La meseta con más plano alto del dataset v1, con sus bordes.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B10",
+      "sitio": "Auyán-tepui",
+      "sur": 5.65,
+      "norte": 6.15,
+      "oeste": -62.8,
+      "este": -62.3,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "valle",
+        "cañón"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Tepui: cima plana y paredes verticales.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B11",
+      "sitio": "Roraima–Kukenán",
+      "sur": 4.9,
+      "norte": 5.4,
+      "oeste": -61.03,
+      "este": -60.53,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Dos tepuis completos en el recuadro.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B12",
+      "sitio": "Montes Simien",
+      "sur": 13.0,
+      "norte": 13.5,
+      "oeste": 37.85,
+      "este": 38.35,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "cañón",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Meseta alta con escarpes y cañones.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B13",
+      "sitio": "Black Mesa, Arizona",
+      "sur": 36.15,
+      "norte": 36.65,
+      "oeste": -110.55,
+      "este": -110.05,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "meseta",
+        "lomas"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Meseta grande con borde abrupto.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B14",
+      "sitio": "Barrancas del Cobre",
+      "sur": 27.15,
+      "norte": 27.65,
+      "oeste": -108.1,
+      "este": -107.6,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "meseta",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cañones profundos que cortan la meseta de la Sierra Tarahumara.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B15",
+      "sitio": "Gran Cañón",
+      "sur": 35.95,
+      "norte": 36.45,
+      "oeste": -112.45,
+      "este": -111.95,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "meseta"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "El cañón tipo: meseta de Kaibab cortada por el Colorado.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B16",
+      "sitio": "Cañón del Sumidero",
+      "sur": 16.6,
+      "norte": 17.1,
+      "oeste": -93.3,
+      "este": -92.8,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "lomas",
+        "valle"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cañón angosto junto al valle de Chiapa de Corzo.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B17",
+      "sitio": "Cañón del Colca",
+      "sur": -15.85,
+      "norte": -15.35,
+      "oeste": -72.15,
+      "este": -71.65,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "cañón",
+        "volcán",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Cañón con volcanes alrededor.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B18",
+      "sitio": "Gran Desierto de Altar–El Pinacate",
+      "sur": 31.6,
+      "norte": 32.1,
+      "oeste": -114.1,
+      "este": -113.6,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna",
+        "volcán",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Campo de dunas pegado al campo volcánico: transición duna–volcán.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B19",
+      "sitio": "Médanos de Samalayuca",
+      "sur": 31.1,
+      "norte": 31.6,
+      "oeste": -106.75,
+      "este": -106.25,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna",
+        "llanura",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Dunas aisladas entre sierras y llanura.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B20",
+      "sitio": "Great Sand Dunes",
+      "sur": 37.5,
+      "norte": 38.0,
+      "oeste": -105.8,
+      "este": -105.3,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna",
+        "montaña",
+        "llanura"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Dunas contra la Sangre de Cristo y el valle de San Luis.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B21",
+      "sitio": "Namib (Sossusvlei)",
+      "sur": -25.0,
+      "norte": -24.5,
+      "oeste": 15.15,
+      "este": 15.65,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "duna"
+      ],
+      "proposito": "clase_pura",
+      "justificacion": "Dunas estrella grandes y regulares.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B22",
+      "sitio": "Paricutín–Tancítaro",
+      "sur": 19.2,
+      "norte": 19.7,
+      "oeste": -102.5,
+      "este": -102.0,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "lomas",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Reemplazo de Paricutín: recortar un tile con el cono centrado.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "B23",
+      "sitio": "Volcán de Colima (Fuego y Nevado)",
+      "sur": 19.3,
+      "norte": 19.8,
+      "oeste": -103.85,
+      "este": -103.35,
+      "lado_grados": 0.5,
+      "clases_esperadas": [
+        "volcán",
+        "montaña"
+      ],
+      "proposito": "entrenamiento",
+      "justificacion": "Reemplazo de Colima: recortar un tile con el cono centrado.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "R1",
+      "sitio": "Tequila–Barranca del Río Santiago",
+      "sur": 20.5,
+      "norte": 21.7,
+      "oeste": -104.2,
+      "este": -103.0,
+      "lado_grados": 1.2,
+      "clases_esperadas": [
+        "volcán",
+        "cañón",
+        "lomas",
+        "llanura",
+        "meseta"
+      ],
+      "proposito": "referencia",
+      "justificacion": "Mezcla de 5 clases; solo para comparar mapas de 1024 y 2048 px, nunca para entrenar.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    },
+    {
+      "id": "R2",
+      "sitio": "San Rafael Swell–Capitol Reef",
+      "sur": 38.0,
+      "norte": 39.2,
+      "oeste": -111.4,
+      "este": -110.2,
+      "lado_grados": 1.2,
+      "clases_esperadas": [
+        "meseta",
+        "cañón",
+        "lomas",
+        "valle"
+      ],
+      "proposito": "referencia",
+      "justificacion": "Mesas y cañones; solo para comparar, nunca para entrenar.",
+      "verificar_coordenadas": true,
+      "estado": "pendiente",
+      "fecha_descarga": null,
+      "verificacion": null
+    }
+  ]
+}
