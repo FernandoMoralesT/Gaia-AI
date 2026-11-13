@@ -577,4 +577,4 @@ Están en `docs/dataset_v3_decisiones.md`:
   - **B30, White Sands:** las dunas de yeso aparecen como una textura de 10 a 15 m de relieve, parecida al ruido de SRTM. Es probable que se pierdan a 60 m.
   - **B39, Teide:** el bloque incluye mar. Hay que enmascararlo al recortar.
   - **Mínimos negativos:** B18 (−44 m), B25 (−2 m), B29 (−17 m), B39 (−14 m) y B44 (−130 m, depresión real del Valle de la Muerte). Hay que distinguir el mar de las depresiones antes de recortar.
-- **Coordenadas verificadas por Fernando:** B03, B15 y B20. El resto sigue con `verificar_coordenadas: true` hasta su revisión.
+- **Coordenadas verificadas por Fernando:** las 48 (B03, B15 y B20 tras el piloto; las otras 45 tras revisar las hojas de miniaturas). Las notas de revisión de arriba siguen pendientes para la etapa de recorte.
