@@ -7,9 +7,25 @@ Uso (desde cualquier carpeta):
     python scrips/medir_linea_base.py --nota "condiciones" --salida docs/linea_base.md
 """
 import statistics
+import sys
 import threading
+import time
+from pathlib import Path
 
 import psutil
+import torch
+import torch.nn as nn
+
+RAIZ = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(RAIZ / "src"))
+from model.discriminador import Discriminador  # noqa: E402
+from model.entrenar import paso_entrenamiento  # noqa: E402
+from model.generador import Generador  # noqa: E402
+
+# Mismos valores que src/pipeline.py (entrenamiento real de la v1.0).
+SEMILLA = 42
+LR = 2e-4
+BETAS = (0.5, 0.999)
 
 
 def resumir_tiempos(tiempos):
@@ -72,3 +88,27 @@ class Muestreador:
             "rss_max": max(self._rss),
             "muestras": len(self._rss),
         }
+
+
+def medir_repeticion(loader, epocas):
+    """Entrena `epocas` épocas lote a lote y devuelve (tiempos por época, recursos).
+
+    El muestreo de CPU y RAM empieza después de la primera época (calentamiento).
+    """
+    torch.manual_seed(SEMILLA)
+    g = Generador()
+    d = Discriminador()
+    criterio = nn.BCEWithLogitsLoss()
+    opt_g = torch.optim.Adam(g.parameters(), lr=LR, betas=BETAS)
+    opt_d = torch.optim.Adam(d.parameters(), lr=LR, betas=BETAS)
+
+    tiempos = []
+    muestreador = Muestreador()
+    for epoca in range(epocas):
+        if epoca == 1:
+            muestreador.iniciar()
+        inicio = time.perf_counter()
+        for mapas, ids in loader:
+            paso_entrenamiento(g, d, mapas, ids, criterio, opt_g, opt_d)
+        tiempos.append(time.perf_counter() - inicio)
+    return tiempos, muestreador.detener()

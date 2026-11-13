@@ -1,11 +1,12 @@
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ / "scrips"))
-from medir_linea_base import Muestreador, cpu_a_maquina, cpu_a_nucleos, resumir_tiempos  # noqa: E402
+from medir_linea_base import Muestreador, cpu_a_maquina, cpu_a_nucleos, medir_repeticion, resumir_tiempos  # noqa: E402
 
 
 def test_resumir_tiempos_separa_calentamiento():
@@ -35,3 +36,20 @@ def test_muestreador_toma_al_menos_una_muestra():
     assert r["muestras"] >= 1
     assert r["rss_max"] > 0
     assert r["cpu_proceso"] >= 0 and 0 <= r["cpu_sistema"] <= 100
+
+
+def loader_falso():
+    """2 lotes de 4 mapas aleatorios de 120x120, con el mismo DEMDataset del entrenamiento real."""
+    from dataset.dem_dataset import DEMDataset
+    from torch.utils.data import DataLoader
+    rng = np.random.default_rng(0)
+    mapas = [rng.uniform(-1, 1, (120, 120)) for _ in range(8)]
+    return DataLoader(DEMDataset(mapas, [i % 6 for i in range(8)]), batch_size=4)
+
+
+def test_medir_repeticion_no_escribe_archivos(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    tiempos, recursos = medir_repeticion(loader_falso(), epocas=2)
+    assert len(tiempos) == 2 and all(t > 0 for t in tiempos)
+    assert recursos["muestras"] >= 1
+    assert list(tmp_path.iterdir()) == []
