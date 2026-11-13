@@ -48,6 +48,8 @@ Cada versión cierra con tests en verde, entrada en `docs/bitacora.md`, commit y
 
 ### v1.1.0: limpieza y línea base
 
+**Estado:** concluida (51 tests de Python y 10 pruebas de Godot en verde; `docs/linea_base.md` con mediana de 4.93 s por época).
+
 **Actividades**
 - Corregir las inconsistencias conocidas del repo (hecho: commits `ad753b6`, `74bbd26` y `94ae1e7`):
   - Documentación: marcadores `[fecha]` y `[10/14/2026]` y errata en `docs/dataset.md`; `preprocesamiento.py` en la bitácora del Sprint 4; llanura 10 y lomas 11 en la del Sprint 6 (son 9 y 12); "18 tests" en `docs/grafo.md` (son 23); la cuenta 260+170 en la bitácora y en `prueba_sombras.gd`.

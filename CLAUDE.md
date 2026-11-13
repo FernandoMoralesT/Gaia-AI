@@ -12,8 +12,8 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desd
 - La carpeta de scripts se llama `scrips` (sin "t").
 
 ## Estado actual
-- v1.0.1 publicada. Tags: `sprint-05` a `sprint-10`, `v1.0` y `v1.0.1` (42 tests de Python y 10 pruebas headless de Godot). Rama base: `main`.
-- En curso: v1.1.0 (limpieza de inconsistencias y línea base de rendimiento). Siguiente: v1.2.0 (dataset v3).
+- v1.1.0 concluida (limpieza de inconsistencias y línea base). Tags: `sprint-05` a `sprint-10`, `v1.0`, `v1.0.1` y `v1.1.0` (este último sobre `main` al fusionar el PR). 51 tests de Python y 10 pruebas headless de Godot. Rama base: `main`.
+- En curso: v1.2.0 (dataset v3). Lo primero: decidir la escala, 60 o 90 m/px.
 - Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100. No se sobrescribe; los modelos nuevos de la v2.0 se guardan aparte.
 - Fuera de la v1.0: el PDF del proyecto (no es necesario para la expo).
 
@@ -65,7 +65,7 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 - Las alturas no son metros. Escala vertical en Godot: `escala_altura` (por clase) × `multiplicador_altura` (3). Luz a 25°, cámara a 30°.
 
 ## Hallazgos
-- Línea base v1.1.0 (`docs/linea_base.md`, `scrips/medir_linea_base.py`): mediana de 4.93 s por época, ~7.9 núcleos de 16 lógicos (torch usa 8 hilos) y 0.75 GiB de RAM. Es la referencia de la v1.5.0.
+- Línea base v1.1.0 (`docs/linea_base.md`, `scrips/medir_linea_base.py`): mediana de 4.93 s por época, ~7.9 núcleos de 16 lógicos (torch usa 8 hilos) y 0.75 GiB de RAM. Es el punto de comparación de la v1.5.0 (medir en las mismas condiciones).
 - El discriminador domina desde la época ~189. Por pérdidas la zona sana es la 10–115; la 150 se eligió por criterio visual (100/150/200). Está en la bitácora.
 - Clases débiles: lomas, montaña y meseta se parecen. Claras: volcán, valle y llanura.
 - Cráter (9 volcanes reales a 120×120): solo 3 dan profundidad positiva clara (Nevado de Toluca, El Pinacate y Colima), 1 marginal (Ceboruco) y 5 sin cráter. El modelo genera un cono sin hueco; no es culpa del suavizado (con sigma 0 ya daba +0.025): es resolución y datos.

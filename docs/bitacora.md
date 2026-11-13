@@ -508,6 +508,14 @@ Tag: `v1.0.1`.
 - **Lectura:** torch usa 8 hilos (uno por núcleo físico) y deja la mitad de los núcleos lógicos sin usar. Es el punto de partida de la v1.5.0.
 - Se verificó con hashes que `salidas/historial.csv`, `salidas/checkpoints/` y `modelos/` no cambiaron.
 
+### Decisiones
+- **pandas:** `scrips/sanos.py` era el único uso y faltaba en `requirements.txt`. En lugar de sumar una dependencia de unos 40 MB para un análisis de una sola vez, se reescribió con csv y numpy, y se comprobó que la salida numérica era idéntica (117 filas, diferencia 0).
+- **`data/processed/`:** sus 2 archivos eran salidas del ruido Simplex de los Sprints 1 a 3, que entraron en `71cfb35`, el mismo commit que agregó la regla al `.gitignore`. Se hizo `git rm --cached` (siguen en disco) y la regla se mantuvo.
+- **`notebooks/`:** estaba vacía y nada la usaba; se quitó del README y del disco.
+- **psutil 7.2.2:** dependencia nueva y ligera, solo para la medición de CPU y RAM.
+- **`pipeline.py`:** se adoptó el estilo de imports sin `src.`, el mismo del resto del repo, porque así funciona con `python src/pipeline.py`, con pytest y con los scripts.
+- **Línea base:** se midió el ritmo, no el resultado (6 épocas por repetición, no 500), para no tocar los resultados de la v1.0.
+
 ### Tests
 - `python -m pytest test/ -q`: 51 pruebas pasan (9 nuevas de la línea base).
 - Godot headless: 10 scripts, todos OK.
@@ -517,4 +525,4 @@ Tag: `v1.0.1`.
 - torch instalado es la build `+cu126` (CUDA) en una máquina sin CUDA; revisar en la v1.5.0.
 - Pendientes menores del script de línea base: el texto del informe repite lr, betas y semilla a mano; los hiperparámetros están copiados de `pipeline.py` porque allá viven dentro de `__main__`.
 
-Tag de cierre: `v1.1.0` (pendiente de crear).
+Tag de cierre: `v1.1.0`, sobre `main` tras fusionar el PR.
