@@ -81,7 +81,7 @@ Resultados de `scrips/resumen_dataset.py` sobre los 60 tiles:
 
 Pipeline (`src/pipeline.py`):
 
-1. `cargar_bach_dem` lee los `.tif` y los devuelve en un diccionario nombre → array.
+1. `cargar_batch_dem` lee los `.tif` y los devuelve en un diccionario nombre → array.
 2. `dividir_tiles` reparte por clase con semilla 42: 80/10/10 y mínimo de 1 tile en val y en test por clase.
 3. `reducir_tile` pasa cada tile de 360 × 360 a 120 × 120 con el promedio de bloques de 3 × 3 (90 m por píxel).
 4. `normalizar_tile` lleva cada tile de −1 a 1 con su propio mínimo y máximo, en `float32`.

@@ -2,13 +2,13 @@
 
 IA local que genera terreno procedural (mapas de altura) con una cGAN entrenada con elevación real (SRTM). Proyecto de Fernando (Ingeniería en Sistemas, FIMAZ-UAS, Mazatlán) con equipo de 3, para Estructura de Datos y una expo de IA. Nació como herramienta de mapas para su juego "A Stupid RPG" (en pausa).
 
-Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desde la v1.0.1 se trabaja por versiones X.Y.Z hacia la v2.0 (`ROADMAP_v2.md`).
+Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desde la v1.0.1 se trabaja por versiones X.Y.Z hacia la v2.0 (`docs/ROADMAP_v2.md`).
 
 ## Navegación (leer primero)
 - Para saber qué depende de qué, lee `docs/grafo.md` (lo genera `scrips/generar_grafo.py`).
 - Ubica con grep/glob antes de abrir archivos completos.
 - No leas `godot/` ni `docs/` salvo que la tarea lo pida. No leas todo el repo al iniciar.
-- Para trabajo de la v2.0, lee `ROADMAP_v2.md` (raíz del repo), solo la versión en curso.
+- Para trabajo de la v2.0, lee `docs/ROADMAP_v2.md`, solo la versión en curso.
 - La carpeta de scripts se llama `scrips` (sin "t").
 
 ## Estado actual
@@ -21,7 +21,7 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desd
 - X.Y.Z. X = cambio mayor tras testeo y verificación. Y = cambios medios (funcionalidades en prueba, depuración, optimización). Z = cambios menores (como la 1.0.1, solo gráficos del visor).
 - Cada versión cierra con tests en verde, entrada en `docs/bitacora.md`, commit y tag `vX.Y.Z`.
 
-## v2.0 (resumen; el detalle está en ROADMAP_v2.md)
+## v2.0 (resumen; el detalle está en docs/ROADMAP_v2.md)
 - Terrenos de uso general, pensados para que otros los usen como base.
 - Tamaños de 64×64 a 2048×2048: accesos rápidos 64, 128, 512, 1024 y 2048, tamaño personalizado (múltiplo de 8) y mapas rectangulares. Un mapa más grande es más territorio, no el mismo con más detalle.
 - Mundos con más de una clase (mapa de clases) y dos clases nuevas: cañón (id 6) y duna (id 7), agregadas al final de `CLASES`.
@@ -84,8 +84,7 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 4. Commit y tag `vX.Y.Z`.
 
 ## Pendientes
-- v1.1.0, documentación: marcadores `[fecha]` y `[10/14/2026]` y la errata en `docs/dataset.md`; `preprocesamiento.py` en la bitácora del Sprint 4; llanura 10 y lomas 11 en la del Sprint 6 (son 9 y 12); "18 tests" en `grafo.md` (son 23); cuenta 260+170 en la bitácora y en `prueba_sombras.gd`.
-- v1.1.0, código: import de `src.model.discriminador` en `pipeline.py`; `__main__` viejo de `cargar_dem.py`; `pandas` de `sanos.py` falta en `requirements.txt`; `notebooks/` vacío y 2 archivos versionados en `data/processed/`; restos `tempCodeRunnerFile.py` y `comprobacion_reduccion.py` (vacío).
+- `salidas/historial.csv` (local): la fila de la época 500 tiene `0.22 58` en D y hace fallar `scrips/sanos.py`; falta el valor real.
 - v1.1.0, línea base: segundos por época, % de CPU y RAM, con los datos de la máquina, en `docs/linea_base.md`.
 - Visor (versión Z): F11 desde ventana maximizada vuelve a ventana; README y `export_presets` nombran `Gaia-AI.exe` y el vigente es `Gaia-AI-v1.0.exe`.
 - Tiles de volcán donde el cono no domina el centro: Paricutín y Colima (v1.2.0).

@@ -49,7 +49,7 @@ Cada versión cierra con tests en verde, entrada en `docs/bitacora.md`, commit y
 ### v1.1.0: limpieza y línea base
 
 **Actividades**
-- Corregir las inconsistencias conocidas del repo:
+- Corregir las inconsistencias conocidas del repo (hecho: commits `ad753b6`, `74bbd26` y `94ae1e7`):
   - Documentación: marcadores `[fecha]` y `[10/14/2026]` y errata en `docs/dataset.md`; `preprocesamiento.py` en la bitácora del Sprint 4; llanura 10 y lomas 11 en la del Sprint 6 (son 9 y 12); "18 tests" en `docs/grafo.md` (son 23); la cuenta 260+170 en la bitácora y en `prueba_sombras.gd`.
   - Código: el import de `src.model.discriminador` en `pipeline.py`; el bloque `__main__` viejo de `cargar_dem.py`; `pandas` de `sanos.py`, que no está en `requirements.txt`; `notebooks/` vacío y los 2 archivos versionados de `data/processed/`; los restos `tempCodeRunnerFile.py` y `comprobacion_reduccion.py` (vacío).
 - Medir la línea base del entrenamiento: segundos por época, porcentaje de CPU y RAM, junto con los datos de la máquina.

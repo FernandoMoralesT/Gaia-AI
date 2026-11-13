@@ -56,7 +56,7 @@ data/raw/*.tif + data/etiquetas.json
 ## 3. Archivos clave
 
 - `src/dataset/dem_dataset.py`: Dataset de PyTorch y orden canónico de clases (nunca reordenar CLASES). Exporta: `CLASES`, `ID_CLASE`, `DEMDataset`.
-- `src/dataset/cargar_dem.py`: Lectura de los .tif con rasterio y de data/etiquetas.json. Exporta: `cargar_etiquetas`, `cargar_bach_dem`.
+- `src/dataset/cargar_dem.py`: Lectura de los .tif con rasterio y de data/etiquetas.json. Exporta: `cargar_etiquetas`, `cargar_batch_dem`.
 - `src/dataset/procesamiento.py`: Reducción a 120×120, normalización por tile, variantes y división por tile. Exporta: `recortar`, `normalizar_dem`, `flip_horizontal`, `flip_vertical`, `rotar_90`, `generar_variantes`, `dividir_tiles`, `reducir_tile`, `normalizar_tile`.
 - `src/dataset/descargar_dem.py`: Descarga de un tile SRTM desde OpenTopography (clave en .env). Exporta: `nombre_tile`, `descargar_tile`.
 - `src/descargar_lote.py`: Descarga por lotes de la lista de tiles. Exporta: `LADO`, `CARPETA`, `RUTA_ETIQUETAS`, `MAX_SOLICITUDES`, `ANTIGUOS`, `NUEVOS`, `LISTA`, `cargar_etiquetas`, `guardar_etiquetas`.

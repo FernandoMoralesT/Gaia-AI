@@ -1,7 +1,6 @@
 import rasterio
 import os
 import json
-import random
 
 def cargar_etiquetas(ruta="data/etiquetas.json"):
     with open(ruta, encoding="utf-8") as f:
@@ -9,11 +8,11 @@ def cargar_etiquetas(ruta="data/etiquetas.json"):
 
 
 
-def cargar_bach_dem(carpeta):
-    heigthmaps = {}
+def cargar_batch_dem(carpeta):
+    heightmaps = {}
     for archivo in sorted(os.listdir(carpeta)):
         if archivo.endswith(".tif"):
             with rasterio.open(os.path.join(carpeta, archivo)) as src:
                 data = src.read(1)
-                heigthmaps[archivo] = data
-    return heigthmaps
+                heightmaps[archivo] = data
+    return heightmaps

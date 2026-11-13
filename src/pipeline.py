@@ -1,7 +1,7 @@
 from torch.utils.data import DataLoader
 from noise.Unificacion_Y_Exportacion import fractal_noise_2d, exportar_para_godot, remap, clasificar_biomas, generar_y_exportar_terreno
 from dataset.dem_dataset import DEMDataset, ID_CLASE
-from dataset.cargar_dem import cargar_bach_dem, cargar_etiquetas
+from dataset.cargar_dem import cargar_batch_dem, cargar_etiquetas
 from dataset.procesamiento import recortar, normalizar_dem, normalizar_tile, reducir_tile,generar_variantes, dividir_tiles
 from dataset.descargar_dem import descargar_tile
 from model.generador import Generador
@@ -26,7 +26,7 @@ def procesar_tiles(nombres, tiles, etiquetas, batch_size, shuffle=False):
     return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 def pipeline_dataset_dem(carpeta_datos, batch_size):
-    tiles = cargar_bach_dem(carpeta_datos)
+    tiles = cargar_batch_dem(carpeta_datos)
     etiquetas = cargar_etiquetas()
     train, val, test = dividir_tiles(tiles, etiquetas)
     loader_train = procesar_tiles(train, tiles, etiquetas, batch_size, shuffle=True)
