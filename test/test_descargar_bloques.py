@@ -186,3 +186,17 @@ def test_verificar_reporta_nodata_y_forma(tmp_path):
     assert v["forma"] == v["forma_esperada"] == [36, 36]
     assert v["nodata_pct"] == pytest.approx(10, abs=1)
     assert v["min_m"] == 100 and v["plausible"]
+
+
+# ---------------------------------------------------------------- ver_bloque
+
+def test_figura_bloque_tiene_imagen_y_titulo(tmp_path):
+    import matplotlib
+    matplotlib.use("Agg")
+    from ver_bloque import figura_bloque
+    ruta = tmp_path / "a.tif"
+    ruta.write_bytes(tif_falso(10, 10 + LADO, 0, LADO))
+    fig = figura_bloque(ruta, "Prueba")
+    ax = fig.axes[0]
+    assert ax.get_images() and ax.get_title() == "Prueba"
+    assert ax.get_images()[0].get_extent() == pytest.approx([0, LADO, 10, 10 + LADO])
