@@ -12,8 +12,11 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desd
 - La carpeta de scripts se llama `scrips` (sin "t").
 
 ## Estado actual
-- v1.1.0 concluida (limpieza de inconsistencias y línea base). Tags: `sprint-05` a `sprint-10`, `v1.0`, `v1.0.1` y `v1.1.0` (este último sobre `main` al fusionar el PR). 51 tests de Python y 10 pruebas headless de Godot. Rama base: `main`.
-- En curso: v1.2.0 (dataset v3). Decisiones de datos tomadas (`docs/dataset_v3_decisiones.md`); sigue la descarga, con más tiles de meseta claros.
+- v1.1.0 concluida (limpieza de inconsistencias y línea base). Tags: `sprint-05` a `sprint-10`, `v1.0`, `v1.0.1` y `v1.1.0` (este último sobre `main` al fusionar el PR). Hoy: 71 tests de Python y 10 pruebas headless de Godot. Rama base: `main`.
+- En curso: v1.2.0 (dataset v3), rama `Rama1.2.0` (en GitHub). Estado al 12/11/2026:
+  - Paso 1 hecho: decisiones de datos en `docs/dataset_v3_decisiones.md`.
+  - Paso 2 hecho: 48 bloques descargados en `data/bloques/` (204 MB, fuera de git): 46 de 0.5° y 2 de referencia de 1.2° (R1, R2; nunca para entrenar). Coordenadas verificadas por Fernando. 0 pendientes. Detalle en la bitácora (v1.2.0) y en `docs/superpowers/plans/2026-11-12-bloques-v3.md`.
+  - **Siguiente (paso 3):** recortar los bloques en tiles a 60 m/px (promedio 2×2), etiquetarlos con las 6 reglas (`UMBRALES_60`), resolver mar y depresiones, tiles de Paricutín y Colima con el cono centrado (de B22 y B23), y división por bloque con más de un tile por clase en validación y prueba. Plan primero y visto bueno de Fernando.
 - Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100. No se sobrescribe; los modelos nuevos de la v2.0 se guardan aparte.
 - Fuera de la v1.0: el PDF del proyecto (no es necesario para la expo).
 
@@ -49,6 +52,7 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 - `data/etiquetas.json`: fuente de verdad de las etiquetas por tile.
 - `docs/bitacora.md`, `docs/dataset.md`: decisiones y razones.
 - `salidas/`: historial, muestras y `checkpoints/epoca_NNN.pt` (solo local, gitignored).
+- v1.2.0: `data/bloques.json` (manifiesto de bloques, fuente de verdad para volver a descargar), `scrips/descargar_bloques.py` (`--revisar` valida sin llamar a la API; `--ids B03,B15`; tope de 45, se detiene ante 401/429/5xx), `scrips/ver_bloque.py` (relieve sombreado; `--zona=oeste,sur,este,norte`; `--guardar`), `scrips/analizar_dataset_v3.py` (métricas por tile, reglas y normalización), `pedir_dem()` y `ErrorAPI` en `src/dataset/descargar_dem.py` (no filtra la clave).
 
 ## Modelo v1.0 (cGAN)
 - 6 clases definidas por forma, no por metros: llanura, lomas, valle, montaña, meseta, volcán.
@@ -68,6 +72,8 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 - Línea base v1.1.0 (`docs/linea_base.md`, `scrips/medir_linea_base.py`): mediana de 4.93 s por época, ~7.9 núcleos de 16 lógicos (torch usa 8 hilos) y 0.75 GiB de RAM. Es el punto de comparación de la v1.5.0 (medir en las mismas condiciones).
 - El discriminador domina desde la época ~189. Por pérdidas la zona sana es la 10–115; la 150 se eligió por criterio visual (100/150/200). Está en la bitácora.
 - Clases débiles: lomas, montaña y meseta se parecen. Claras: volcán, valle y llanura.
+- Dataset v3 (60 tiles v1 a 60 m): las 6 reglas coinciden en 51 de 60 (optimista: umbrales ajustados a esos tiles). Meseta es la débil (3 de 8); por eso el v3 trae más mesetas claras. La "posición del centro" separa valle (≤ 0.27) de montaña (≥ 0.42). Promediar pierde sobre todo pendiente (llanura conserva 58.7 % a 60 m y 38.4 % a 90 m).
+- El método de cráter de la v1.0 (anillo de 360–1800 m alrededor del centro del tile) da 3 de 9 en cualquier escala: no ve cráteres pequeños ni descentrados.
 - Cráter (9 volcanes reales a 120×120): solo 3 dan profundidad positiva clara (Nevado de Toluca, El Pinacate y Colima), 1 marginal (Ceboruco) y 5 sin cráter. El modelo genera un cono sin hueco; no es culpa del suavizado (con sigma 0 ya daba +0.025): es resolución y datos.
 
 ## Reglas del repo
@@ -87,7 +93,10 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 ## Pendientes
 - `salidas/historial.csv` (local): la fila de la época 500 tiene `0.22 58` en D y hace fallar `scrips/sanos.py`; falta el valor real.
 - Visor (versión Z): F11 desde ventana maximizada vuelve a ventana; README y `export_presets` nombran `Gaia-AI.exe` y el vigente es `Gaia-AI-v1.0.exe`.
-- Tiles de volcán donde el cono no domina el centro: Paricutín y Colima (v1.2.0).
+- v1.2.0, notas de la revisión de bloques: Pinacate fuera de B18; dunas dudosas en B19 (Samalayuca) y B30 (White Sands, 10–15 m de relieve); mar en B39 (Teide); mínimos bajo el nivel del mar en B18, B25, B29 y B39 (B44, Valle de la Muerte, es depresión real).
+- v1.2.0, descarga diaria: Fernando planea una tarea cada 24 h; necesita coordenadas nuevas en `data/bloques.json` (hoy 0 pendientes). El 12/11/2026 se usaron 48 de 50 llamadas.
+- v1.2.0, 7 pendientes menores de la revisión del descargador: al final del plan de bloques.
+- Push: los commits desde `c05fbe7` (coordenadas verificadas y este estado) quedaron sin subir a `Rama1.2.0`; preguntar a Fernando.
 - PDF del proyecto (no necesario para la expo).
 
 ## Cómo trabajar con Fernando
@@ -95,3 +104,4 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 - Modo mentoría (editable): explicar el porqué y guiar con preguntas antes de dar el código completo. Si pide la solución directa, dársela.
 - Antes de cambios significativos, explicar qué y cómo y esperar su visto bueno.
 - Es estudiante: evitar jerga innecesaria y explicar los términos técnicos la primera vez.
+- En cada tarea cargar las skills `andrej-karpathy-skills:karpathy-guidelines` y la de superpowers que aplique (writing-plans, executing-plans con test-driven-development, verification-before-completion).
