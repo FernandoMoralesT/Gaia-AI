@@ -128,7 +128,6 @@ dist/            Gaia-AI.exe exportado (no versionado)
 docs/            bitácora y documentación del dataset
 godot/gaia-visor proyecto de Godot: intro, visor 3D, mapas de respaldo y pruebas
 modelos/         generador exportado para inferencia (época 150)
-notebooks/       exploración
 salidas/         historial, muestras y checkpoints del entrenamiento (no versionado)
 scrips/          scripts sueltos (exportar_generador.py, generar_respaldos.py, revisiones del dataset)
 src/noise/       generador clásico de ruido y exportación (Sprints 1-3)

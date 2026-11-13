@@ -1,2 +1,0 @@
-
-colores = ['blue', 'green', 'brown']

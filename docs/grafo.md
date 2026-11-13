@@ -37,7 +37,7 @@ No editar a mano las secciones 1 y 3: volver a ejecutar el script.
 - `test/test_inferencia.py` → `src/inferencia.py`
 - `test/test_servidor.py` → `src/servidor.py`
 
-Sin dependencias internas: `scrips/Practicatensores.py`, `scrips/comprobacion.py`, `scrips/comprobacion_reduccion.py`, `scrips/coordenadas_raw_v1.py`, `scrips/generar_grafo.py`, `scrips/resumen_dataset.py`, `scrips/sanos.py`, `scrips/validar_nodata.py`, `scrips/ver_clase.py`, `scrips/ver_dudosos.py`, `scrips/ver_tile.py`, `src/__init__.py`, `src/dataset/__init__.py`, `src/model/__init__.py`, `src/noise/Comprobacion.py`, `src/noise/__init__.py`, `src/noise/noise2D.py`, `src/noise/normalizacionDeRangos.py`, `src/noise/tempCodeRunnerFile.py`, `test/test_comparar_simplex.py`, `test/test_coordenadas_raw_v1.py`.
+Sin dependencias internas: `scrips/Practicatensores.py`, `scrips/comprobacion.py`, `scrips/coordenadas_raw_v1.py`, `scrips/generar_grafo.py`, `scrips/resumen_dataset.py`, `scrips/sanos.py`, `scrips/validar_nodata.py`, `scrips/ver_clase.py`, `scrips/ver_dudosos.py`, `scrips/ver_tile.py`, `src/__init__.py`, `src/dataset/__init__.py`, `src/model/__init__.py`, `src/noise/Comprobacion.py`, `src/noise/__init__.py`, `src/noise/noise2D.py`, `src/noise/normalizacionDeRangos.py`, `test/test_comparar_simplex.py`, `test/test_coordenadas_raw_v1.py`.
 
 ## 2. Flujo de datos
 
