@@ -108,10 +108,14 @@ def manifiesto(n):
 
 
 class PedirFalso:
-    def __init__(self, falla_en=None, status=None, cuerpo=None):
+    def __init__(self, falla_en=None, status=None, cuerpo=None, intentos=1):
         self.llamadas, self.falla_en, self.status, self.cuerpo = 0, falla_en, status, cuerpo
+        self.intentos = intentos  # peticiones HTTP por bloque (reintentos incluidos)
 
-    def __call__(self, s, n, w, e):
+    def __call__(self, s, n, w, e, al_intentar=None):
+        for _ in range(self.intentos):
+            if al_intentar:
+                al_intentar()
         self.llamadas += 1
         if self.llamadas == self.falla_en:
             raise descargar_dem.ErrorAPI(self.status, "rechazado")
@@ -162,11 +166,13 @@ def test_400_marca_fallido_y_sigue(tmp_path):
     assert r["detenido_por"] is None
 
 
-def test_respuesta_no_geotiff_queda_fallida(tmp_path):
-    m = manifiesto(1)
-    descargar(m, tmp_path, PedirFalso(cuerpo=b"<html>error</html>"))
-    assert m["bloques"][0]["estado"] == "fallido"
-    assert list(tmp_path.glob("*.tif")) == []
+def test_respuesta_no_geotiff_detiene_y_queda_pendiente(tmp_path):
+    m = manifiesto(2)
+    pedir = PedirFalso(cuerpo=b"<html>error</html>")
+    r = descargar(m, tmp_path, pedir)
+    assert pedir.llamadas == 1 and r["detenido_por"] == "respuesta no GeoTIFF"
+    assert [b["estado"] for b in m["bloques"]] == ["pendiente", "pendiente"]
+    assert list(tmp_path.glob("*.tif")) == [] and list(tmp_path.glob("*.tmp")) == []
 
 
 def test_ids_limita_a_los_pedidos(tmp_path):
@@ -200,3 +206,54 @@ def test_figura_bloque_tiene_imagen_y_titulo(tmp_path):
     ax = fig.axes[0]
     assert ax.get_images() and ax.get_title() == "Prueba"
     assert ax.get_images()[0].get_extent() == pytest.approx([0, LADO, 10, 10 + LADO])
+
+
+
+# ---------------------------------------------------------------- arreglos de la revisión final
+
+def test_clave_cortada_por_el_recorte_no_se_filtra(monkeypatch):
+    monkeypatch.setenv("OPENTOPO_API_KEY", CLAVE)
+    cuerpo = "x" * 190 + CLAVE + " fin"  # la clave cruza el límite de 200 caracteres
+    monkeypatch.setattr(descargar_dem.requests, "get", lambda url, params, timeout: Respuesta(401, text=cuerpo))
+    with pytest.raises(descargar_dem.ErrorAPI) as e:
+        descargar_dem.pedir_dem(1, 2, 3, 4)
+    assert CLAVE[:10] not in str(e.value)
+
+
+def test_cada_reintento_cuenta_para_el_tope(tmp_path):
+    m = manifiesto(30)
+    r = descargar(m, tmp_path, PedirFalso(intentos=2))  # cada bloque gasta 2 peticiones
+    assert r["llamadas"] <= 45 and r["detenido_por"] == "tope"
+    assert sum(b["estado"] == "descargado" for b in m["bloques"]) == 22
+
+
+def test_pedir_dem_avisa_cada_intento(monkeypatch):
+    monkeypatch.setenv("OPENTOPO_API_KEY", CLAVE)
+    respuestas = iter([requests.Timeout("lento"), Respuesta(200, content=b"ok")])
+
+    def get(url, params, timeout):
+        r = next(respuestas)
+        if isinstance(r, Exception):
+            raise r
+        return r
+
+    monkeypatch.setattr(descargar_dem.requests, "get", get)
+    monkeypatch.setattr(descargar_dem.time, "sleep", lambda s: None)
+    intentos = []
+    assert descargar_dem.pedir_dem(1, 2, 3, 4, al_intentar=lambda: intentos.append(1)) == b"ok"
+    assert len(intentos) == 2
+
+
+def test_error_5xx_detiene_y_queda_pendiente(tmp_path):
+    m = manifiesto(3)
+    r = descargar(m, tmp_path, PedirFalso(falla_en=2, status=503))
+    assert r["detenido_por"] == 503
+    assert [b["estado"] for b in m["bloques"]] == ["descargado", "pendiente", "pendiente"]
+
+
+def test_verificacion_fallida_se_reporta(tmp_path):
+    m = manifiesto(1)
+    b = m["bloques"][0]
+    r = descargar(m, tmp_path, PedirFalso(cuerpo=tif_falso(b["sur"], b["norte"], 0, LADO * 2)))  # forma mal
+    assert b["verificacion"]["ok"] is False
+    assert r["revisar"] == [b["id"]]

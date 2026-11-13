@@ -29,6 +29,7 @@ from dataset.descargar_dem import ErrorAPI, pedir_dem  # noqa: E402  (carga .env
 
 MAX_LLAMADAS = 45     # igual que src/descargar_lote.py
 DETIENEN = {401, 429}  # cuota agotada o demasiadas peticiones: se retoma al día siguiente
+# Un 5xx (servidor caído) también detiene: seguir gastaría una llamada por bloque sin resultado.
 NODATA = -32768
 RANGO_PLAUSIBLE = (-450, 8850)  # mar Muerto a Everest
 RUTA_MANIFIESTO = RAIZ / "data" / "bloques.json"
@@ -116,7 +117,17 @@ def descargar_pendientes(m, carpeta, pedir=pedir_dem, max_llamadas=MAX_LLAMADAS,
                          esperar=time.sleep, guardar=None):
     """Descarga los bloques en estado pendiente. Devuelve un resumen de la corrida."""
     carpeta = Path(carpeta)
-    r = {"llamadas": 0, "descargados": [], "fallidos": [], "detenido_por": None}
+    r = {"llamadas": 0, "descargados": [], "fallidos": [], "revisar": [], "detenido_por": None}
+
+    class TopeAlcanzado(Exception):
+        pass
+
+    def contar():
+        """Cada petición HTTP cuenta, reintentos incluidos; la que pasaría del tope no se hace."""
+        if r["llamadas"] >= max_llamadas:
+            raise TopeAlcanzado
+        r["llamadas"] += 1
+
     for b in m["bloques"]:
         if b["estado"] != "pendiente" or (ids is not None and b["id"] not in ids):
             continue
@@ -127,11 +138,13 @@ def descargar_pendientes(m, carpeta, pedir=pedir_dem, max_llamadas=MAX_LLAMADAS,
                 break
             if r["llamadas"]:
                 esperar(2)
-            r["llamadas"] += 1
             try:
-                contenido = pedir(b["sur"], b["norte"], b["oeste"], b["este"])
+                contenido = pedir(b["sur"], b["norte"], b["oeste"], b["este"], al_intentar=contar)
+            except TopeAlcanzado:
+                r["detenido_por"] = "tope"
+                break
             except ErrorAPI as err:
-                if err.status in DETIENEN:
+                if err.status in DETIENEN or err.status >= 500:
                     r["detenido_por"] = err.status
                     break
                 b["estado"], b["verificacion"] = "fallido", {"motivo": str(err)}
@@ -147,17 +160,17 @@ def descargar_pendientes(m, carpeta, pedir=pedir_dem, max_llamadas=MAX_LLAMADAS,
             try:
                 verificar_bloque(temporal, b)
             except RasterioIOError:
+                # Suele ser una página de error del servidor: detener para no gastar una llamada por bloque.
                 temporal.unlink()
-                b["estado"], b["verificacion"] = "fallido", {"motivo": "la respuesta no es un GeoTIFF"}
-                r["fallidos"].append(b["id"])
-                if guardar:
-                    guardar(m)
-                continue
+                r["detenido_por"] = "respuesta no GeoTIFF"
+                break
             os.replace(temporal, ruta)
         b["verificacion"] = verificar_bloque(ruta, b)
         b["estado"] = "descargado"
         b["fecha_descarga"] = b["fecha_descarga"] or date.today().isoformat()
         r["descargados"].append(b["id"])
+        if not b["verificacion"]["ok"]:
+            r["revisar"].append(b["id"])
         if guardar:
             guardar(m)
     return r
@@ -191,7 +204,9 @@ def main(argv=None):
         if b["id"] in r["descargados"] or b["id"] in r["fallidos"]:
             print(f"{b['id']} {b['sitio']}: {b['estado']} {b['verificacion']}")
     print(f"Llamadas: {r['llamadas']}. Descargados: {len(r['descargados'])}. Fallidos: {len(r['fallidos'])}.")
-    if r["detenido_por"] in DETIENEN:
+    if r["revisar"]:
+        print(f"REVISAR (forma o rango fuera de lo esperado): {', '.join(r['revisar'])}")
+    if isinstance(r["detenido_por"], int):
         print(f"El servidor rechazó la llamada (HTTP {r['detenido_por']}): vuelve a ejecutar mañana.")
     elif r["detenido_por"] == "tope":
         print(f"Tope de {MAX_LLAMADAS} llamadas por corrida: vuelve a ejecutar mañana.")

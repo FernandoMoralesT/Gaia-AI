@@ -16,10 +16,11 @@ class ErrorAPI(Exception):
         self.status = status
 
 
-def pedir_dem(south, north, west, east, demtype="SRTMGL1"):
+def pedir_dem(south, north, west, east, demtype="SRTMGL1", al_intentar=None):
     """Pide un recorte a la API y devuelve los bytes del GeoTIFF, sin escribir en disco.
 
     Ningún error que salga de aquí lleva la clave: los de red se relanzan sin la URL.
+    al_intentar(), si se da, se llama antes de cada petición HTTP (los reintentos también gastan cuota).
     """
     api_key = os.environ.get("OPENTOPO_API_KEY")
     url = "https://portal.opentopography.org/API/globaldem"
@@ -34,6 +35,8 @@ def pedir_dem(south, north, west, east, demtype="SRTMGL1"):
     }
     response = None
     for intento in range(1, 4):
+        if al_intentar:
+            al_intentar()
         try:
             response = requests.get(url, params=params, timeout=(10, 120))
             break
@@ -45,9 +48,10 @@ def pedir_dem(south, north, west, east, demtype="SRTMGL1"):
             print(f"Intento {intento} falló ({tipo.__name__}); reintentando")
             time.sleep(5 * intento)
     if response.status_code != 200:
-        texto = response.text[:200]
+        texto = response.text
         if api_key:
-            texto = texto.replace(api_key, "***")
+            texto = texto.replace(api_key, "***")  # antes de recortar, para no dejar un pedazo de la clave
+        texto = texto[:200]
         raise ErrorAPI(response.status_code, texto)
     return response.content
 
