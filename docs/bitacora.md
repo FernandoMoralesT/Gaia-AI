@@ -492,3 +492,29 @@ Tags de cierre: `sprint-10` y `v1.0`.
 - **Verificación:** `prueba_reloj_fondo` cubre la función de ida y vuelta, el autoload y el global. Además, capturas de la intro con el reloj en 3500 s y en 3700 s salen idénticas píxel por píxel.
 
 Tag: `v1.0.1`.
+
+
+## v1.1.0: limpieza y línea base
+
+### Limpieza de inconsistencias
+- **Documentación** (`ad753b6`): fechas de `docs/dataset.md` tomadas de git (14/10/2026 y 18/10/2026) y erratas; notas aclaratorias en esta bitácora (Sprints 4, 6 y 10) sin reescribir lo original; `generar_grafo.py` cuenta funciones y casos reales con `pytest --collect-only` (18 funciones, 23 casos).
+- **Código** (`74bbd26`): `pipeline.py` importaba `src.model.discriminador` y fallaba al correrlo con `python src/pipeline.py`; se quitó el `__main__` roto de `cargar_dem.py`; `sanos.py` se reescribió con csv y numpy (misma salida numérica que con pandas).
+- **Repositorio** (`94ae1e7` y `ead4e97`): `data/processed/` deja de versionarse (`git rm --cached`), se borran `tempCodeRunnerFile.py` y `comprobacion_reduccion.py`, `cargar_bach_dem` pasa a `cargar_batch_dem` y CLAUDE.md apunta a `docs/ROADMAP_v2.md`.
+
+### Línea base del entrenamiento
+- **Script:** `scrips/medir_linea_base.py`. No llama a `entrenar()`, porque esa función sobrescribe `salidas/historial.csv` y guarda checkpoints en cada época; usa `paso_entrenamiento()` lote a lote con los mismos hiperparámetros y semilla. Mide el tiempo por época con `perf_counter`, y el CPU y la RAM con psutil en un hilo cada 0.5 s. El promedio de CPU se pondera por la duración de cada muestra: lo señaló la revisión final, porque la última muestra puede durar milisegundos.
+- **Resultado** (`docs/linea_base.md`, commit `940b628`, laptop enchufada en modo Performance): **mediana de 4.93 s por época** (15 épocas medidas, mínimo 4.70 s), unos 7.9 núcleos equivalentes de 16 lógicos y un pico de 0.75 GiB de RAM. Coincide con los "~5 s por época" del Sprint 7.
+- **Anomalía:** en la repetición 2 una época tardó 13.25 s porque otro programa ocupó CPU. Se conservó la corrida y se toma la mediana como referencia, en lugar de repetir hasta obtener un número limpio.
+- **Lectura:** torch usa 8 hilos (uno por núcleo físico) y deja la mitad de los núcleos lógicos sin usar. Es el punto de partida de la v1.5.0.
+- Se verificó con hashes que `salidas/historial.csv`, `salidas/checkpoints/` y `modelos/` no cambiaron.
+
+### Tests
+- `python -m pytest test/ -q`: 51 pruebas pasan (9 nuevas de la línea base).
+- Godot headless: 10 scripts, todos OK.
+
+### Trabajo futuro
+- `salidas/historial.csv` (local): la fila de la época 500 tiene `0.22 58` en D; falta el valor real.
+- torch instalado es la build `+cu126` (CUDA) en una máquina sin CUDA; revisar en la v1.5.0.
+- Pendientes menores del script de línea base: el texto del informe repite lr, betas y semilla a mano; los hiperparámetros están copiados de `pipeline.py` porque allá viven dentro de `__main__`.
+
+Tag de cierre: `v1.1.0` (pendiente de crear).

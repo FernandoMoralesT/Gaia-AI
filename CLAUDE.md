@@ -36,7 +36,7 @@ Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desd
 - Pruebas Godot: `godot --headless --path godot/gaia-visor -s res://pruebas/prueba_X.gd`.
 
 ## Stack
-- Python 3.13 + PyTorch, CPU (GPU AMD Radeon, sin CUDA). numpy, rasterio, python-dotenv, scipy, pytest.
+- Python 3.13 + PyTorch, CPU (GPU AMD Radeon, sin CUDA). numpy, rasterio, python-dotenv, scipy, psutil, pytest.
 - Datos: SRTM GL1 (30 m) vía OpenTopography; clave en `.env` (fuera de git). Límite: 50 llamadas por 24 h; la descarga es reanudable.
 - Visor: Godot 4.5.1, renderer Compatibility.
 
@@ -65,6 +65,7 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 - Las alturas no son metros. Escala vertical en Godot: `escala_altura` (por clase) × `multiplicador_altura` (3). Luz a 25°, cámara a 30°.
 
 ## Hallazgos
+- Línea base v1.1.0 (`docs/linea_base.md`, `scrips/medir_linea_base.py`): mediana de 4.93 s por época, ~7.9 núcleos de 16 lógicos (torch usa 8 hilos) y 0.75 GiB de RAM. Es la referencia de la v1.5.0.
 - El discriminador domina desde la época ~189. Por pérdidas la zona sana es la 10–115; la 150 se eligió por criterio visual (100/150/200). Está en la bitácora.
 - Clases débiles: lomas, montaña y meseta se parecen. Claras: volcán, valle y llanura.
 - Cráter (9 volcanes reales a 120×120): solo 3 dan profundidad positiva clara (Nevado de Toluca, El Pinacate y Colima), 1 marginal (Ceboruco) y 5 sin cráter. El modelo genera un cono sin hueco; no es culpa del suavizado (con sigma 0 ya daba +0.025): es resolución y datos.
@@ -85,7 +86,6 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 
 ## Pendientes
 - `salidas/historial.csv` (local): la fila de la época 500 tiene `0.22 58` en D y hace fallar `scrips/sanos.py`; falta el valor real.
-- v1.1.0, línea base: segundos por época, % de CPU y RAM, con los datos de la máquina, en `docs/linea_base.md`.
 - Visor (versión Z): F11 desde ventana maximizada vuelve a ventana; README y `export_presets` nombran `Gaia-AI.exe` y el vigente es `Gaia-AI-v1.0.exe`.
 - Tiles de volcán donde el cono no domina el centro: Paricutín y Colima (v1.2.0).
 - PDF del proyecto (no necesario para la expo).

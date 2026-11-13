@@ -29,12 +29,17 @@ No editar a mano las secciones 1 y 3: volver a ejecutar el script.
 - `scrips/exportar_generador.py` → `src/model/generador.py`
 - `scrips/generar_respaldos.py` → `src/dataset/dem_dataset.py`
 - `scrips/generar_respaldos.py` → `src/inferencia.py`
+- `scrips/medir_linea_base.py` → `src/model/discriminador.py`
+- `scrips/medir_linea_base.py` → `src/model/entrenar.py`
+- `scrips/medir_linea_base.py` → `src/model/generador.py`
+- `scrips/medir_linea_base.py` → `src/pipeline.py`
 - `scrips/probar_checkpoint.py` → `src/dataset/dem_dataset.py`
 - `scrips/probar_checkpoint.py` → `src/model/discriminador.py`
 - `scrips/probar_checkpoint.py` → `src/model/entrenar.py`
 - `scrips/probar_checkpoint.py` → `src/model/generador.py`
 - `test/test_inferencia.py` → `src/dataset/dem_dataset.py`
 - `test/test_inferencia.py` → `src/inferencia.py`
+- `test/test_medir_linea_base.py` → `src/dataset/dem_dataset.py`
 - `test/test_servidor.py` → `src/servidor.py`
 
 Sin dependencias internas: `scrips/Practicatensores.py`, `scrips/comprobacion.py`, `scrips/coordenadas_raw_v1.py`, `scrips/generar_grafo.py`, `scrips/resumen_dataset.py`, `scrips/sanos.py`, `scrips/validar_nodata.py`, `scrips/ver_clase.py`, `scrips/ver_dudosos.py`, `scrips/ver_tile.py`, `src/__init__.py`, `src/dataset/__init__.py`, `src/model/__init__.py`, `src/noise/Comprobacion.py`, `src/noise/__init__.py`, `src/noise/noise2D.py`, `src/noise/normalizacionDeRangos.py`, `test/test_comparar_simplex.py`, `test/test_coordenadas_raw_v1.py`.
