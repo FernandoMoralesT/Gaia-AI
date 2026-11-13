@@ -4,6 +4,16 @@ IA local que genera terreno procedural (mapas de altura) con una cGAN entrenada 
 
 Repo: github.com/FernandoMoralesT/Gaia-AI · La v1.0 se hizo en 10 sprints. Desde la v1.0.1 se trabaja por versiones X.Y.Z hacia la v2.0 (`docs/ROADMAP_v2.md`).
 
+## Skills obligatorias (regla de Fernando)
+En **cada** tarea en este repo, antes de leer archivos o responder, cargar con la herramienta Skill:
+- Siempre: `andrej-karpathy-skills:karpathy-guidelines` (supuestos explícitos, lo mínimo, cambios quirúrgicos, criterio verificable).
+- Además, la de superpowers que aplique:
+  - Plan de varios pasos: `superpowers:writing-plans`.
+  - Implementar un plan: `superpowers:executing-plans` junto con `superpowers:test-driven-development`.
+  - Algo falla o se comporta raro: `superpowers:systematic-debugging`.
+  - Antes de decir que algo está hecho, hacer commit o push: `superpowers:verification-before-completion`.
+- Si ninguna de superpowers aplica, al menos `verification-before-completion`. Aplica aunque la tarea parezca simple.
+
 ## Navegación (leer primero)
 - Para saber qué depende de qué, lee `docs/grafo.md` (lo genera `scrips/generar_grafo.py`).
 - Ubica con grep/glob antes de abrir archivos completos.
@@ -103,4 +113,3 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 - Modo mentoría (editable): explicar el porqué y guiar con preguntas antes de dar el código completo. Si pide la solución directa, dársela.
 - Antes de cambios significativos, explicar qué y cómo y esperar su visto bueno.
 - Es estudiante: evitar jerga innecesaria y explicar los términos técnicos la primera vez.
-- En cada tarea cargar las skills `andrej-karpathy-skills:karpathy-guidelines` y la de superpowers que aplique (writing-plans, executing-plans con test-driven-development, verification-before-completion).
