@@ -96,7 +96,6 @@ Mapa completo en `docs/grafo.md`. Los más usados:
 - v1.2.0, notas de la revisión de bloques: Pinacate fuera de B18; dunas dudosas en B19 (Samalayuca) y B30 (White Sands, 10–15 m de relieve); mar en B39 (Teide); mínimos bajo el nivel del mar en B18, B25, B29 y B39 (B44, Valle de la Muerte, es depresión real).
 - v1.2.0, descarga diaria: Fernando planea una tarea cada 24 h; necesita coordenadas nuevas en `data/bloques.json` (hoy 0 pendientes). El 12/11/2026 se usaron 48 de 50 llamadas.
 - v1.2.0, 7 pendientes menores de la revisión del descargador: al final del plan de bloques.
-- Push: los commits desde `c05fbe7` (coordenadas verificadas y este estado) quedaron sin subir a `Rama1.2.0`; preguntar a Fernando.
 - PDF del proyecto (no necesario para la expo).
 
 ## Cómo trabajar con Fernando
