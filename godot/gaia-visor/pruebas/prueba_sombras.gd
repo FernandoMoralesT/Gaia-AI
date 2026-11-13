@@ -11,7 +11,8 @@ func _initialize() -> void:
 
 		Afirmar.afirmar(sol.shadow_enabled, "el sol proyecta sombra")
 		Afirmar.afirmar(not relleno.shadow_enabled, "el relleno no proyecta sombra")
-		# Distancia máxima de cámara (260) + diagonal del bloque (~170).
+		# Distancia máxima de cámara (260) + media diagonal del bloque (~84) = ~344;
+		# ~367 con la altura máxima (66). 400 deja margen.
 		Afirmar.afirmar(sol.directional_shadow_max_distance >= 400.0,
 				"la sombra cubre la camara a distancia maxima")
 

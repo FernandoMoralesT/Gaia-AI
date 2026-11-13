@@ -155,6 +155,10 @@ recortado, y se verificó su funcionamiento real con `DataLoader`
 `[1, 100, 100]` — confirma el pipeline completo: DEM real → cargado →
 recortado → Dataset → batches iterables.
 
+> Nota (v1.1.0): el archivo nunca se llamó `preprocesamiento.py`; el real es
+> `src/dataset/procesamiento.py` (creado en `3bdd10d`). Aplica también a la
+> mención de `normalizar_dem()` en el Sprint 5.
+
 ### Pendiente para el Sprint 5
 
 - El recorte fijo a 100×100 es una solución temporal, no augmentation real
@@ -262,6 +266,8 @@ Se definieron 6 clases discretas: llanura, lomas, valle, montaña, meseta y volc
 ### Etiquetas
 
 Cambios sobre la propuesta inicial: `dem_23.57_23.68_-106.02_-105.92` de lomas a montaña (rango de 1121 m), `dem_23.18_23.28_-106.44_-106.34` de llanura a lomas (264 m) y descarte del tile de Table Mountain (incluye mar y ciudad). Conteo final: llanura 10, lomas 11, valle 8, montaña 14, meseta 8, volcán 9. Quedan 9 etiquetas dudosas por confirmar visualmente.
+
+> Nota (v1.1.0): el conteo era correcto en su momento. Después, el 18/10/2026 (`7e85033`), la revisión visual pasó `dem_24.77_24.88_-107.42_-107.33` de llanura a lomas (ver `docs/dataset.md`). Conteo vigente: llanura 9, lomas 12, valle 8, montaña 14, meseta 8, volcán 9.
 
 ### Normalización y ventana de entrada
 
@@ -450,6 +456,7 @@ Objetivo: cerrar los pendientes del visor y de la documentación, y publicar la 
 
 ### Visor
 - **Sombras del sol** (`shadow_enabled`, modo ortogonal y distancia máxima de 400): 400 es la distancia máxima de la cámara (260) más la diagonal del bloque (~170). Con opacidad 1.0, las laderas que miran al sol pero quedan bajo la sombra de otro pico salían negro puro, porque la luz de relleno ilumina el lado contrario; se dejó `shadow_opacity = 0.7`. El relleno sigue sin sombra, para que cada pico no proyecte dos. El `shadow_bias` por defecto no dejó rayas (acné) a distancias de 110, 170 y 260.
+  - Nota (v1.1.0): la cuenta 260 + 170 está mal (da 430, no 400). La cámara gira alrededor del centro del bloque, así que lo que se suma es la media diagonal (119 × √2 / 2 ≈ 84): 260 + 84 ≈ 344, y unos 367 contando la altura máxima (22 × 3 = 66). El valor de 400 sí alcanza, con margen.
 - **Granulado con sigma = 2:** se descarta. Capturas en `docs/img/granulado/` (volcán y montaña, semilla 42): con sigma 0 hay granulado fuerte, con sigma 1 una rugosidad fina, y con sigma 2 laderas lisas sin picos aislados. Se mantiene sigma = 2.
 - **Girar con el mouse:** arrastrar con clic izquierdo gira (0.3 grados por píxel). Va en `_unhandled_input` para que arrastrar sobre los paneles no mueva la cámara. Usa `screen_relative` (píxeles reales) y no `relative`, que viene escalado por `canvas_items` y haría que el giro cambiara de velocidad en pantalla completa.
 - **F11 y Salir:** un autoload nuevo, `Pantalla`, alterna la pantalla completa en todas las escenas. El botón Salir solo llama a `get_tree().quit()`, porque el autoload `ServidorLocal` ya apaga `pythonw` en su `_exit_tree`; se comprobó en el Administrador de tareas.

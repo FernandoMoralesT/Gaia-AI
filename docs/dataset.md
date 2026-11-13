@@ -27,7 +27,7 @@ Límites de las 3 descargas manuales de `raw_v1`, leídos del propio GeoTIFF con
 
 NASA Shuttle Radar Topography Mission (SRTM). (2013). *Shuttle Radar Topography Mission (SRTM) Global* [Conjunto de datos]. Distribuido por OpenTopography. https://doi.org/10.5069/G9445JDF
 
-Licencia: los términos de uso de OpenTopography (https://opentopography.org/usageterms, consultados el [10/14/2026]) permiten el uso libre de los datos /btenidos por su API. La ficha del dataset muestra el campo de licencia/como "Not Provided", pero los términos generales del sitio son los que se aplican a la descarga.
+Licencia: los términos de uso de OpenTopography (https://opentopography.org/usageterms, consultados el 14/10/2026) permiten el uso libre de los datos obtenidos por su API. La ficha del dataset muestra el campo de licencia como "Not Provided", pero los términos generales del sitio son los que se aplican a la descarga.
 
 Condiciones que se mantienen:
 - Citar el dataset y OpenTopography como fuente.
@@ -57,7 +57,7 @@ Cada tile se normaliza de −1 a 1 por separado, así que la red no ve metros: l
 
 - La clase inicial se asignó por el nombre del lugar y por el rango de elevación.
 - Cambios aplicados: `dem_23.57_23.68_-106.02_-105.92` de lomas a montaña (rango de 1121 m), `dem_23.18_23.28_-106.44_-106.34` de llanura a lomas (264 m), `dem_24.77_24.88_-107.42_-107.33` de llanura a lomas (274 m, con drenaje y crestas visibles; mismo criterio que el anterior) y descarte del tile de Table Mountain (incluye mar y ciudad).
-- Revisión visual de las 9 etiquetas dudosas ([fecha], `scrips/ver_dudosos.py` y `scrips/ver_clase.py`): 1 cambió y 8 se conservaron.
+- Revisión visual de las 9 etiquetas dudosas (18/10/2026, `scrips/ver_dudosos.py` y `scrips/ver_clase.py`): 1 cambió y 8 se conservaron.
   - `dem_25.77_25.88_-108.97_-108.88` (llanura): casi plana; el rango lo inflan tres lomas pequeñas y el ruido de SRTM.
   - `dem_24.81_24.91_-99.62_-99.52` (lomas): ladera inclinada con una cresta rocosa; confianza baja.
   - `dem_38.61_38.71_-96.54_-96.44` (lomas): colinas con una superficie plana de borde recto, parece un embalse.

@@ -3,6 +3,8 @@
 Uso (desde la raíz): python scrips/generar_grafo.py
 """
 import ast
+import subprocess
+import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -96,7 +98,11 @@ def exportados(ruta):
     arbol = ast.parse(ruta.read_text(encoding="utf-8"))
     if ruta.parts[-2] == "test":
         n = sum(isinstance(x, ast.FunctionDef) and x.name.startswith("test_") for x in arbol.body)
-        return [f"{n} tests"]
+        # Los casos reales los cuenta pytest (parametrize repite una función por cada valor).
+        salida = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q", rel(ruta)],
+                                cwd=RAIZ, capture_output=True, text=True).stdout
+        casos = sum("::" in linea for linea in salida.splitlines())
+        return [f"{n} funciones, {casos} casos"]
     if ruta.parts[-2] == "scrips":
         return []
     nombres = []
@@ -143,7 +149,7 @@ def main():
         nombres = exportados(ruta)
         if not nombres:
             lineas.append(f"- `{archivo}`: {descripcion} Script ejecutable.")
-        elif nombres[0].endswith(" tests"):
+        elif nombres[0].endswith(" casos"):
             lineas.append(f"- `{archivo}`: {descripcion} Contiene {nombres[0]}.")
         else:
             lineas.append(f"- `{archivo}`: {descripcion} Exporta: " + ", ".join(f"`{n}`" for n in nombres) + ".")

@@ -70,7 +70,7 @@ data/raw/*.tif + data/etiquetas.json
 - `src/noise/Unificacion_Y_Exportacion.py`: Generador clásico de ruido y exportación (Sprints 1-3). Exporta: `Noise2D`, `fractal_noise_2d`, `remap`, `clasificar_biomas`, `exportar_para_godot`, `generar_y_exportar_terreno`.
 - `scrips/exportar_generador.py`: Extrae el generador de epoca_150.pt a modelos/generador_epoca150.pt. Script ejecutable.
 - `scrips/generar_grafo.py`: Este script: regenera docs/grafo.md. Script ejecutable.
-- `test/test_inferencia.py`: Tests de pytest de src/inferencia.py. Contiene 18 tests.
+- `test/test_inferencia.py`: Tests de pytest de src/inferencia.py. Contiene 18 funciones, 23 casos.
 - `modelos/generador_epoca150.pt`: `state_dict` del generador de la época 150 (modelo del demo).
 - `data/etiquetas.json`: fuente de verdad de la clase de cada tile.
 - `godot/gaia-visor/terreno.gd`: lee el `.raw` y arma la malla; `terreno.gdshader` colorea por altura.
