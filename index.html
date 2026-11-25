@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Gaia-AI · Terrenos que nunca existieron, dibujados por una IA</title>
+  <meta name="description" content="Gaia-AI es una IA local que genera terreno por tipo (llanura, lomas, valle, montaña, meseta y volcán) y lo muestra en 3D en un visor hecho en Godot.">
+  <meta name="theme-color" content="#2C5F6F">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon.png" type="image/png" sizes="32x32">
+
+  <!-- Open Graph: vista previa del enlace al compartirlo (WhatsApp, Facebook, etc.) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Gaia-AI · Terrenos que nunca existieron, dibujados por una IA">
+  <meta property="og:description" content="Una IA local que genera terreno por tipo y lo muestra en 3D.">
+  <meta property="og:url" content="https://fernandomoralest.github.io/Gaia-AI/">
+  <!-- og:image necesita ruta absoluta y usa .jpg porque algunas apps no muestran .webp -->
+  <meta property="og:image" content="https://fernandomoralest.github.io/Gaia-AI/img/portada.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Captura del visor 3D de Gaia-AI mostrando un terreno generado">
+
+  <!-- Fuentes: Paytone One (títulos) y Barlow Semi Condensed (texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700&family=Paytone+One&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <a class="salto" href="#contenido">Saltar al contenido</a>
+
+  <!-- ENCABEZADO Y NAVEGACIÓN -->
+  <header class="encabezado">
+    <div class="contenedor encabezado__fila">
+      <a class="logo" href="#portada">Gaia-AI</a>
+      <nav aria-label="Principal">
+        <ul class="menu">
+          <li><a href="#problema">El problema</a></li>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#galeria">Galería</a></li>
+          <li><a href="#descarga">Descarga</a></li>
+          <li><a href="#futuro">Futuro</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+
+    <!-- 1. PORTADA -->
+    <section class="portada" id="portada" aria-labelledby="titulo-portada">
+      <div class="contenedor portada__rejilla">
+        <div class="portada__texto">
+          <img class="portada__logo" src="img/logo.svg" width="747" height="326" alt="">
+          <h1 id="titulo-portada" class="portada__titulo">Gaia-AI</h1>
+          <p class="portada__lema">Terrenos que nunca existieron, dibujados por una IA</p>
+          <div class="botones">
+            <a class="boton boton--ocre" href="#como-funciona">Cómo funciona</a>
+            <a class="boton boton--borde" href="https://github.com/FernandoMoralesT/Gaia-AI">Ver en GitHub</a>
+          </div>
+        </div>
+        <figure class="portada__imagen">
+          <div class="marco" data-archivo="img/portada.webp" style="--proporcion: 1200 / 630">
+            <img src="img/portada.webp" width="1200" height="630" alt="Captura del visor 3D de Gaia-AI: un terreno generado por la IA visto desde arriba">
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 2. EL PROBLEMA -->
+    <section class="seccion" id="problema" aria-labelledby="titulo-problema">
+      <div class="contenedor">
+        <h2 class="barra-titulo" id="titulo-problema">El problema</h2>
+        <p class="texto-grande">Los juegos necesitan terreno nuevo. El ruido clásico da variedad, pero no permite pedir una forma. Gaia-AI genera relieve por tipo: llanura, lomas, valle, montaña, meseta y volcán.</p>
+        <p class="origen">Gaia-AI nació al querer crear los mapas de un videojuego propio.</p>
+      </div>
+    </section>
+
+    <!-- 3. CÓMO FUNCIONA -->
+    <section class="seccion" id="como-funciona" aria-labelledby="titulo-como">
+      <div class="contenedor">
+        <h2 class="barra-titulo" id="titulo-como">Cómo funciona</h2>
+
+        <ol class="pasos">
+          <li class="paso paso--cafe">
+            <h3 class="paso__cabeza"><span class="paso__numero">1</span> Datos</h3>
+            <p class="paso__cuerpo">Reunimos 60 zonas reales del mundo, de unos 11 km cada una, con datos de elevación de la NASA (SRTM, una misión que midió la altura de la superficie terrestre). Cada zona se clasificó en uno de 6 tipos de terreno.</p>
+          </li>
+          <li class="paso paso--cafe">
+            <h3 class="paso__cabeza"><span class="paso__numero">2</span> Procesado</h3>
+            <p class="paso__cuerpo">Cada zona se reduce a 120 × 120 puntos y se multiplica por 6 con volteos y rotaciones, para que la IA tenga más ejemplos de los que realmente existen.</p>
+          </li>
+          <li class="paso paso--morado">
+            <h3 class="paso__cabeza"><span class="paso__numero">3</span> Modelo</h3>
+            <p class="paso__cuerpo">Usamos una GAN condicional: dos redes que compiten. El generador crea mapas y el discriminador decide si parecen reales. Las dos reciben el tipo de terreno, así se puede pedir una forma concreta.</p>
+          </li>
+          <li class="paso paso--morado">
+            <h3 class="paso__cabeza"><span class="paso__numero">4</span> Entrenamiento</h3>
+            <p class="paso__cuerpo">500 épocas (vueltas completas por los datos) en CPU, sin tarjeta gráfica. Se eligió el modelo de la época 150 por criterio visual, comparando los mapas a simple vista.</p>
+          </li>
+          <li class="paso paso--verde">
+            <h3 class="paso__cabeza"><span class="paso__numero">5</span> Visor</h3>
+            <p class="paso__cuerpo">El terreno se genera al momento y se explora en 3D en un visor hecho en Godot, un motor de videojuegos.</p>
+          </li>
+        </ol>
+
+        <!-- Franja de cifras -->
+        <ul class="cifras" aria-label="Cifras del proyecto">
+          <li class="cifra"><span class="cifra__numero">60</span> <span class="cifra__texto">tiles SRTM</span></li>
+          <li class="cifra"><span class="cifra__numero">6</span> <span class="cifra__texto">clases de terreno</span></li>
+          <li class="cifra"><span class="cifra__numero">500</span> <span class="cifra__texto">épocas en CPU</span></li>
+          <li class="cifra"><span class="cifra__numero">150</span> <span class="cifra__texto">época elegida</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4. GALERÍA -->
+    <section class="seccion" id="galeria" aria-labelledby="titulo-galeria">
+      <div class="contenedor">
+        <h2 class="barra-titulo" id="titulo-galeria">Galería</h2>
+
+        <ul class="galeria">
+          <li class="tarjeta">
+            <div class="marco" data-archivo="img/llanura.webp">
+              <img src="img/llanura.webp" width="800" height="600" alt="Terreno generado de tipo llanura: superficie casi plana" loading="lazy">
+            </div>
+            <div class="tarjeta__texto">
+              <h3 class="tarjeta__nombre"><span class="pildora">Llanura</span></h3>
+              <p>Superficie casi plana, sin crestas ni drenaje marcado.</p>
+            </div>
+          </li>
+          <li class="tarjeta">
+            <div class="marco" data-archivo="img/lomas.webp">
+              <img src="img/lomas.webp" width="800" height="600" alt="Terreno generado de tipo lomas: ondulaciones suaves" loading="lazy">
+            </div>
+            <div class="tarjeta__texto">
+              <h3 class="tarjeta__nombre"><span class="pildora">Lomas</span></h3>
+              <p>Ondulaciones suaves y repartidas, con drenaje visible.</p>
+            </div>
+          </li>
+          <li class="tarjeta">
+            <div class="marco" data-archivo="img/valle.webp">
+              <img src="img/valle.webp" width="800" height="600" alt="Terreno generado de tipo valle: fondo bajo con laderas altas a los lados" loading="lazy">
+            </div>
+            <div class="tarjeta__texto">
+              <h3 class="tarjeta__nombre"><span class="pildora">Valle</span></h3>
+              <p>Fondo bajo con laderas altas a los lados.</p>
+            </div>
+          </li>
+          <li class="tarjeta">
+            <div class="marco" data-archivo="img/montana.webp">
+              <img src="img/montana.webp" width="800" height="600" alt="Terreno generado de tipo montaña: crestas y pendientes pronunciadas" loading="lazy">
+            </div>
+            <div class="tarjeta__texto">
+              <h3 class="tarjeta__nombre"><span class="pildora">Montaña</span></h3>
+              <p>Crestas y pendientes pronunciadas, relieve alto y accidentado.</p>
+            </div>
+          </li>
+          <li class="tarjeta">
+            <div class="marco" data-archivo="img/meseta.webp">
+              <img src="img/meseta.webp" width="800" height="600" alt="Terreno generado de tipo meseta: superficie alta y plana con bordes abruptos" loading="lazy">
+            </div>
+            <div class="tarjeta__texto">
+              <h3 class="tarjeta__nombre"><span class="pildora">Meseta</span></h3>
+              <p>Superficie alta y plana con bordes abruptos.</p>
+            </div>
+          </li>
+          <li class="tarjeta">
+            <div class="marco" data-archivo="img/volcan.webp">
+              <img src="img/volcan.webp" width="800" height="600" alt="Terreno generado de tipo volcán: un cono" loading="lazy">
+            </div>
+            <div class="tarjeta__texto">
+              <h3 class="tarjeta__nombre"><span class="pildora">Volcán</span></h3>
+              <p>Un cono. Por ahora sin cráter; mira la comparación en Cráteres.</p>
+            </div>
+          </li>
+        </ul>
+        <p class="pie-galeria">Capturas del visor con el modelo de la época 150, semilla 42 y suavizado 2.</p>
+
+        <!-- Cráteres: volcanes reales contra generado -->
+        <h3 class="subtitulo" id="crateres">Cráteres</h3>
+        <p>Tres volcanes reales del dataset y uno generado por la IA.</p>
+
+        <ul class="crateres">
+          <li class="crater">
+            <div class="marco" data-archivo="img/crater-toluca.webp" style="--proporcion: 1">
+              <img src="img/crater-toluca.webp" width="600" height="600" alt="Relieve real del Nevado de Toluca, con su cráter" loading="lazy">
+            </div>
+            <p class="crater__pie"><span class="pildora">Real</span> Nevado de Toluca</p>
+          </li>
+          <li class="crater">
+            <div class="marco" data-archivo="img/crater-pinacate.webp" style="--proporcion: 1">
+              <img src="img/crater-pinacate.webp" width="600" height="600" alt="Relieve real de El Pinacate, con sus cráteres" loading="lazy">
+            </div>
+            <p class="crater__pie"><span class="pildora">Real</span> El Pinacate</p>
+          </li>
+          <li class="crater">
+            <div class="marco" data-archivo="img/crater-colima.webp" style="--proporcion: 1">
+              <img src="img/crater-colima.webp" width="600" height="600" alt="Relieve real del volcán de Colima, con su cráter" loading="lazy">
+            </div>
+            <p class="crater__pie"><span class="pildora">Real</span> Colima</p>
+          </li>
+          <li class="crater">
+            <div class="marco" data-archivo="img/crater-generado.webp" style="--proporcion: 1">
+              <img src="img/crater-generado.webp" width="600" height="600" alt="Volcán generado por la IA: un cono sin cráter" loading="lazy">
+            </div>
+            <p class="crater__pie"><span class="pildora pildora--morada">Generado</span> Gaia-AI</p>
+          </li>
+        </ul>
+
+        <p class="nota"><strong>Límite actual:</strong> los volcanes generados salen como cono sin cráter; solo 3 de 9 volcanes reales del dataset lo tienen.</p>
+
+        <!-- Resultados: gráfica de la lona -->
+        <h3 class="subtitulo" id="resultados">Resultados</h3>
+        <figure class="grafica">
+          <img src="img/grafica-metricas.svg" width="772" height="354" alt="Dos gráficas de barras por clase (llanura, lomas, valle, montaña, meseta y volcán): rugosidad media y variedad entre semillas, con el terreno real, la cGAN con suavizado 2 y la línea del ruido Simplex" loading="lazy">
+          <figcaption>Rugosidad media por clase: terreno real, cGAN con suavizado σ = 2 y línea del ruido Simplex (0.0402). La llanura real sube porque cada tile se normaliza por separado.</figcaption>
+        </figure>
+        <p>En variedad no hay ganador: Simplex y cGAN caen en el rango real. La cGAN controla la forma; el Simplex no recibe clase.</p>
+
+        <!-- Interfaz: capturas del visor -->
+        <h3 class="subtitulo" id="interfaz">Interfaz</h3>
+        <p>Se elige forma, semilla y suavizado, y el terreno se genera al momento. Cámara con WASD o mouse; zoom con la rueda.</p>
+        <ul class="interfaz">
+          <li class="pantalla">
+            <div class="marco" data-archivo="img/interfaz-menu.webp" style="--proporcion: 3 / 4">
+              <img src="img/interfaz-menu.webp" width="600" height="800" alt="Menú del visor de Gaia-AI con los botones Explorar terrenos, Cómo funciona Gaia, Acerca de nosotros y Salir" loading="lazy">
+            </div>
+            <p class="pantalla__pie">Menú</p>
+          </li>
+          <li class="pantalla">
+            <div class="marco" data-archivo="img/interfaz-panel.webp" style="--proporcion: 3 / 4">
+              <img src="img/interfaz-panel.webp" width="600" height="800" alt="Visor con un volcán generado, un panel de datos arriba a la derecha y abajo los controles de terreno, semilla y suavizado" loading="lazy">
+            </div>
+            <p class="pantalla__pie">Panel</p>
+          </li>
+          <li class="pantalla">
+            <div class="marco" data-archivo="img/interfaz-volcan.webp" style="--proporcion: 3 / 4">
+              <img src="img/interfaz-volcan.webp" width="600" height="800" alt="Volcán generado por Gaia-AI con la semilla 42, visto en el visor sin la interfaz" loading="lazy">
+            </div>
+            <p class="pantalla__pie">Volcán</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. DESCARGA Y REPOSITORIO -->
+    <section class="seccion" id="descarga" aria-labelledby="titulo-descarga">
+      <div class="contenedor">
+        <h2 class="barra-titulo" id="titulo-descarga">Descarga y repositorio</h2>
+
+        <ul class="descargas">
+          <li class="tarjeta tarjeta--descarga">
+            <h3 class="tarjeta__nombre">Repositorio</h3>
+            <p>Código, modelo y documentación, con licencia MIT.</p>
+            <a class="boton boton--petroleo" href="https://github.com/FernandoMoralesT/Gaia-AI">Ver en GitHub</a>
+          </li>
+          <li class="tarjeta tarjeta--descarga tarjeta--pronto">
+            <h3 class="tarjeta__nombre">Instalador para Windows</h3>
+            <p><span class="pildora">Próximamente</span></p>
+          </li>
+          <li class="tarjeta tarjeta--descarga tarjeta--pronto">
+            <h3 class="tarjeta__nombre">Beta de Android</h3>
+            <p><span class="pildora">Próximamente</span></p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6. TRABAJO FUTURO -->
+    <section class="seccion" id="futuro" aria-labelledby="titulo-futuro">
+      <div class="contenedor">
+        <h2 class="barra-titulo" id="titulo-futuro">Trabajo futuro</h2>
+        <p class="texto-grande">Versión 2.0 con más clases (cañón y duna), tamaños de 64 a 2048 px y exportación a otros formatos.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 7. PIE DE PÁGINA -->
+  <footer class="pie">
+    <div class="contenedor pie__rejilla">
+      <div>
+        <h2 class="pie__titulo">Autores de la v1</h2>
+        <ul class="pie__lista">
+          <li>Sebastián Aguillón Peinado</li>
+          <li>Cristoff Salvador García Mendoza</li>
+          <li>Luis Fernando Morales Toledo</li>
+        </ul>
+        <p>Asesor: Dr. Héctor Joaquin Escobar Cuevas</p>
+        <p>FIMAZ – Universidad Autónoma de Sinaloa</p>
+      </div>
+
+      <div>
+        <h2 class="pie__titulo">Licencia, datos y herramientas</h2>
+        <p>Licencia <a href="https://github.com/FernandoMoralesT/Gaia-AI/blob/main/LICENSE">MIT</a>.</p>
+        <p>Datos: NASA SRTM (2013), distribuido por OpenTopography, <a href="https://doi.org/10.5069/G9445JDF">https://doi.org/10.5069/G9445JDF</a>. Misión descrita en Farr et al. (2007).</p>
+        <p>Modelo: PyTorch. Visor: Godot 4.5.1.</p>
+      </div>
+
+      <div>
+        <h2 class="pie__titulo">Referencias</h2>
+        <p>Goodfellow et al. (2014); Mirza y Osindero (2014); Beckham y Pal (2017); Guérin et al. (2017).</p>
+        <p>Lista completa en el <a href="https://github.com/FernandoMoralesT/Gaia-AI">repositorio</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

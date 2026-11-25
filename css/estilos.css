@@ -1,0 +1,603 @@
+/* ==========================================================
+   Gaia-AI · hoja de estilos
+   Mobile-first: lo base es para celular; los @media (min-width)
+   al final de cada bloque amplían el diseño en pantallas grandes.
+   ========================================================== */
+
+/* ---------- 1. VARIABLES (colores y fuentes) ---------- */
+:root {
+  --petroleo: #2C5F6F;
+  --petroleo-claro: #346574;
+  --crema: #F4EDE1;
+  --azul-noche: #0B0D2D;
+  --cafe: #6B4A2B;
+  --ocre: #B5834A;
+  --morado: #7B5BB5;
+  --morado-oscuro: #3E2A63;
+  --verde: #4C8C3A;
+  --ambar: #E9B44C;
+  --blanco: #FFFFFF;
+
+  --fuente-titulo: "Paytone One", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --fuente-texto: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+
+  --radio: 1rem;
+  --ancho-max: 66rem;
+}
+
+/* ---------- 2. BASE ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
+
+body {
+  margin: 0;
+  background: var(--crema);
+  color: var(--azul-noche);
+  font-family: var(--fuente-texto);
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+p {
+  margin: 0 0 1rem;
+  max-width: 62ch;
+}
+
+a {
+  color: var(--petroleo);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Foco visible para quien navega con teclado */
+:focus-visible {
+  outline: 3px solid var(--ambar);
+  outline-offset: 3px;
+}
+
+.contenedor {
+  width: min(100% - 2rem, var(--ancho-max));
+  margin-inline: auto;
+}
+
+/* Enlace para saltar el menú (solo se ve al enfocarlo con teclado) */
+.salto {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  padding: 0.5rem 1rem;
+  background: var(--ambar);
+  color: var(--azul-noche);
+  font-weight: 700;
+  border-radius: 0.5rem;
+  z-index: 10;
+}
+.salto:focus {
+  top: 1rem;
+}
+
+/* ---------- 3. ENCABEZADO Y MENÚ ---------- */
+.encabezado {
+  background: var(--petroleo);
+  color: var(--blanco);
+}
+
+.encabezado__fila {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-block: 0.75rem;
+}
+
+.logo {
+  font-family: var(--fuente-titulo);
+  font-size: 1.5rem;
+  color: var(--blanco);
+  text-decoration: none;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+}
+
+.menu a {
+  color: var(--blanco);
+  font-weight: 600;
+  text-decoration: none;
+  padding-block: 0.25rem;
+  border-bottom: 2px solid transparent;
+}
+.menu a:hover {
+  border-bottom-color: var(--ambar);
+}
+
+@media (min-width: 48rem) {
+  .encabezado__fila {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* ---------- 4. PORTADA ---------- */
+.portada {
+  background: var(--petroleo);
+  color: var(--blanco);
+  padding-block: 1.5rem 3rem;
+}
+
+.portada__rejilla {
+  display: grid;
+  gap: 2rem;
+}
+
+.portada__titulo {
+  font-size: clamp(3.5rem, 18vw, 6.5rem);
+  color: var(--blanco);
+}
+
+.portada__lema {
+  margin: 0.75rem 0 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.3;
+  max-width: 22ch;
+}
+
+.portada__imagen {
+  margin: 0;
+}
+
+/* Malla blanca del logo, sobre el título */
+.portada__logo {
+  width: min(70%, 13rem);
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 56rem) {
+  .portada {
+    padding-block: 3rem 4.5rem;
+  }
+  .portada__rejilla {
+    grid-template-columns: 1fr 1.15fr;
+    align-items: center;
+    gap: 3rem;
+  }
+}
+
+/* ---------- 5. BOTONES ---------- */
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.boton {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  font-family: var(--fuente-texto);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+/* Ocre: siempre con texto oscuro */
+.boton--ocre {
+  background: var(--ocre);
+  color: var(--azul-noche);
+}
+.boton--ocre:hover {
+  background: var(--ambar);
+}
+
+.boton--borde {
+  border-color: var(--blanco);
+  color: var(--blanco);
+}
+.boton--borde:hover {
+  background: var(--blanco);
+  color: var(--petroleo);
+}
+
+.boton--petroleo {
+  background: var(--petroleo);
+  color: var(--blanco);
+}
+.boton--petroleo:hover {
+  background: var(--petroleo-claro);
+}
+
+/* ---------- 6. IMÁGENES Y MARCADORES ----------
+   Cada imagen vive dentro de un .marco con proporción fija.
+   Mientras el archivo no exista, se ve el texto "Falta: img/...".
+   Cuando exista, la imagen lo tapa sola. */
+.marco {
+  position: relative;
+  aspect-ratio: var(--proporcion, 4 / 3);
+  overflow: hidden;
+  background: rgba(181, 131, 74, 0.18);
+  border: 3px solid var(--ocre);
+  border-radius: var(--radio);
+}
+
+.marco::before {
+  content: "Falta: " attr(data-archivo);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--azul-noche);
+}
+
+.marco img {
+  position: relative;       /* queda por encima del marcador */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  font-size: 0;             /* oculta el texto alternativo si la imagen falla */
+  color: transparent;
+}
+
+/* En la portada (fondo petróleo) el borde es blanco para que resalte */
+.portada .marco {
+  border-color: var(--blanco);
+}
+
+/* ---------- 7. SECCIONES Y BARRAS DE TÍTULO ---------- */
+.seccion {
+  padding-block: 2.5rem;
+}
+
+.seccion + .seccion {
+  padding-top: 0;
+}
+
+.barra-titulo {
+  display: block;
+  margin-bottom: 1.5rem;
+  padding: 0.7rem 1.4rem;
+  background: var(--petroleo);
+  color: var(--blanco);
+  border-radius: var(--radio);
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
+}
+
+.subtitulo {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.7rem;
+  color: var(--petroleo);
+}
+
+.texto-grande {
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+
+.origen {
+  padding-left: 1rem;
+  border-left: 5px solid var(--ocre);
+  font-weight: 600;
+}
+
+/* ---------- 8. PÍLDORAS ---------- */
+.pildora {
+  display: inline-block;
+  padding: 0.1rem 0.8rem;
+  background: var(--ocre);
+  color: var(--azul-noche);   /* nunca blanco sobre ocre */
+  border-radius: 999px;
+  font-family: var(--fuente-texto);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.pildora--morada {
+  background: var(--morado-oscuro);
+  color: var(--blanco);
+}
+
+/* ---------- 9. PASOS (cómo funciona) ----------
+   Cada tarjeta tiene una cabeza de color (texto blanco, grande y en negrita)
+   y un cuerpo sobre crema con texto azul noche, que siempre contrasta bien. */
+.pasos {
+  display: grid;
+  gap: 1rem;
+}
+
+.paso {
+  --color-paso: var(--cafe);
+  overflow: hidden;
+  background: var(--crema);
+  border: 3px solid var(--color-paso);
+  border-radius: var(--radio);
+}
+
+.paso--cafe   { --color-paso: var(--cafe); }
+.paso--morado { --color-paso: var(--morado-oscuro); }
+.paso--verde  { --color-paso: var(--verde); }
+
+.paso__cabeza {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background: var(--color-paso);
+  color: var(--blanco);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.paso__numero {
+  display: inline-grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: var(--crema);
+  color: var(--azul-noche);
+  border-radius: 50%;
+  font-size: 1.3rem;
+}
+
+.paso__cuerpo {
+  margin: 0;
+  padding: 1rem;
+  max-width: none;
+}
+
+@media (min-width: 48rem) {
+  .pasos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* El último paso (impar) ocupa todo el ancho */
+  .paso:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- 10. FRANJA DE CIFRAS ---------- */
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem 1rem;
+  background: var(--azul-noche);
+  color: var(--crema);
+  border-radius: var(--radio);
+  text-align: center;
+}
+
+.cifra__numero {
+  display: block;
+  font-family: var(--fuente-titulo);
+  font-size: 2.8rem;
+  line-height: 1.1;
+  color: var(--ambar);
+}
+
+.cifra__texto {
+  font-weight: 600;
+}
+
+@media (min-width: 48rem) {
+  .cifras {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- 11. TARJETAS (galería y descargas) ---------- */
+.galeria,
+.descargas {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.tarjeta {
+  overflow: hidden;
+  background: var(--crema);
+  border: 3px solid var(--morado);
+  border-radius: var(--radio);
+}
+
+.tarjeta .marco {
+  border: 0;
+  border-bottom: 3px solid var(--morado);
+  border-radius: 0;
+}
+
+.tarjeta__texto {
+  padding: 1rem;
+}
+
+.tarjeta__texto p,
+.tarjeta--descarga p {
+  margin: 0.5rem 0 0;
+}
+
+.tarjeta__nombre {
+  font-size: 1.4rem;
+}
+
+@media (min-width: 40rem) {
+  .galeria {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .galeria {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- 12. CRÁTERES ---------- */
+.crateres {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.crater__pie {
+  margin: 0.5rem 0 0;
+  font-weight: 600;
+}
+
+.pie-galeria {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Resultados: gráfica de la lona (SVG sin fondo) */
+.grafica {
+  margin: 0 0 1rem;
+  padding: 1rem;
+  background: var(--crema);
+  border: 3px solid var(--petroleo);
+  border-radius: var(--radio);
+}
+
+.grafica img {
+  width: 100%;
+  height: auto;
+}
+
+.grafica figcaption {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+}
+
+/* Interfaz: 3 capturas verticales, también en celular */
+.interfaz {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .interfaz {
+    gap: 1rem;
+    max-width: 44rem;
+  }
+}
+
+.pantalla__pie {
+  margin: 0.5rem 0 0;
+  font-weight: 600;
+}
+
+.nota {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--crema);
+  border: 3px solid var(--ocre);
+  border-radius: var(--radio);
+}
+
+@media (min-width: 48rem) {
+  .crateres {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- 13. DESCARGAS ---------- */
+.tarjeta--descarga {
+  padding: 1.25rem;
+  border-color: var(--petroleo);
+}
+
+.tarjeta--descarga .boton {
+  margin-top: 1rem;
+}
+
+/* "Próximamente": apagado y sin enlace */
+.tarjeta--pronto {
+  border-style: dashed;
+  border-color: var(--ocre);
+}
+
+@media (min-width: 48rem) {
+  .descargas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- 14. PIE DE PÁGINA ---------- */
+.pie {
+  margin-top: 1.5rem;
+  padding-block: 2.5rem;
+  background: var(--azul-noche);
+  color: var(--crema);
+  font-size: 1rem;
+}
+
+.pie a {
+  color: var(--ambar);
+}
+
+.pie__rejilla {
+  display: grid;
+  gap: 2rem;
+}
+
+.pie__titulo {
+  margin-bottom: 0.75rem;
+  font-size: 1.3rem;
+  color: var(--ambar);
+}
+
+.pie__lista {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 56rem) {
+  .pie__rejilla {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- 15. ACCESIBILIDAD: MOVIMIENTO REDUCIDO ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .boton {
+    transition: none;
+  }
+}
