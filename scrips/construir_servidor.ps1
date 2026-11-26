@@ -13,11 +13,19 @@ Set-Location $raiz
 $venv = Join-Path $raiz ".venv-build"
 $python = Join-Path $venv "Scripts\python.exe"
 
+# Lanzador py (Python de python.org) si existe; si no, python (Microsoft Store)
+function Crear-Venv {
+    $lanzador = if (Get-Command py -ErrorAction SilentlyContinue) { "py" } else { "python" }
+    $opcion = if ($lanzador -eq "py") { @("-3.13") } else { @() }
+    $version = & $lanzador @opcion -c "import sys; print('%d.%d' % sys.version_info[:2])"
+    if ($version -ne "3.13") { throw "Se necesita Python 3.13 y se encontro $version" }
+    Write-Host "Creando .venv-build con Python $version ($lanzador)..."
+    & $lanzador @opcion -m venv $venv
+    if ($LASTEXITCODE -ne 0) { throw "No se pudo crear .venv-build" }
+}
+
 function Preparar-Venv {
-    if (-not (Test-Path $python)) {
-        Write-Host "Creando .venv-build con Python 3.13..."
-        py -3.13 -m venv $venv
-    }
+    if (-not (Test-Path $python)) { Crear-Venv }
     & $python -m pip install --upgrade pip
     & $python -m pip install -r requirements-build.txt
 }
