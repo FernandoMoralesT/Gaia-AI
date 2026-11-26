@@ -31,13 +31,15 @@ function Preparar-Venv {
 }
 
 function Empaquetar {
+    # ruta absoluta: con --specpath, PyInstaller resuelve --add-data desde build\
+    $modelo = Join-Path $raiz "modelos\generador_epoca150.pt"
     # --onedir: un solo proceso y arranque rapido (onefile se descomprime cada vez)
     # --noupx: UPX provoca falsos positivos de antivirus
     # --paths src: encuentra inferencia, model y dataset como en desarrollo
     & $python -m PyInstaller src/servidor.py `
         --name gaia-servidor --onedir --noconsole --noupx --clean -y `
         --paths src `
-        --add-data "modelos/generador_epoca150.pt;modelos" `
+        --add-data "${modelo};modelos" `
         --distpath dist --workpath build --specpath build
     if ($LASTEXITCODE -ne 0) { throw "PyInstaller fallo (codigo $LASTEXITCODE)" }
 }
