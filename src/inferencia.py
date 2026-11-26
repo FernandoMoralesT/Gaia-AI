@@ -8,8 +8,9 @@ import torch
 from scipy.ndimage import gaussian_filter
 from model.generador import Generador
 from dataset.dem_dataset import ID_CLASE
+from rutas import ruta_recurso
 
-RUTA_MODELO = RAIZ / "modelos" / "generador_epoca150.pt"
+RUTA_MODELO = ruta_recurso("modelos/generador_epoca150.pt")
 Z_DIM = 100
 
 _generador = None
