@@ -27,6 +27,7 @@ En **cada** tarea en este repo, antes de leer archivos o responder, cargar con l
   - Paso 1 hecho: decisiones de datos en `docs/dataset_v3_decisiones.md`.
   - Paso 2 hecho: 48 bloques descargados en `data/bloques/` (204 MB, fuera de git): 46 de 0.5° y 2 de referencia de 1.2° (R1, R2; nunca para entrenar). Coordenadas verificadas por Fernando. 0 pendientes. Detalle en la bitácora (v1.2.0) y en `docs/superpowers/plans/2026-11-12-bloques-v3.md`.
   - **Siguiente (paso 3):** recortar los bloques en tiles a 60 m/px (promedio 2×2), etiquetarlos con las 6 reglas (`UMBRALES_60`), resolver mar y depresiones, tiles de Paricutín y Colima con el cono centrado (de B22 y B23), y división por bloque con más de un tile por clase en validación y prueba. Plan primero y visto bueno de Fernando.
+- Versión para PC 1.2.0-beta (26/11/2026, en `Rama1.2.0`): instalador `dist/instalador/Gaia-AI-Setup.exe` (Inno Setup 7) con `Gaia-AI.exe` y `gaia-servidor/` (PyInstaller, torch CPU); no necesita Python ni el repo. Orden de construcción en `instalador/LEEME.md`; detalle en la bitácora. Pendiente: Release en GitHub, VirusTotal y aviso de SmartScreen en la página. La lona del concurso es solo local (`.git/info/exclude`).
 - Modelo del demo: época 150 (`modelos/generador_epoca150.pt`, versionado). Respaldo: época 100. No se sobrescribe; los modelos nuevos de la v2.0 se guardan aparte.
 - Fuera de la v1.0: el PDF del proyecto (no es necesario para la expo).
 

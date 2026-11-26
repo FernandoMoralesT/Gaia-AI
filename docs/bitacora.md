@@ -607,3 +607,30 @@ Botón **Exportar** en el visor, con menú desplegable. Diseño en `docs/superpo
 - **Archivo:** `dist/Gaia-AI_beta.exe`, 97,651,712 bytes (unos 93 MiB), generado el 19/11/2026 a las 15:53 con el preset "Windows Desktop" y sin editar `export_presets.cfg`. Incluye `exportador.gd`. Sin número de versión.
 - **Sin cambios:** `dist/Gaia-AI.exe` (97,639,112 bytes, 26/10/2026) y `dist/Gaia-AI-v1.0.exe` (97,644,208 bytes, 02/11/2026). `dist/` sigue ignorado por git.
 - Como el resto, debe quedarse dentro del repo y necesita Python con las dependencias; no empaqueta PyTorch. No se abrió con ventana: solo se comprobó que existe, su tamaño y su fecha.
+
+## Empaquetado para PC: 1.2.0-beta (26/11/2026)
+
+Objetivo: que Gaia-AI se instale y genere terreno en vivo en cualquier Windows, sin el repo y sin Python, para el concurso (stand y página web). Se eligió congelar el servidor de Python con PyInstaller en vez de migrar a C#/ONNX por ahora; ONNX queda para la versión de Android.
+
+### Qué se hizo
+- **`src/rutas.py`:** `ruta_recurso(relativa)` devuelve la ruta desde la raíz del repo o, con el servidor congelado, desde `sys._MEIPASS`. `inferencia.py` la usa para `RUTA_MODELO`. Prueba en `test/test_rutas.py`.
+- **`requirements-build.txt` y `scrips/construir_servidor.ps1`:** venv aparte (`.venv-build`) con lo mínimo (torch CPU, numpy, scipy, pyinstaller). El script genera `dist/gaia-servidor/gaia-servidor.exe` (`--onedir --noconsole --noupx`, modelo como dato) y hace una prueba de humo con `/salud` y `/terreno`.
+- **`ServidorLocal`:** primero busca `gaia-servidor/gaia-servidor.exe` junto a `Gaia-AI.exe`; si no está, sigue con el repo y `pythonw`; sin servidor, los respaldos. Prueba en `prueba_servidor_local.gd`.
+- **Ícono:** `godot/gaia-visor/icono.ico` (16, 32, 48, 64, 128 y 256 px) a partir del logo y el favicon de la página (fondo `#2C5F6F`). `export_presets.cfg` lo asigna con `modify_resources=true`. Fuentes SVG en `instalador/`.
+- **Instalador:** `instalador/gaia-ai.iss` (Inno Setup 7) → `dist/instalador/Gaia-AI-Setup.exe`. Instala en `%LOCALAPPDATA%\Programs\Gaia-AI` sin permisos de administrador, en español, con licencia MIT, acceso directo opcional y desinstalador que cierra `gaia-servidor.exe`. Orden de construcción en `instalador/LEEME.md`.
+
+### Decisiones
+- **`--onedir` y no `--onefile`:** un solo proceso (Godot lo apaga con `OS.kill`), arranque más rápido y menos falsos positivos de antivirus. Por lo mismo, sin UPX.
+- **Ruta absoluta en `--add-data`:** con `--specpath build`, PyInstaller resuelve las rutas desde `build/`.
+- **Python de la Microsoft Store:** no trae el lanzador `py`; el script usa `py -3.13` si existe y si no `python`, y verifica la versión. PyInstaller funcionó con él.
+- **Instalación por usuario:** facilita instalarlo en computadoras ajenas (stand) sin pedir administrador.
+- **`project.godot` sin commitear:** su diff es Godot reacomodando secciones; quitó `viewport_width/height` (1152×648), que son los valores por defecto.
+- **La lona del concurso es solo local:** sus scripts y figuras están en `.git/info/exclude`, no en el repo.
+
+### Verificación
+- 83 tests de Python en verde en la PC de Fernando y `prueba_servidor_local` en `OK`.
+- `gaia-servidor`: 534 MB sin comprimir; la prueba de humo respondió `/salud` y `/terreno` (57,608 bytes).
+- `Gaia-AI.exe` exportado con ícono; abre `gaia-servidor.exe` (no `pythonw`) y lo cierra al salir.
+- `Gaia-AI-Setup.exe`: 159 MB, compilado en unos 3 min.
+- Instalado y probado en la computadora de un compañero **sin Python** y en la de otro con Python: genera terreno y funciona completo.
+- **Pendiente:** Release en GitHub con el SHA-256, revisión en VirusTotal e instrucciones de SmartScreen en la página (el instalador no tiene firma digital).
