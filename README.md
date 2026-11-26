@@ -97,6 +97,20 @@ Escucha solo en `127.0.0.1:8765`:
 2. Al abrirse, el visor enciende el servidor local si encuentra el repo y Python, y lo apaga al cerrar. Sin servidor, usa los mapas guardados de `mapas/respaldo_<clase>.raw` (se regeneran con `python scrips/generar_respaldos.py`).
 3. Controles: W A S D, flechas o arrastrar con clic izquierdo para girar; rueda del mouse o Q y E para acercar y alejar; F11 para pantalla completa; Esc para volver al menú.
 
+### Exportar el terreno
+
+El botón **Exportar** del visor despliega un menú con tres formatos. Cada uno guarda el terreno que se está viendo en `Documentos/Gaia-AI/exportaciones`, con el nombre `<clase>_<semilla>_s<suavizado>` (por ejemplo `volcan_42_s2.0`), y escribe también un `_LEEME.txt` con estos mismos pasos. Las alturas son relativas (de 0 a 1), no son metros.
+
+| Opción del menú | Archivo | Programa |
+|---|---|---|
+| PNG 8 bits (Roblox) | `_roblox.png` | Roblox Studio |
+| RAW 16 bits (Unity) | `_unity.raw` | Unity |
+| OBJ (Blender) | `_blender.obj` | Blender |
+
+- **Roblox Studio:** en el Terrain Editor abre la pestaña Import y elige el PNG. Un píxel equivale a 4 studs: tamaño X = Z = ancho × 4 y Y = escala × 4 (el LEEME trae los números de tu mapa).
+- **Unity:** en Terrain Settings elige Import Raw con Depth 16 bit, Byte Order Windows y el ancho y alto del mapa. Activa Flip Vertically si el relieve sale al revés. Tamaño X = Z = ancho, Y = escala del visor. Si Unity exige una resolución 2ⁿ + 1, usa 129 o 257 y deja que remuestree.
+- **Blender:** File → Import → Wavefront (.obj), con Forward -Z y Up Y (los valores por defecto). No hay que rotar. El archivo trae dos objetos: `terreno` y `base` (paredes y fondo).
+
 ### Demo (.exe)
 
 Desde Godot o en terminal:

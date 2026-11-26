@@ -11,6 +11,8 @@ const SEMILLA_RESPALDO := 42
 const SIGMA_RESPALDO := 2.0
 const LADO_MINIMAPA := 240
 const NIVELES_CURVAS := 10
+# Dentro de la carpeta Documentos del usuario; res:// es de solo lectura en el .exe.
+const CARPETA_EXPORTACIONES := "/Gaia-AI/exportaciones"
 
 @export var terreno: MeshInstance3D
 
@@ -39,7 +41,7 @@ func _ready() -> void:
 				%Clases.add_child(boton)
 
 		# Solo la semilla toma foco; así las flechas mueven únicamente la cámara.
-		for c in [%Sigma, %Menu, %Inspeccionar, %Generar]:
+		for c in [%Sigma, %Menu, %Inspeccionar, %Exportar, %Generar]:
 				c.focus_mode = Control.FOCUS_NONE
 		%Sigma.value_changed.connect(func(v): %ValorSigma.text = "%.1f" % v)
 		%Semilla.text_changed.connect(_al_cambiar_semilla)
@@ -47,6 +49,7 @@ func _ready() -> void:
 		%Generar.pressed.connect(generar)
 		%Menu.pressed.connect(volver_al_menu)
 		%Inspeccionar.toggled.connect(func(activo): %Inspeccion.visible = activo)
+		%Exportar.get_popup().id_pressed.connect(_al_exportar)
 		%Peticion.request_completed.connect(_al_recibir)
 		%Salud.request_completed.connect(_al_responder_salud)
 
@@ -83,6 +86,7 @@ func generar() -> void:
 		if ocupado:
 				return
 		ocupado = true
+		%Exportar.disabled = true
 		%Generar.disabled = true
 		%Generar.text = "Generando…"
 		inicio_ms = Time.get_ticks_msec()
@@ -154,9 +158,22 @@ func _usar_respaldo() -> void:
 
 func _terminar() -> void:
 		ocupado = false
+		%Exportar.disabled = false
 		%Generar.disabled = false
 		%Generar.text = "Generar"
 		actualizar_inspeccion()
+
+
+# El id es la posición del elemento en el menú Exportar (Roblox, Unity, Blender).
+func _al_exportar(id: int) -> void:
+		var exportadores := [Exportador.exportar_roblox, Exportador.exportar_unity, Exportador.exportar_blender]
+		var carpeta := OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS) + CARPETA_EXPORTACIONES
+		var ruta: String = exportadores[id].call(terreno, info, carpeta)
+		if ruta.is_empty():
+				%Nota.text = "No se pudo exportar. Revisa que puedas escribir en la carpeta Documentos."
+		else:
+				%Nota.text = "Guardado en " + carpeta
+		%Nota.visible = true
 
 
 func _leer_encabezados(encabezados: PackedStringArray) -> Dictionary:

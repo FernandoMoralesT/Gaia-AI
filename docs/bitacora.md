@@ -578,3 +578,32 @@ Están en `docs/dataset_v3_decisiones.md`:
   - **B39, Teide:** el bloque incluye mar. Hay que enmascararlo al recortar.
   - **Mínimos negativos:** B18 (−44 m), B25 (−2 m), B29 (−17 m), B39 (−14 m) y B44 (−130 m, depresión real del Valle de la Muerte). Hay que distinguir el mar de las depresiones antes de recortar.
 - **Coordenadas verificadas por Fernando:** las 48 (B03, B15 y B20 tras el piloto; las otras 45 tras revisar las hojas de miniaturas). Las notas de revisión de arriba siguen pendientes para la etapa de recorte.
+
+## Exportación desde el visor (19/11/2026, sin versión asignada)
+
+Botón **Exportar** en el visor, con menú desplegable. Diseño en `docs/superpowers/specs/2026-11-19-exportar-terreno-design.md` y plan en `docs/superpowers/plans/2026-11-19-exportar-terreno.md`.
+
+### Qué se hizo
+- **`godot/gaia-visor/exportador.gd`** (`class_name Exportador`): `exportar_roblox`, `exportar_unity` y `exportar_blender`, cada una con `(terreno, info, carpeta)` y devolviendo la ruta escrita o `""`.
+  - PNG de 8 bits en escala de grises (`FORMAT_L8`), RAW de 16 bits little-endian sin encabezado y OBJ de texto con los objetos `terreno` y `base`.
+  - Cada exportación escribe también `<base>_LEEME.txt` (pasos de los tres programas y datos del mapa). Como el nombre base es el mismo, es un solo archivo que cada formato reescribe igual.
+- **Interfaz:** `MenuButton` "Exportar" entre Inspeccionar y Generar, con "PNG 8 bits (Roblox)", "RAW 16 bits (Unity)" y "OBJ (Blender)". Guarda en `Documentos/Gaia-AI/exportaciones` y muestra el resultado en la nota. Se deshabilita mientras se genera.
+- **`tema.tres`:** bloque `PopupMenu` (caliza, Barlow Medium, panel `campo`, hover `boton_hover`), sin colores ni fuentes nuevas. Sin él, el menú salía con el gris por defecto de Godot.
+- **`pruebas/prueba_exportador.gd`:** comprobaciones (PNG, RAW, OBJ, LEEME, mapa plano, carpeta inválida y menú en la escena real).
+
+### Decisiones
+- **Mapa normalizado una sola vez** (min-max a 0..1; si max = min, todo en 0) y usado en los tres formatos, también para construir la malla del OBJ.
+- **Triángulos invertidos en el OBJ:** Godot tiene el frente en sentido horario y el OBJ en antihorario. La prueba comprueba que la normal geométrica de cada cara coincide con su `vn`.
+- **Las paredes y el fondo no tienen índices ni UV:** se leen de tres en tres vértices y sus caras salen como `v//vn`. Los índices del OBJ son globales, así que el objeto `base` sigue la cuenta del `terreno`.
+- **La clase `Exportador` obliga a refrescar la caché de clases de Godot** (`godot --headless --path godot/gaia-visor --import`) la primera vez que se corre una prueba tras añadir el archivo.
+- **Las pruebas con `await` no fallan solas ante un error de ejecución:** imprimen `OK` aunque la función se corte. Por eso `prueba_exportador.gd` comprueba que `%Exportar` exista antes de usarlo.
+
+### Verificación
+- 11 pruebas headless de Godot en `OK` (las 10 existentes y `prueba_exportador`); 81 tests de Python en verde (no cambiaron).
+- La prueba de carpeta inválida provoca a propósito tres líneas `ERROR: Could not create directory` del motor; la función devuelve `""` como debe.
+- **No verificado:** importar los archivos en Roblox Studio, Unity y Blender (el "Flip Vertically" de Unity es lo más probable de ajustar), ver el menú en una ventana real y abrir el `.exe` con interfaz.
+
+### Ejecutable beta con exportación (Roblox, Unity, Blender)
+- **Archivo:** `dist/Gaia-AI_beta.exe`, 97,651,712 bytes (unos 93 MiB), generado el 19/11/2026 a las 15:53 con el preset "Windows Desktop" y sin editar `export_presets.cfg`. Incluye `exportador.gd`. Sin número de versión.
+- **Sin cambios:** `dist/Gaia-AI.exe` (97,639,112 bytes, 26/10/2026) y `dist/Gaia-AI-v1.0.exe` (97,644,208 bytes, 02/11/2026). `dist/` sigue ignorado por git.
+- Como el resto, debe quedarse dentro del repo y necesita Python con las dependencias; no empaqueta PyTorch. No se abrió con ventana: solo se comprobó que existe, su tamaño y su fecha.

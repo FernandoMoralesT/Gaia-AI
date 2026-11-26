@@ -104,6 +104,8 @@ Cada versión cierra con tests en verde, entrada en `docs/bitacora.md`, commit y
 - Exportar a PNG de 16 bits, OBJ, STL y GLB, con metros reales.
 - Ajustar los tamaños para Unity (2ⁿ+1) y para Unreal.
 
+**Avance (parcial, fuera de la versión):** el visor ya tiene un botón Exportar con PNG de 8 bits (Roblox), RAW de 16 bits (Unity) y OBJ (Blender), con LEEME y prueba headless. Faltan el PNG de 16 bits, STL, GLB, los metros reales y el ajuste automático a 2ⁿ+1 (hoy solo se explica en el LEEME). Tampoco se ha probado la importación en Roblox Studio, Unity ni Blender.
+
 **Listo cuando:** los archivos abren en al menos una aplicación de visualización o de diseño 3D, y hay tests del formato.
 
 ### v1.7.0: visor integral

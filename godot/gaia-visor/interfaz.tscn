@@ -102,6 +102,19 @@ layout_mode = 2
 toggle_mode = true
 text = "Inspeccionar"
 
+[node name="Exportar" type="MenuButton" parent="Raiz/Controles/Columna/FilaAjustes"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Exportar"
+flat = false
+item_count = 3
+popup/item_0/text = "PNG 8 bits (Roblox)"
+popup/item_0/id = 0
+popup/item_1/text = "RAW 16 bits (Unity)"
+popup/item_1/id = 1
+popup/item_2/text = "OBJ (Blender)"
+popup/item_2/id = 2
+
 [node name="Generar" type="Button" parent="Raiz/Controles/Columna/FilaAjustes"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 0)
