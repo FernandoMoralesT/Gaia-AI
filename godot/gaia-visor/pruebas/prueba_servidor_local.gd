@@ -22,7 +22,15 @@ func _initialize() -> void:
 		var real: String = Lanzador.buscar_repo(ProjectSettings.globalize_path("res://"))
 		Afirmar.afirmar(FileAccess.file_exists(real + "/src/servidor.py") and real != "", "encuentra la raiz real")
 
+		# Servidor empaquetado junto al ejecutable
+		DirAccess.make_dir_recursive_absolute(base + "/gaia-servidor")
+		FileAccess.open(base + "/gaia-servidor/gaia-servidor.exe", FileAccess.WRITE).close()
+		var exe: String = Lanzador.buscar_servidor_exe(base)
+		Afirmar.afirmar(exe.ends_with("/gaia-servidor/gaia-servidor.exe"), "encuentra gaia-servidor.exe: " + exe)
+		var exe_vacio: String = Lanzador.buscar_servidor_exe(base + "/a")
+		Afirmar.afirmar(exe_vacio == "", "sin gaia-servidor.exe devuelve vacio: " + exe_vacio)
+
 		# Limpieza
-		for ruta in ["/v/1/2/3/4/5/6/7", "/v/1/2/3/4/5/6", "/v/1/2/3/4/5", "/v/1/2/3/4", "/v/1/2/3", "/v/1/2", "/v/1", "/v", "/a/b", "/a", "/src/servidor.py", "/src", ""]:
+		for ruta in ["/v/1/2/3/4/5/6/7", "/v/1/2/3/4/5/6", "/v/1/2/3/4/5", "/v/1/2/3/4", "/v/1/2/3", "/v/1/2", "/v/1", "/v", "/a/b", "/a", "/src/servidor.py", "/src", "/gaia-servidor/gaia-servidor.exe", "/gaia-servidor", ""]:
 				DirAccess.remove_absolute(base + ruta)
 		Afirmar.terminar("prueba_servidor_local")

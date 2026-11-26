@@ -1,8 +1,11 @@
 extends Node
-# Autoload: enciende el servidor de Python si no está vivo y lo apaga al salir.
+# Autoload: enciende el servidor local si no está vivo y lo apaga al salir.
+# Orden: gaia-servidor.exe junto a Gaia-AI.exe (instalador) y, si no está,
+# src/servidor.py del repo con pythonw. Sin ninguno, el visor usa los respaldos.
 # Solo apaga el servidor que este proceso lanzó (pid > 0).
 
 const URL := "http://127.0.0.1:8765"
+const SERVIDOR_EXE := "gaia-servidor/gaia-servidor.exe"
 
 var pid := -1
 
@@ -24,6 +27,12 @@ static func carpeta_inicio() -> String:
 		if OS.has_feature("editor"):
 				return ProjectSettings.globalize_path("res://")
 		return OS.get_executable_path().get_base_dir()
+
+
+# Servidor empaquetado con PyInstaller junto al ejecutable. Devuelve la ruta o "".
+static func buscar_servidor_exe(carpeta: String) -> String:
+		var exe := carpeta.replace("\\", "/").rstrip("/") + "/" + SERVIDOR_EXE
+		return exe if FileAccess.file_exists(exe) else ""
 
 
 # pythonw.exe junto al Python real (no el alias de la Store), para que el PID sea el correcto.
@@ -58,6 +67,14 @@ func _al_responder_salud(resultado: int, codigo: int, _cab: PackedStringArray, _
 
 
 func _lanzar() -> void:
+		var exe := buscar_servidor_exe(carpeta_inicio())
+		if exe != "":
+				pid = OS.create_process(exe, [])
+				return
+		_lanzar_desde_repo()
+
+
+func _lanzar_desde_repo() -> void:
 		var repo := buscar_repo(carpeta_inicio())
 		if repo == "":
 				return
