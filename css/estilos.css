@@ -552,9 +552,140 @@ ul, ol {
   border-color: var(--ocre);
 }
 
+/* Tarjeta de Windows: la principal de la sección */
+.tarjeta--windows {
+  order: -1;                       /* en celular va primero */
+  border-width: 4px;
+  box-shadow: 6px 6px 0 var(--petroleo);
+}
+
+.windows__cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.boton--descarga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;             /* más de 44 px de área táctil */
+  margin-top: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--verde);
+  color: var(--azul-noche);        /* contraste 4,6:1 sobre verde */
+  font-size: 1.25rem;
+  box-shadow: 0 4px 0 var(--azul-noche);
+  transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.boton--descarga:hover {
+  background: var(--ambar);
+}
+.boton--descarga:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--azul-noche);
+}
+.boton__icono {
+  flex: none;
+}
+
+.tarjeta--descarga .windows__datos {
+  margin-top: 0.6rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.desplegable {
+  margin-top: 0.75rem;
+  border-top: 2px solid var(--petroleo);
+  padding-top: 0.5rem;
+}
+.desplegable summary {
+  min-height: 2.75rem;             /* área táctil */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--petroleo);
+  font-weight: 700;
+  cursor: pointer;
+}
+.desplegable summary::-webkit-details-marker {
+  display: none;
+}
+.desplegable summary::before {
+  content: "";
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 3px solid currentColor;
+  border-bottom: 3px solid currentColor;
+  transform: rotate(-45deg);       /* flecha hacia la derecha: cerrado */
+}
+.desplegable[open] summary::before {
+  transform: rotate(45deg);        /* hacia abajo: abierto */
+}
+.tarjeta--descarga .desplegable p {
+  margin: 0.25rem 0 0.5rem;
+}
+
+.hash {
+  display: block;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--azul-noche);
+  color: var(--crema);
+  border-radius: 0.5rem;
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;         /* se parte en celular sin desbordar */
+  word-break: break-all;
+  user-select: all;
+}
+/* El comando se parte solo entre palabras, no a mitad de una */
+.hash--comando {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.boton-copiar {
+  min-height: 2.75rem;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem 1.2rem;
+  background: var(--petroleo);
+  color: var(--blanco);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  font-family: var(--fuente-texto);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.boton-copiar:hover {
+  background: var(--petroleo-claro);
+}
+.boton-copiar[hidden] {
+  display: none;
+}
+
+.tarjeta--descarga .windows__todas {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  text-align: center;
+}
+.windows__todas a {
+  color: var(--petroleo);
+}
+
 @media (min-width: 48rem) {
   .descargas {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1.5fr 1fr;
+    align-items: start;
+  }
+  .tarjeta--windows {
+    order: 0;
   }
 }
 
@@ -597,7 +728,11 @@ ul, ol {
   html {
     scroll-behavior: auto;
   }
-  .boton {
+  .boton,
+  .boton--descarga {
     transition: none;
+  }
+  .boton--descarga:active {
+    transform: none;
   }
 }

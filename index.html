@@ -61,6 +61,7 @@
           <div class="botones">
             <a class="boton boton--ocre" href="#como-funciona">Cómo funciona</a>
             <a class="boton boton--borde" href="https://github.com/FernandoMoralesT/Gaia-AI">Ver en GitHub</a>
+            <a class="boton boton--borde" href="#descarga">Descargar</a>
           </div>
         </div>
         <figure class="portada__imagen">
@@ -259,9 +260,36 @@
             <p>Código, modelo y documentación, con licencia MIT.</p>
             <a class="boton boton--petroleo" href="https://github.com/FernandoMoralesT/Gaia-AI">Ver en GitHub</a>
           </li>
-          <li class="tarjeta tarjeta--descarga tarjeta--pronto">
-            <h3 class="tarjeta__nombre">Instalador para Windows</h3>
-            <p><span class="pildora">Próximamente</span></p>
+          <li class="tarjeta tarjeta--descarga tarjeta--windows">
+            <div class="windows__cabeza">
+              <h3 class="tarjeta__nombre">Instalador para Windows</h3>
+              <span class="pildora">Beta</span>
+            </div>
+            <p>No necesita Python ni otras instalaciones.</p>
+
+            <a class="boton boton--descarga" href="https://github.com/FernandoMoralesT/Gaia-AI/releases/download/v1.2.0-beta/Gaia-AI-Setup.exe">
+              <svg class="boton__icono" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/>
+              </svg>
+              <span>Descargar para Windows</span>
+            </a>
+            <p class="windows__datos">v1.2.0-beta · 159 MB · Windows 10/11 de 64 bits</p>
+
+            <details class="desplegable">
+              <summary>Windows muestra un aviso al abrirlo</summary>
+              <p>Aparece porque el instalador no tiene firma digital. Pulsa <strong>Más información</strong> y luego <strong>Ejecutar de todas formas</strong>.</p>
+            </details>
+
+            <details class="desplegable">
+              <summary>Verificar el archivo (SHA-256)</summary>
+              <p>Compara esta huella con la que calcula tu equipo:</p>
+              <code class="hash" id="hash-sha256">53B223748420FD39473DC0358B8DC28A41A9AF597CB7EFD5CC2429EA957518E0</code>
+              <button type="button" class="boton-copiar" data-copiar="hash-sha256" hidden>Copiar</button>
+              <p>En PowerShell, desde la carpeta donde lo descargaste:</p>
+              <code class="hash hash--comando">Get-FileHash .\Gaia-AI-Setup.exe -Algorithm SHA256</code>
+            </details>
+
+            <p class="windows__todas"><a href="https://github.com/FernandoMoralesT/Gaia-AI/releases">Ver todas las versiones</a></p>
           </li>
           <li class="tarjeta tarjeta--descarga tarjeta--pronto">
             <h3 class="tarjeta__nombre">Beta de Android</h3>
@@ -310,5 +338,6 @@
     </div>
   </footer>
 
+  <script src="js/copiar.js" defer></script>
 </body>
 </html>
