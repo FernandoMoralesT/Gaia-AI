@@ -1,8 +1,8 @@
-; Instalador de Gaia-AI para Windows (Inno Setup 6).
+; Instalador de Gaia-AI para Windows (Inno Setup 7).
 ; Antes de compilar deben existir, desde la raiz del repo:
 ;   dist\Gaia-AI.exe          (exportacion de Godot con Embed PCK)
 ;   dist\gaia-servidor\       (scrips\construir_servidor.ps1)
-; Compilar:  ISCC.exe instalador\gaia-ai.iss
+; Compilar:  & "C:\Program Files\Inno Setup 7\ISCC.exe" instalador\gaia-ai.iss
 ; Resultado: dist\instalador\Gaia-AI-Setup.exe
 
 #define AppVersion "1.2.0-beta"

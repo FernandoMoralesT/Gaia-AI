@@ -13,6 +13,6 @@ Desde la raíz del repo, en este orden:
 
 1. `powershell -ExecutionPolicy Bypass -File scrips/construir_servidor.ps1` → `dist\gaia-servidor\`
 2. Exportar el visor con Godot (`--export-release "Windows Desktop" ../../dist/Gaia-AI.exe`) → `dist\Gaia-AI.exe`
-3. Compilar `instalador\gaia-ai.iss` con Inno Setup 6 (`ISCC.exe instalador\gaia-ai.iss`) → `dist\instalador\Gaia-AI-Setup.exe`
+3. Compilar `instalador\gaia-ai.iss` con Inno Setup 7 (`& "C:\Program Files\Inno Setup 7\ISCC.exe" instalador\gaia-ai.iss`, unos 3 min) → `dist\instalador\Gaia-AI-Setup.exe`
 
 La versión se cambia en `#define AppVersion` dentro de `gaia-ai.iss`. El `AppId` no se cambia nunca.
