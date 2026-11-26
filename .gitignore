@@ -21,3 +21,7 @@ dist/
 
 # Bloques del dataset v3 (se vuelven a bajar con data/bloques.json)
 data/bloques/
+
+# Empaquetado del servidor (scrips/construir_servidor.ps1)
+.venv-build/
+build/
